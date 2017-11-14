@@ -7,24 +7,17 @@ Documentation:
 """
 
 import pytest
-from app import create_app
+from app import app
 
 
 @pytest.fixture
-def app():
-    app = create_app()
+def app_test():
     app.debug = True
+    app.testing = True
     return app.test_client()
 
 
-def test_hello_world(app):
-    res = app.get("/")
+def test_hello_world(app_test):
+    res = app_test.get("/")
     # print(dir(res), res.status_code)
     assert res.status_code == 200
-    assert b"Hello World" in res.data
-
-
-def test_some_id(app):
-    res = app.get("/foo/12345")
-    assert res.status_code == 200
-    assert b"12345" in res.data
