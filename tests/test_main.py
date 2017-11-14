@@ -7,12 +7,12 @@ Documentation:
 """
 
 import pytest
-from app import app
+from app import create_app
 
 
 @pytest.fixture
 def app():
-    app = app.create_app()
+    app = create_app()
     app.debug = True
     return app.test_client()
 
