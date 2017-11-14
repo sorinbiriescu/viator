@@ -1,8 +1,4 @@
 """
-You can auto-discover and run all tests with this command:
-
-    $ pytest
-
 Documentation:
 
 * https://docs.pytest.org/en/latest/
@@ -11,13 +7,12 @@ Documentation:
 """
 
 import pytest
-
-import main
+from app import app
 
 
 @pytest.fixture
 def app():
-    app = main.create_app()
+    app = app.create_app()
     app.debug = True
     return app.test_client()
 
