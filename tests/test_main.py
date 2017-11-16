@@ -7,17 +7,16 @@ Documentation:
 """
 
 import pytest
+
 from app import app
 
 
 @pytest.fixture
 def app_test():
-    app.debug = True
-    app.testing = True
+    app.config.from_object('tests/config_test')
     return app.test_client()
-
 
 def test_hello_world(app_test):
     res = app_test.get("/")
-    # print(dir(res), res.status_code)
+
     assert res.status_code == 200

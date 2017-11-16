@@ -1,4 +1,5 @@
 import os
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 CSRF_ENABLED = True
@@ -8,3 +9,4 @@ TESTDB_PATH = os.path.join(basedir, 'db/VIATOR_test.db')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + TESTDB_PATH
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 TESTING = True
+DEBUG = True

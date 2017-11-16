@@ -1,5 +1,5 @@
 #User defined
-config.py
+config*.py
 *.db
 alembic.ini
 
