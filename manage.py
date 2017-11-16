@@ -3,7 +3,7 @@ from flask_script import Manager, prompt_bool
 
 from app import app, db
 
-from app.models import Locations
+import app.models
 
 migrate = Migrate(app, db)
 manager = Manager(app)
