@@ -6,6 +6,8 @@ class Locations(db.Model):
     location_name = db.Column(db.Text)
     location_parent = db.Column(db.Text)
 
+    
+
 class Attractions(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
