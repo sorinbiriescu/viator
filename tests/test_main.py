@@ -8,26 +8,41 @@ Documentation:
 
 import pytest
 
-from app import app
-
+from app import app, db
+from app.models import Locations, Attractions
 
 @pytest.fixture
 def app_test():
     app.config.from_object('tests/config_test')
-    return app.test_client()
+    db.create_all()
+    db.session.commit()
+
+    yield app.test_client()
+
+    db.session.remove()
+    db.drop_all()
 
 def test_index(app_test):
     request = app_test.get("/")
 
     assert request.status_code == 200
 
+
 def test_location(app_test):
-    request = app_test.get("/location")
+    location = Locations(location_name='Grenoble', location_parent='Isere')
+    db.session.add(location)
+    db.session.commit()
+
+    request = app_test.get("/Grenoble")
 
     assert request.status_code == 200
 
 def test_attraction(app_test):
-    request = app_test.get("/attraction")
+    attraction = Attractions(attraction_name='Bastille', attraction_location='Grenoble')
+    db.session.add(attraction)
+    db.session.commit()
+
+    request = app_test.get("/Bastille")
 
     assert request.status_code == 200
 
