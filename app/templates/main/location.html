@@ -1,8 +1,12 @@
-{% extends "/main/base.html" %}
-
-{% block content %}
+{% extends "/main/base.html" %} {% block content %}
 <div>
-    {{ location.location_name }}
-    {{ location.location_parent }}
+    {{ location.location_name }} {{ location.location_parent }}
+    <div class="container-fluid">
+        <iframe src="{{ url_for('main.get_map', location=location.location_name) }}" frameborder="0" height="500px" width="100%"></iframe>
+    </div>
+
 </div>
+
+
+
 {% endblock %}

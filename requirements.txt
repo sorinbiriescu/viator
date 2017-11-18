@@ -1,7 +1,8 @@
 pytest>=3.0.7
 Flask==0.12.2
 flask-cors==3.0.2
-flask_sqlalchemy
-pylint
-flask-migrate
-flask-script
+flask_sqlalchemy==2.3.2
+pylint>=1.7.4
+flask-migrate==2.1.1
+flask-script==2.0.6
+folium==0.5.0

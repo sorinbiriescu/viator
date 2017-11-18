@@ -5,6 +5,9 @@ class Locations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location_name = db.Column(db.Text)
     location_parent = db.Column(db.Text)
+    location_type = db.Column(db.Text)
+    location_lat = db.Column(db.Float)
+    location_long = db.Column(db.Float)
 
     @staticmethod
     def get_location(location):
