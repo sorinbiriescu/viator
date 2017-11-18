@@ -15,7 +15,7 @@
     <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
     <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
     
-            <style> #map_8394c7a98b774daeafba3f4c942fde59 {
+            <style> #map_481532b3523348998e888f796536a2f5 {
                 position : relative;
                 width : 100.0%;
                 height: 100.0%;
@@ -27,7 +27,7 @@
 </head>
 <body>    
     
-            <div class="folium-map" id="map_8394c7a98b774daeafba3f4c942fde59" ></div>
+            <div class="folium-map" id="map_481532b3523348998e888f796536a2f5" ></div>
         
 </body>
 <script>    
@@ -37,8 +37,8 @@
                 var bounds = null;
             
 
-            var map_8394c7a98b774daeafba3f4c942fde59 = L.map(
-                                  'map_8394c7a98b774daeafba3f4c942fde59',
+            var map_481532b3523348998e888f796536a2f5 = L.map(
+                                  'map_481532b3523348998e888f796536a2f5',
                                   {center: [45.764,4.8357],
                                   zoom: 14,
                                   maxBounds: bounds,
@@ -49,7 +49,7 @@
             
         
     
-            var tile_layer_f32a3e2210524f76afaa4d98bbff70ef = L.tileLayer(
+            var tile_layer_6918e7c6fb52403bb083bc71bf5c005b = L.tileLayer(
                 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 {
   "attribution": null,
@@ -59,6 +59,28 @@
   "noWrap": false,
   "subdomains": "abc"
 }
-                ).addTo(map_8394c7a98b774daeafba3f4c942fde59);
+                ).addTo(map_481532b3523348998e888f796536a2f5);
+        
+    
+
+            var marker_ffb943964f374637b798bcbb0bb84fc6 = L.marker(
+                [45.764,4.8357],
+                {
+                    icon: new L.Icon.Default()
+                    }
+                )
+                .addTo(map_481532b3523348998e888f796536a2f5);
+            
+    
+            var popup_21351ef75bea4f00baf6a8e48412d7c4 = L.popup({maxWidth: '300'});
+
+            
+                var html_f00b8b7179a84f56906a9832bbc73ada = $('<div id="html_f00b8b7179a84f56906a9832bbc73ada" style="width: 100.0%; height: 100.0%;"><i>Lyon</i></div>')[0];
+                popup_21351ef75bea4f00baf6a8e48412d7c4.setContent(html_f00b8b7179a84f56906a9832bbc73ada);
+            
+
+            marker_ffb943964f374637b798bcbb0bb84fc6.bindPopup(popup_21351ef75bea4f00baf6a8e48412d7c4);
+
+            
         
 </script>

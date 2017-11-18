@@ -19,7 +19,7 @@ def get_map():
     return render_template('/maps/map_%s.html' % (location))
 
 @main.route('/location/<location>')
-def location(location='Grenoble'):
+def location(location):
 
     location_query = Locations.get_location(location)
     create_map(location_query)
