@@ -7,5 +7,6 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 app.config.from_object('config')
 
+from .models import Locations, Attractions
 from .views.main import main
 app.register_blueprint(main)

@@ -9,7 +9,7 @@ Documentation:
 import pytest
 
 from app import app, db
-from app.models import Locations, Attractions
+from app import Locations, Attractions
 
 @pytest.fixture
 def app_test():
@@ -19,8 +19,8 @@ def app_test():
 
     yield app.test_client()
 
-    db.session.remove()
-    db.drop_all()
+    # db.session.remove()
+    # db.drop_all()
 
 def test_index(app_test):
     request = app_test.get("/")
@@ -33,18 +33,22 @@ def test_location(app_test):
     db.session.add(location)
     db.session.commit()
 
-    request = app_test.get("/Grenoble")
+    request = app_test.get("/location/Grenoble")
+    request_404 = app_test.get("/location/Lyon")
 
     assert request.status_code == 200
+    assert request_404.status_code == 404
 
 def test_attraction(app_test):
     attraction = Attractions(attraction_name='Bastille', attraction_location='Grenoble')
     db.session.add(attraction)
     db.session.commit()
 
-    request = app_test.get("/Bastille")
+    request = app_test.get("/attraction/Bastille")
+    request_404 = app_test.get("/attraction/Cafe_des_Jeux")
 
     assert request.status_code == 200
+    assert request_404.status_code == 404
 
 def test_route(app_test):
     request = app_test.get("/route")

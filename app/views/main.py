@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template
-from app.models import Locations, Attractions
+from app import Locations, Attractions
 
 main = Blueprint('main', __name__)
-
 
 
 @main.route('/')
@@ -11,7 +10,7 @@ def index():
 
 
 
-@main.route('/<location>')
+@main.route('/location/<location>')
 def location(location):
 
     location_query_result = Locations.get_location(location)
@@ -20,18 +19,14 @@ def location(location):
     }
     return render_template('/main/location.html', **content)
 
-
-
-@main.route('/<attraction>')
-def attraction():
+@main.route('/attraction/<attraction>')
+def attraction(attraction):
 
     attraction_query_result = Attractions.get_attraction(attraction)
     content = {
         'attraction' : attraction_query_result
     }
     return render_template('/main/attraction.html', **content)
-
-
 
 @main.route('/route')
 def route():

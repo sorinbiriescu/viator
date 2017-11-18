@@ -10,7 +10,7 @@ class Locations(db.Model):
     def get_location(location):
         return Locations.query \
                     .filter(Locations.location_name == location) \
-                    .first_or_404() \
+                    .first_or_404()
 
 class Attractions(db.Model):
 
