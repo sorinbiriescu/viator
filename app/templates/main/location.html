@@ -2,7 +2,9 @@
 <div>
     {{ location.location_name }} {{ location.location_parent }}
     <div class="container-fluid">
-        <iframe src="{{ url_for('main.get_map', location=location.location_name) }}" frameborder="0" height="500px" width="100%"></iframe>
+            <div class="embed-responsive embed-responsive-1by1">
+        <iframe class="embed-responsive-item" src="{{ url_for('main.get_map', location=location.location_name) }}"></iframe>
+    </div>
     </div>
 
 </div>
