@@ -19,8 +19,8 @@ def app_test():
 
     yield app.test_client()
 
-    # db.session.remove()
-    # db.drop_all()
+    db.session.remove()
+    db.drop_all()
 
 def test_index(app_test):
     request = app_test.get("/")
@@ -52,5 +52,11 @@ def test_attraction(app_test):
 
 def test_route(app_test):
     request = app_test.get("/route")
+
+    assert request.status_code == 200
+
+@pytest.mark.xfail
+def test_get_map(app_test):
+    request = app_test.get("/get_route?location=Grenoble")
 
     assert request.status_code == 200

@@ -20,6 +20,9 @@ class Attractions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     attraction_name = db.Column(db.Text)
     attraction_location = db.Column(db.Text)
+    attraction_type = db.Column(db.Text)
+    attraction_lat = db.Column(db.Float)
+    attraction_long = db.Column(db.Float)
 
     @staticmethod
     def get_attraction(attraction):

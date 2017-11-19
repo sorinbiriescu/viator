@@ -5,4 +5,8 @@
     {{ attraction.attraction_name }}
     {{ attraction.attraction_location }}
 </div>
+<div class="container-fluid">
+    <div class="embed-responsive embed-responsive-1by1">
+<iframe class="embed-responsive-item" src="{{ url_for('main.get_map', location=attraction.attraction_name) }}"></iframe>
+</div>
 {% endblock %}
