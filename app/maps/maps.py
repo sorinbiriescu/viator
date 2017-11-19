@@ -15,7 +15,10 @@ def create_map_loc(location_query):
     start_coords = (location_lat, location_long)
     location_name = location_query.location_name
 
-    location_map = folium.Map(location=start_coords, zoom_start=14)
+    location_map = folium.Map(location=start_coords,
+            tiles='https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic29yaW5iaXJpZXNjdSIsImEiOiJjajhuYXR1YmcxMXdrMnd1YWZzOG5nNXQwIn0.tY6DQoXnp_V88XSNlF2HdA',
+            attr='Mapbox',
+            zoom_start=14)
     
     folium.Marker([location_lat, location_long], popup='<i>%s</i>' %(location_name)).add_to(location_map)
 
@@ -28,7 +31,10 @@ def create_map_att(attraction_query):
     start_coords = (attraction_lat, attraction_long)
     attraction_name = attraction_query.attraction_name
 
-    location_map = folium.Map(location=start_coords, zoom_start=14)
+    location_map = folium.Map(location=start_coords,
+            tiles='https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic29yaW5iaXJpZXNjdSIsImEiOiJjajhuYXR1YmcxMXdrMnd1YWZzOG5nNXQwIn0.tY6DQoXnp_V88XSNlF2HdA',
+            attr='Mapbox',
+            zoom_start=16)
     
     folium.Marker([attraction_lat, attraction_long], popup='<i>%s</i>' %(attraction_name)).add_to(location_map)
 
