@@ -1,14 +1,19 @@
-{% extends "/main/base.html" %} {% block content %}
-<div>
-    {{ location.location_name }} {{ location.location_parent }}
-    <div class="container-fluid">
-            <div class="embed-responsive embed-responsive-1by1">
-        <iframe class="embed-responsive-item" src="{{ url_for('main.get_map', location=location.location_name) }}"></iframe>
-    </div>
-    </div>
+{% extends "/main/base.html" %}
 
-</div>
+{% block content %}
 
-
-
+    {{ form.autocomp.label }}: {{ form.autocomp }}
+    
+    <script>
+        $(function() {
+            $.ajax({
+                url: '{{ url_for("main.autocomplete") }}'
+                }).done(function (data){
+                    $('#city_autocomplete').autocomplete({
+                        source: data,
+                        minLength: 2
+                    });
+                });
+            });
+    </script>
 {% endblock %}
