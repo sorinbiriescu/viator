@@ -17,17 +17,6 @@ main = Blueprint('main', __name__)
 def index():
     return render_template('/main/index.html')
 
-cities = ["Bratislava",
-          "Bratislava2",
-          "Banská Bystrica",
-          "Prešov",
-          "Považská Bystrica",
-          "Žilina",
-          "Košice",
-          "Ružomberok",
-          "Zvolen",
-          "Poprad"]
-
 class SearchForm(Form):
     autocomp = TextField('Insert City', id='location-search-autocomplete')
 
