@@ -29,11 +29,13 @@ cities = ["Bratislava",
           "Poprad"]
 
 class SearchForm(Form):
-    autocomp = TextField('Insert City', id='city_autocomplete')
+    autocomp = TextField('Insert City', id='location-search-autocomplete')
 
 @main.route('/_autocomplete', methods=['GET'])
 def autocomplete():
-    return Response(json.dumps(cities), mimetype='application/json')
+    query = request.args.get('query')
+    result = Locations.get_location_autocomplete(query)
+    return jsonify(result)
 
 @main.route('/location/<location>', methods=['GET', 'POST'])
 def location(location):
