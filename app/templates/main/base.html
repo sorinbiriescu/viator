@@ -15,8 +15,9 @@
 
     <!-- Custom styles for this template -->
     <link href="../static/css/simple-sidebar.css" rel="stylesheet">
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.1/mapbox-gl.css' rel='stylesheet' />   
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    {% block head %}
+    {% endblock %}
 
 </head>
 
@@ -73,7 +74,6 @@
 
     <!-- Bootstrap core JavaScript -->
     <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.1/mapbox-gl.js'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="../static/js/main.js"></script>

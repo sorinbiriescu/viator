@@ -1,0 +1,10 @@
+{% extends "/main/base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+    {{ form.autocomp.label }}: {{ form.autocomp }}
+    <button type="submit" class="btn btn-success">Search</button>
+</form>
+
+{% endblock %}

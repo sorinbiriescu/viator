@@ -9,6 +9,6 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 
 from .models import Locations, Attractions
-
-from .views.main import main
+from .forms.forms_main import SearchForm
+from .views.views_main import main
 app.register_blueprint(main)

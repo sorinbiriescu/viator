@@ -1,7 +1,3 @@
-{% extends "/main/base.html" %}
-
-{% block content %}
-
 <div id='map' style='width: 600px; height: 600px;'></div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic29yaW5iaXJpZXNjdSIsImEiOiJjajhuYXR1YmcxMXdrMnd1YWZzOG5nNXQwIn0.tY6DQoXnp_V88XSNlF2HdA';
@@ -17,5 +13,3 @@ var marker = new mapboxgl.Marker()
 .addTo(map);
 
 </script>
-
-{% endblock %}

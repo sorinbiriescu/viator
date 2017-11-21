@@ -1,7 +1,25 @@
 {% extends "/main/base.html" %}
 
-{% block content %}
+{% block head%}
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.42.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v0.42.0/mapbox-gl.css' rel='stylesheet' />
+{% endblock %}
 
-    {{ form.autocomp.label }}: {{ form.autocomp }}
-    
+{% block content %}
+<div id='map' style='width: 600px; height: 600px;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic29yaW5iaXJpZXNjdSIsImEiOiJjajhuYXR1YmcxMXdrMnd1YWZzOG5nNXQwIn0.tY6DQoXnp_V88XSNlF2HdA';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [{{ location_lat }}, {{ location_long}}],
+    zoom: 11.15
+});
+
+var marker = new mapboxgl.Marker()
+.setLngLat([{{ location_lat }},{{ location_long }}])
+.addTo(map);
+
+</script>
+
 {% endblock %}

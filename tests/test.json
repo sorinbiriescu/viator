@@ -1,0 +1,247 @@
+{
+    "type": "FeatureCollection",
+    "query": [
+      "grenoble",
+      "isere",
+      "france"
+    ],
+    "features": [
+      {
+        "id": "place.13086768216264030",
+        "type": "Feature",
+        "place_type": [
+          "place"
+        ],
+        "relevance": 1,
+        "properties": {
+          "wikidata": "Q1289"
+        },
+        "text": "Grenoble",
+        "place_name": "Grenoble, Isère, France",
+        "bbox": [
+          5.677721,
+          45.154137,
+          5.753146,
+          45.214079
+        ],
+        "center": [
+          5.72639,
+          45.18694
+        ],
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            5.72639,
+            45.18694
+          ]
+        },
+        "context": [
+          {
+            "id": "region.215754",
+            "short_code": "FR-38",
+            "wikidata": "Q12559",
+            "text": "Isère"
+          },
+          {
+            "id": "country.3148",
+            "short_code": "fr",
+            "wikidata": "Q142",
+            "text": "France"
+          }
+        ]
+      },
+      {
+        "id": "poi.3184956555708400",
+        "type": "Feature",
+        "place_type": [
+          "poi"
+        ],
+        "relevance": 0.8233333333333333,
+        "properties": {
+          "landmark": true,
+          "tel": "04 76 49 19 77",
+          "category": "bakery, pizza, restaurant",
+          "address": "21 cours de la Libération et du Général de Gaulle"
+        },
+        "text": "Francesco Pizzas",
+        "place_name": "Francesco Pizzas, 21 cours de la Libération et du Général de Gaulle, Grenoble, Isère 38100, France",
+        "center": [
+          5.715924,
+          45.178278
+        ],
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            5.715924,
+            45.178278
+          ]
+        },
+        "context": [
+          {
+            "id": "postcode.15275544203027130",
+            "text": "38100"
+          },
+          {
+            "id": "place.13086768216264030",
+            "wikidata": "Q1289",
+            "text": "Grenoble"
+          },
+          {
+            "id": "region.215754",
+            "short_code": "FR-38",
+            "wikidata": "Q12559",
+            "text": "Isère"
+          },
+          {
+            "id": "country.3148",
+            "short_code": "fr",
+            "wikidata": "Q142",
+            "text": "France"
+          }
+        ]
+      },
+      {
+        "id": "region.215754",
+        "type": "Feature",
+        "place_type": [
+          "region"
+        ],
+        "relevance": 0.6666666666666666,
+        "properties": {
+          "short_code": "FR-38",
+          "wikidata": "Q12559"
+        },
+        "text": "Isère",
+        "place_name": "Isère, France",
+        "bbox": [
+          4.741534,
+          44.696033,
+          6.359122,
+          45.883678
+        ],
+        "center": [
+          5.635072,
+          45.289726
+        ],
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            5.635072,
+            45.289726
+          ]
+        },
+        "context": [
+          {
+            "id": "country.3148",
+            "short_code": "fr",
+            "wikidata": "Q142",
+            "text": "France"
+          }
+        ]
+      },
+      {
+        "id": "poi.14946303892658000",
+        "type": "Feature",
+        "place_type": [
+          "poi"
+        ],
+        "relevance": 0.6566666666666666,
+        "properties": {
+          "landmark": true,
+          "wikidata": "Q3080577",
+          "tel": "04 76 01 40 00",
+          "category": "landmark",
+          "address": "15 avenue du Grand Sablon",
+          "maki": "monument"
+        },
+        "text": "France 3 Alpes",
+        "place_name": "France 3 Alpes, 15 avenue du Grand Sablon, La Tronche, Isère 38700, France",
+        "center": [
+          5.74731,
+          45.1946
+        ],
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            5.74731,
+            45.1946
+          ]
+        },
+        "context": [
+          {
+            "id": "postcode.4181518765255020",
+            "text": "38700"
+          },
+          {
+            "id": "place.10193123699878880",
+            "wikidata": "Q1017260",
+            "text": "La Tronche"
+          },
+          {
+            "id": "region.215754",
+            "short_code": "FR-38",
+            "wikidata": "Q12559",
+            "text": "Isère"
+          },
+          {
+            "id": "country.3148",
+            "short_code": "fr",
+            "wikidata": "Q142",
+            "text": "France"
+          }
+        ]
+      },
+      {
+        "id": "poi.8422324096264030",
+        "type": "Feature",
+        "place_type": [
+          "poi"
+        ],
+        "relevance": 0.3333333333333333,
+        "properties": {
+          "landmark": true,
+          "tel": "03 296 30 10",
+          "category": "restaurant",
+          "address": "Kokkelbeekstraat 45",
+          "maki": "restaurant"
+        },
+        "text": "Grenoble",
+        "place_name": "Grenoble, Kokkelbeekstraat 45, Sint-Niklaas, Oost-Vlanderen 9100, Belgium",
+        "center": [
+          4.142111,
+          51.162048
+        ],
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            4.142111,
+            51.162048
+          ]
+        },
+        "context": [
+          {
+            "id": "postcode.3159437547419400",
+            "text": "9100"
+          },
+          {
+            "id": "place.10626137547483290",
+            "wikidata": "Q13127",
+            "text": "Sint-Niklaas"
+          },
+          {
+            "id": "region.3401",
+            "short_code": "BE-VOV",
+            "wikidata": "Q1114",
+            "text": "Oost-Vlanderen"
+          },
+          {
+            "id": "country.21681",
+            "short_code": "be",
+            "wikidata": "Q31",
+            "text": "Belgium"
+          }
+        ]
+      }
+    ],
+    "attribution": "NOTICE: © 2017 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."
+  }

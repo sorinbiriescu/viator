@@ -32,7 +32,7 @@ class Locations(db.Model):
                     .all()
         json = { "query": "Unit","suggestions": [] }
         for result in query:
-            json["suggestions"].append({"value":','.join([result[0],result[1]]),"data":','.join([result[0],result[1]])})
+            json["suggestions"].append({"value":','.join([result[0],result[1],'France']),"data":','.join([result[0],result[1],'France'])})
         return json
 
 class Attractions(db.Model):
