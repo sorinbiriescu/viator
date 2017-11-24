@@ -32,14 +32,14 @@ def autocomplete():
     result = Locations.get_location_autocomplete(query)
     return jsonify(result)
 
-@main.route('/location/<location>', methods=['GET'])
-def location(location):
-    geocode = get_geocode(location)
-
+@main.route('/location/', methods=['GET','POST'])
+def location():
+    form = SearchForm(request.form)
     content = {
-        'location_name': geocode[0]['location_name'],
-        'location_lat' : geocode[0]['location_lat'],
-        'location_long': geocode[0]['location_long']
+        # 'location_name': geocode[0]['location_name'],
+        # 'location_lat' : geocode[0]['location_lat'],
+        # 'location_long': geocode[0]['location_long'],
+        'form': form
     }
     return render_template('/main/location.html', **content)
 
