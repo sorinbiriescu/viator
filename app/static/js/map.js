@@ -8,13 +8,28 @@ $(document).ready( function() {
         zoom: 10
     });
     
-    document.getElementById('fly').addEventListener('click', function () {
+    document.getElementById('search_submit').addEventListener('click', function () {
         // Fly to a random location by offsetting the point -74.50, 40
         // by up to 5 degrees.
-        map.flyTo({
-            center: [
-                5.7245 + (Math.random() - 0.5) * 10,
-                45.1885 + (Math.random() - 0.5) * 10]
+        const $autocomplete = $('#location-search-autocomplete').val()
+        var locLat
+        var locLong
+        console.log('Lat: ', locLat)
+        console.log('Long: ', locLong)
+        const url = 'http://127.0.0.1:5000/_geocode'
+        const data = {
+            query: $autocomplete
+        }
+        $.getJSON(url, data, function(data) {
+
+                    locLat = Number(data.location_lat)
+                    locLong = Number(data.location_long)
+                    console.log('Lat: ', locLat)
+                    console.log('Long: ', locLong)
+        }).then( function() {
+            map.flyTo({
+                center: [locLong, locLat]
+            });
         });
     });
 });

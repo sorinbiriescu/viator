@@ -32,6 +32,16 @@ def autocomplete():
     result = Locations.get_location_autocomplete(query)
     return jsonify(result)
 
+@main.route('/_geocode', methods=['GET'])
+def geocode():
+    query = request.args.get('query')
+    local_db_query = Locations.get_geocode_local(query)
+    if local_db_query is None:
+        geocode = get_geocode(query)
+        return geocode
+    else:
+        return local_db_query
+
 @main.route('/location/', methods=['GET','POST'])
 def location():
     form = SearchForm(request.form)
