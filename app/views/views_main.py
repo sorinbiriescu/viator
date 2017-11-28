@@ -1,10 +1,10 @@
-import os
+import os, sys
 
 import requests
 from flask import (Blueprint, Response, jsonify, redirect, render_template,
                    request, url_for)
 
-from app import Attractions, Locations, SearchForm, SearchForm2
+from app import Attractions, Locations, SearchForm, SearchForm2, SearchForm3
 
 script_dir = os.path.dirname(__file__)
 
@@ -55,6 +55,28 @@ def autocomplete():
 def geocode():
     pass
 
+@main.route('/_optimized_route', methods=['GET','POST'])
+def optimized_route():
+    json = request.json
+    payload = {
+        "json" : json,
+        "api_key" : mapzen_api,
+        }
+    print(json, file=sys.stderr)
+    mapzen_req = requests.post(url='https://matrix.mapzen.com/optimized_route', params=payload)
+    mapzen_resp_json = mapzen_req.json
+    print(mapzen_req, file=sys.stderr)
+    print(mapzen_req.json, file=sys.stderr)
+    return mapzen_resp_json
+
+# @main.after_request
+# def after(response):
+#   # todo with response
+#     print(response.status)
+#     print(response.headers)
+#     print(response.get_data())
+#     return response
+
 @main.route('/location', methods=['GET','POST'])
 def location():
     form = SearchForm(request.form)
@@ -75,4 +97,12 @@ def directions():
 
 @main.route('/route')
 def route():
-    return render_template('/main/route.html')
+    form = SearchForm(request.form)
+    form2 = SearchForm2(request.form)
+    form3 = SearchForm3(request.form)
+    content = {
+        'form': form,
+        'form2': form2,
+        'form3': form3
+    }
+    return render_template('/main/route.html', **content)

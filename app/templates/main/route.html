@@ -1,0 +1,40 @@
+{% extends "/main/base.html" %}
+
+{% block head%}
+<script src="../static/js/map.js"></script>
+<script src="../static/js/route.js"></script>
+
+<!-- style sheet for mapzen.js -->
+<link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+
+
+<!-- latest version of mapzen.js-->
+<script src="https://mapzen.com/js/mapzen.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+    #mapzen {
+      height: 600px;
+      width: 600px;
+      position: absolute;
+    }
+    html,body{margin: 0; padding: 0;}
+    .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+    .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+    .autocomplete-selected { background: #F0F0F0; }
+    .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+    .autocomplete-group { padding: 2px 5px; }
+    .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+  </style>
+
+{{ form.autocomp.label }}: {{ form.autocomp }}
+{{ form2.autocomp2.label }}: {{ form2.autocomp2 }}
+{{ form3.autocomp3.label }}: {{ form3.autocomp3 }}
+<button id='search_submit_directions' class="btn btn-success">Search</button>
+<div id='mapzen'></div>
+
+
+{% endblock %}
