@@ -1,11 +1,10 @@
 import os
-import requests
 
-from flask import Blueprint, Response, jsonify, render_template, request, url_for, redirect
+import requests
+from flask import (Blueprint, Response, jsonify, redirect, render_template,
+                   request, url_for)
 
 from app import Attractions, Locations, SearchForm
-
-from ..maps.mapbox import get_geocode
 
 script_dir = os.path.dirname(__file__)
 
@@ -49,42 +48,21 @@ def autocomplete():
                 "data": result['geometry']['coordinates'] \
                 })
 
-    print(mapzen_req)
-
     return jsonify(json)
 
 
 @main.route('/_geocode', methods=['GET'])
 def geocode():
-    query = request.args.get('query')
-    local_db_query = Locations.get_geocode_local(query)
-    if local_db_query is None:
-        geocode = get_geocode(query)
-        return geocode
-    else:
-        return local_db_query
+    pass
 
 @main.route('/location', methods=['GET','POST'])
 def location():
     form = SearchForm(request.form)
     content = {
-        # 'location_name': geocode[0]['location_name'],
-        # 'location_lat' : geocode[0]['location_lat'],
-        # 'location_long': geocode[0]['location_long'],
         'form': form
     }
     return render_template('/main/location.html', **content)
 
-@main.route('/mapzen', methods=['GET','POST'])
-def mapzen():
-    form = SearchForm(request.form)
-    content = {
-        # 'location_name': geocode[0]['location_name'],
-        # 'location_lat' : geocode[0]['location_lat'],
-        # 'location_long': geocode[0]['location_long'],
-        'form': form
-    }
-    return render_template('/main/mapzen.html', **content)
 
 @main.route('/route')
 def route():
