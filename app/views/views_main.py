@@ -4,7 +4,7 @@ import requests
 from flask import (Blueprint, Response, jsonify, redirect, render_template,
                    request, url_for)
 
-from app import Attractions, Locations, SearchForm
+from app import Attractions, Locations, SearchForm, SearchForm2
 
 script_dir = os.path.dirname(__file__)
 
@@ -63,6 +63,15 @@ def location():
     }
     return render_template('/main/location.html', **content)
 
+@main.route('/directions', methods=['GET','POST'])
+def directions():
+    form = SearchForm(request.form)
+    form2 = SearchForm2(request.form)
+    content = {
+        'form': form,
+        'form2': form2
+    }
+    return render_template('/main/directions.html', **content)
 
 @main.route('/route')
 def route():

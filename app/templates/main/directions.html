@@ -2,6 +2,7 @@
 
 {% block head%}
 <script src="../static/js/map.js"></script>
+<script src="../static/js/directions.js"></script>
 
 <!-- style sheet for mapzen.js -->
 <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
@@ -30,8 +31,9 @@
   </style>
 
 {{ form.autocomp.label }}: {{ form.autocomp }}
-<button id='search_submit' class="btn btn-success">Search</button>
-<div id='mapzen';'></div>
+{{ form2.autocomp2.label }}: {{ form2.autocomp2 }}
+<button id='search_submit_directions' class="btn btn-success">Search</button>
+<div id='mapzen'></div>
 
 
 {% endblock %}
