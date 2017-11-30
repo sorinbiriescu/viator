@@ -50,6 +50,23 @@ def autocomplete():
 
     return jsonify(json)
 
+@main.route('/_getpoi', methods=['GET','POST'])
+def getpoi():
+    query = request.args.get('query')
+    payload = {
+        'api_key':mapzen_api,
+        'layers':'venue',
+        'point.lat':45.1885,
+        'point.lon':5.7245,
+        'sources':'osm',
+        'boundary.circle.radius': 3500
+        }
+    
+    mapzen_req = requests.get(url='https://search.mapzen.com/v1/reverse', params=payload)
+    mapzen_resp_json = mapzen_req.json()
+
+    return jsonify(mapzen_resp_json)
+
 
 @main.route('/_geocode', methods=['GET'])
 def geocode():
@@ -106,3 +123,11 @@ def route():
         'form3': form3
     }
     return render_template('/main/route.html', **content)
+
+@main.route('/poi', methods=['GET'])
+def poi():
+    form = SearchForm(request.form)
+    content = {
+        'form': form
+    }
+    return render_template('/main/poi.html', **content)

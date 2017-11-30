@@ -9,3 +9,4 @@ flask-script==2.0.6
 folium==0.5.0
 mapbox==0.14.0
 WTForms==2.1
+psycopg2
