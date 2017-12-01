@@ -1,20 +1,21 @@
 from app import db
-from sqlalchemy import and_
+from sqlalchemy import Column,and_
 import json
 
 class Locations(db.Model):
+    __bind_key__ = None
 
     id = db.Column(db.Integer, primary_key=True)
     location_eu_region = db.Column(db.Text)
     location_region_code = db.Column(db.Integer)
     location_region_name = db.Column(db.Text)
     location_region_capital = db.Column(db.Text)
-    location_department_no = db.Column(db.Integer)
+    location_department_no = db.Column(db.Text)
     location_department_name = db.Column(db.Text)
     location_prefecture = db.Column(db.Text)
     location_circumscription = db.Column(db.Integer)
     location_name = db.Column(db.Text)
-    location_postal_code = db.Column(db.Integer)
+    location_postal_code = db.Column(db.Text)
     location_insee_code = db.Column(db.Integer)
     location_lat = db.Column(db.Float)
     location_long = db.Column(db.Float)
@@ -68,6 +69,8 @@ class Locations(db.Model):
 
 class Attractions(db.Model):
 
+    __bind_key__ = None
+    
     id = db.Column(db.Integer, primary_key=True)
     attraction_name = db.Column(db.Text)
     attraction_location = db.Column(db.Text)

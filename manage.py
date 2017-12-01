@@ -9,7 +9,7 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def initdb():
-    db.create_all()
+    db.create_all(bind=None) #bind=None if only the main DB needs to be created
     db.session.commit()
     print('Initialized the database')
 
@@ -17,7 +17,7 @@ def initdb():
 @manager.command
 def dropdb():
     if prompt_bool("Are you sure you want to lose all your data"):
-        db.drop_all()
+        db.drop_all(bind=None)
         print('Dropped the database')
 
 
