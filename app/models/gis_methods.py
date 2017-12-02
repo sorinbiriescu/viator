@@ -26,7 +26,7 @@ def get_restaurants():
                         rhone_alpes_point.amenity,
                         func.ST_AsGeoJSON(rhone_alpes_point.way)
                         ) \
-                .limit(5) \
+                .limit(10) \
                 .all()
     result = {
         "status":"OK",
