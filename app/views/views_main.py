@@ -1,10 +1,12 @@
-import os, sys
+import os
+import sys
 
 import requests
 from flask import (Blueprint, Response, jsonify, redirect, render_template,
                    request, url_for)
 
-from app import Attractions, Locations, SearchForm, SearchForm2, SearchForm3
+from app import (Attractions, Locations, SearchForm, SearchForm2, SearchForm3,
+                 get_restaurants)
 
 script_dir = os.path.dirname(__file__)
 
@@ -52,21 +54,10 @@ def autocomplete():
 
 @main.route('/_getpoi', methods=['GET','POST'])
 def getpoi():
-    query = request.args.get('query')
-    payload = {
-        'api_key':mapzen_api,
-        'layers':'venue',
-        'point.lat':45.1885,
-        'point.lon':5.7245,
-        'sources':'osm',
-        'boundary.circle.radius': 3500
-        }
-    
-    mapzen_req = requests.get(url='https://search.mapzen.com/v1/reverse', params=payload)
-    mapzen_resp_json = mapzen_req.json()
 
-    return jsonify(mapzen_resp_json)
+    result = get_restaurants()
 
+    return jsonify(result)
 
 @main.route('/_geocode', methods=['GET'])
 def geocode():
