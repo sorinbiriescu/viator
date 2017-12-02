@@ -1,10 +1,12 @@
-from app import db
-from sqlalchemy import Column, BigInteger, Text
 from geoalchemy2 import Geometry
+from sqlalchemy import (VARCHAR, BigInteger, CheckConstraint, Column, Index,
+                        PrimaryKeyConstraint, Text)
+
+from app import db
+
 
 class GISModelMixin (object):
-    id = db.Column(db.BigInteger, primary_key=True, nullable=False)
-    osm_id = db.Column(db.BigInteger)
+
     access = db.Column(db.Text)
     addr_housename = db.Column('addr:housename',db.Text)
     addr_housenumber = db.Column('addr:housenumber',db.Text) 
@@ -63,7 +65,6 @@ class GISModelMixin (object):
     toll = db.Column(db.Text)
     tourism = db.Column(db.Text)
     tower_type = db.Column('tower:type',db.Text)
-    tracktype = db.Column(db.Text)
     tunnel = db.Column(db.Text)
     water = db.Column(db.Text)
     waterway = db.Column(db.Text)
@@ -71,13 +72,21 @@ class GISModelMixin (object):
     width = db.Column(db.Text)
     wood = db.Column(db.Text)
     z_order = db.Column(db.Integer)
-    way_area = db.Column(db.Float)
 
 
 class rhone_alpes_line(GISModelMixin, db.Model):
     __bind_key__ = 'gis_rhone_alpes'
 
+    osm_id = db.Column(db.BigInteger, primary_key=True,nullable=False)
+    tracktype = db.Column(db.Text)
+    way_area = db.Column(db.Float)
     way = db.Column(Geometry('LINESTRING'))
+    db.Index('rhone_alpes_line_index', way,
+        postgresql_using='gist',
+        postgresql_ops={'way':'gist_geometry_ops_2d'})
+    db.Index('rhone_alpes_line_pkey', osm_id,
+        postgresql_using='btree',
+        postgresql_ops={'osm_id':'int8_ops'})
 
 class rhone_alpes_nodes(db.Model):
     __bind_key__ = 'gis_rhone_alpes'
@@ -86,19 +95,36 @@ class rhone_alpes_nodes(db.Model):
     lat = db.Column(db.Integer, nullable=False)
     lon = db.Column(db.Integer, nullable=False)
     tags = db.Column(db.Text)
+    db.PrimaryKeyConstraint(id, name='rhone_alpes_nodes_pkey')
 
 class rhone_alpes_point(GISModelMixin,db.Model):
     __bind_key__ = 'gis_rhone_alpes'
 
+    osm_id = db.Column(db.BigInteger, primary_key=True,nullable=False)
     capital = db.Column(db.Text)
     ele = db.Column(db.Text)
     poi = db.Column(db.Text)
     way = db.Column(Geometry('POINT'))
+    db.Index('rhone_alpes_point_index', way,
+        postgresql_using='gist',
+        postgresql_ops={'way':'gist_geometry_ops_2d'})
+    db.Index('rhone_alpes_point_pkey', osm_id,
+        postgresql_using='btree',
+        postgresql_ops={'osm_id':'int8_ops'})
 
 class rhone_alpes_polygon(GISModelMixin,db.Model):
     __bind_key__ = 'gis_rhone_alpes'
 
+    osm_id = db.Column(db.BigInteger, primary_key=True,nullable=False)
+    tracktype = db.Column(db.Text)
+    way_area = db.Column(db.Float)
     way = db.Column(Geometry('GEOMETRY'))
+    db.Index('rhone_alpes_polygon_index', way,
+        postgresql_using='gist',
+        postgresql_ops={'way':'gist_geometry_ops_2d'})
+    db.Index('rhone_alpes_polygon_pkey', osm_id,
+        postgresql_using='btree',
+        postgresql_ops={'osm_id':'int8_ops'})
 
 class rhone_alpes_rels(db.Model):
     __bind_key__ = 'gis_rhone_alpes'
@@ -109,11 +135,24 @@ class rhone_alpes_rels(db.Model):
     parts = db.Column(db.ARRAY(BigInteger))
     members = db.Column(db.ARRAY(Text))
     tags = db.Column(db.ARRAY(Text))
+    db.Index('rhone_alpes_rels_parts', parts,
+        postgresql_using='gin',
+        postgresql_ops={'parts':'_int8_ops'})
+    db.PrimaryKeyConstraint(id, name='rhone_alpes_rels_pkey')
 
 class rhone_alpes_roads(GISModelMixin,db.Model):
     __bind_key__ = 'gis_rhone_alpes'
 
+    osm_id = db.Column(db.BigInteger, primary_key=True,nullable=False)
+    tracktype = db.Column(db.Text)
+    way_area = db.Column(db.Float)
     way = db.Column(Geometry('LINESTRING'))
+    db.Index('rhone_alpes_roads_index', way,
+        postgresql_using='gist',
+        postgresql_ops={'way':'gist_geometry_ops_2d'})
+    db.Index('rhone_alpes_roads_pkey', osm_id,
+        postgresql_using='btree',
+        postgresql_ops={'osm_id':'int8_ops'})
 
 class rhone_alpes_ways(db.Model):
     __bind_key__ = 'gis_rhone_alpes'
@@ -121,3 +160,19 @@ class rhone_alpes_ways(db.Model):
     id = db.Column(db.BigInteger, primary_key=True, nullable=False)
     nodes = db.Column(db.ARRAY(BigInteger), nullable=False)
     tags = db.Column(db.Text)
+    db.Index('rhone_alpes_ways_nodes', nodes,
+        postgresql_using='gin',
+        postgresql_ops={'nodes':'_int8_ops'})
+    db.PrimaryKeyConstraint(id, name='rhone_alpes_ways_pkey')
+
+class spatial_ref_sys(db.Model):
+    __bind_key__ = 'gis_rhone_alpes'
+
+    srid = db.Column(db.Integer, primary_key=True, nullable=False)
+    auth_name = db.Column(db.VARCHAR(256))
+    auth_srid = db.Column(db.Integer)
+    srtext = db.Column(db.VARCHAR(2048))
+    proj4text = db.Column(db.VARCHAR(2048))
+
+    db.PrimaryKeyConstraint(srid, name='spatial_ref_sys_pkey')
+    db.CheckConstraint('srid > 0 AND srid < 998999', name='spatial_ref_sys_srid_check')
