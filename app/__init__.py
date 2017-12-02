@@ -10,8 +10,8 @@ db = SQLAlchemy(app)
 
 from .models.models import Locations, Attractions
 from .models.gis_rhone_alpes import (
-    rhones_alpes_line, rhones_alpes_nodes, rhones_alpes_point,
-    rhones_alpes_polygon,rhones_alpes_rels,rhones_alpes_roads,rhones_alpes_ways) 
+    rhone_alpes_line, rhone_alpes_nodes, rhone_alpes_point,
+    rhone_alpes_polygon,rhone_alpes_rels,rhone_alpes_roads,rhone_alpes_ways) 
 from .forms.forms_main import SearchForm, SearchForm2, SearchForm3
 from .views.views_main import main
 app.register_blueprint(main)
