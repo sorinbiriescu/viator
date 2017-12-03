@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 import requests
 from flask import (Blueprint, Response, jsonify, redirect, render_template,
@@ -28,6 +29,53 @@ def index():
         return render_template('/main/main.html', **content)
  
 
+
+@main.route('/location', methods=['GET','POST'])
+def location():
+    form = SearchForm(request.form)
+    content = {
+        'form': form
+    }
+    return render_template('/main/location.html', **content)
+
+
+
+@main.route('/directions', methods=['GET','POST'])
+def directions():
+    form = SearchForm(request.form)
+    form2 = SearchForm2(request.form)
+    content = {
+        'form': form,
+        'form2': form2
+    }
+    return render_template('/main/directions.html', **content)
+
+
+
+@main.route('/route')
+def route():
+    form = SearchForm(request.form)
+    form2 = SearchForm2(request.form)
+    form3 = SearchForm3(request.form)
+    content = {
+        'form': form,
+        'form2': form2,
+        'form3': form3
+    }
+    return render_template('/main/route.html', **content)
+
+
+
+@main.route('/poi', methods=['GET'])
+def poi():
+    form = SearchForm(request.form)
+    content = {
+        'form': form
+    }
+    return render_template('/main/poi.html', **content)
+
+
+
 @main.route('/_autocomplete', methods=['GET'])
 def autocomplete():
     query = request.args.get('query')
@@ -52,16 +100,22 @@ def autocomplete():
 
     return jsonify(json)
 
+
+
 @main.route('/_getpoi', methods=['GET','POST'])
 def getpoi():
+    json_response = request.json
+    result = get_restaurants(json_response)
 
-    result = get_restaurants()
+    return json.dumps(result)
 
-    return jsonify(result)
+
 
 @main.route('/_geocode', methods=['GET'])
 def geocode():
     pass
+
+
 
 @main.route('/_optimized_route', methods=['GET','POST'])
 def optimized_route():
@@ -84,41 +138,3 @@ def optimized_route():
 #     print(response.headers)
 #     print(response.get_data())
 #     return response
-
-@main.route('/location', methods=['GET','POST'])
-def location():
-    form = SearchForm(request.form)
-    content = {
-        'form': form
-    }
-    return render_template('/main/location.html', **content)
-
-@main.route('/directions', methods=['GET','POST'])
-def directions():
-    form = SearchForm(request.form)
-    form2 = SearchForm2(request.form)
-    content = {
-        'form': form,
-        'form2': form2
-    }
-    return render_template('/main/directions.html', **content)
-
-@main.route('/route')
-def route():
-    form = SearchForm(request.form)
-    form2 = SearchForm2(request.form)
-    form3 = SearchForm3(request.form)
-    content = {
-        'form': form,
-        'form2': form2,
-        'form3': form3
-    }
-    return render_template('/main/route.html', **content)
-
-@main.route('/poi', methods=['GET'])
-def poi():
-    form = SearchForm(request.form)
-    content = {
-        'form': form
-    }
-    return render_template('/main/poi.html', **content)

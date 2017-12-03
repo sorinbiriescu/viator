@@ -2,7 +2,8 @@
 
 {% block head%}
 <script src="../static/js/map.js"></script>
-<script src="../static/js/location.js"></script>
+<script src="../static/js/autocomplete.js"></script>
+<script src="../static/js/poi.js"></script>
 <script src="../static/js/position.js"></script>
 
 <!-- style sheet for mapzen.js -->
@@ -18,8 +19,8 @@
 
 <style>
     #mapzen {
-      height: 600px;
-      width: 600px;
+      height: 500px;
+      width: 100%;
       position: absolute;
     }
     html,body{margin: 0; padding: 0;}
@@ -31,9 +32,24 @@
     .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
   </style>
 
-{{ form.autocomp.label }}: {{ form.autocomp }}
-<button id='search_submit' class="btn btn-success">Search</button>
-<div id='mapzen'></div>
+
+<div class="row">
+    {{ form.autocomp.label }}: {{ form.autocomp }}
+    <button id='search_submit' class="btn btn-success">Search</button>
+</div>
+
+        <div class="row">
+            <div class="col-md-6">
+              <div id='results'></div>
+            </div>
+            <div class="col-md-6">
+              <div id='mapzen'></div>
+            </div>
+        </div>
+</div>
+
+
+
 
 
 {% endblock %}
