@@ -1,9 +1,9 @@
 'use strict';
 // Add a Mapzen API key
-var api_key = 'mapzen-fPCfu1G'
-var map
-var addMarkerToGroup
-var clearMarkersFromGroup
+let api_key = 'mapzen-fPCfu1G'
+let map
+let addMarkerToGroup
+let clearMarkersFromGroup
 
 $(document).ready(function () {
   L.Mapzen.apiKey = api_key;
@@ -18,8 +18,7 @@ $(document).ready(function () {
     // }
   });
 
-  var resultsGroup = L.layerGroup()
-  resultsGroup.addTo(map);
+  let resultsGroup = L.layerGroup().addTo(map);
 
   addMarkerToGroup = function(lat, long, popup) {
     let marker = L.marker([long, lat]).bindPopup(popup);

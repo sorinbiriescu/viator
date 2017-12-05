@@ -7,7 +7,8 @@ from flask import (Blueprint, Response, jsonify, redirect, render_template,
                    request, url_for)
 
 from app import (Attractions, Locations, SearchForm, SearchForm2, SearchForm3,
-                 get_restaurants)
+                 get_poi_type,PoiTypeForm)
+
 
 script_dir = os.path.dirname(__file__)
 
@@ -33,6 +34,7 @@ def index():
 @main.route('/location', methods=['GET','POST'])
 def location():
     form = SearchForm(request.form)
+
     content = {
         'form': form
     }
@@ -69,8 +71,10 @@ def route():
 @main.route('/poi', methods=['GET'])
 def poi():
     form = SearchForm(request.form)
+    poi_type_checkbox = PoiTypeForm(request.form)
     content = {
-        'form': form
+        'form': form,
+        'poi_type_checkbox':poi_type_checkbox
     }
     return render_template('/main/poi.html', **content)
 
@@ -105,7 +109,7 @@ def autocomplete():
 @main.route('/_getpoi', methods=['GET','POST'])
 def getpoi():
     json_response = request.json
-    result = get_restaurants(json_response)
+    result = get_poi_type(json_response)
 
     return json.dumps(result)
 

@@ -1,6 +1,4 @@
-{% extends "/main/base.html" %}
-
-{% block head%}
+{% extends "/main/base.html" %} {% block head%}
 <script src="../static/js/map.js"></script>
 <script src="../static/js/autocomplete.js"></script>
 <script src="../static/js/poi.js"></script>
@@ -13,43 +11,95 @@
 <!-- latest version of mapzen.js-->
 <script src="https://mapzen.com/js/mapzen.js"></script>
 
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 
 <style>
-    #mapzen {
-      height: 500px;
-      width: 100%;
-      position: absolute;
-    }
-    html,body{margin: 0; padding: 0;}
-    .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
-    .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
-    .autocomplete-selected { background: #F0F0F0; }
-    .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-    .autocomplete-group { padding: 2px 5px; }
-    .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
-  </style>
+  #mapzen {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .autocomplete-suggestions {
+    border: 1px solid #999;
+    background: #FFF;
+    overflow: auto;
+  }
+
+  .autocomplete-suggestion {
+    padding: 2px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .autocomplete-selected {
+    background: #F0F0F0;
+  }
+
+  .autocomplete-suggestions strong {
+    font-weight: normal;
+    color: #3399FF;
+  }
+
+  .autocomplete-group {
+    padding: 2px 5px;
+  }
+
+  .autocomplete-group strong {
+    display: block;
+    border-bottom: 1px solid #000;
+  }
+</style>
 
 
-<div class="row">
-    {{ form.autocomp.label }}: {{ form.autocomp }}
-    <button id='search_submit' class="btn btn-success">Search</button>
-</div>
 
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      {{ form.autocomp.label }}: {{ form.autocomp }}
+      <button id='search_submit' class="btn btn-success">Search</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
         <div class="row">
-            <div class="col-md-6">
-              <div id='results'></div>
-            </div>
-            <div class="col-md-6">
-              <div id='mapzen'></div>
-            </div>
-        </div>
+
+            <p>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Select POI
+                </button>
+              </p>
+              <div class="collapse" id="collapseExample" style="width:100%";>
+                <div class="card card-block">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% for item in poi_type_checkbox %}
+                        <label class="btn btn-primary" name="bullshit">
+                             {{ item(class_="poi-checkbox") }} {{ item.name }}
+                        </label>
+                       {% endfor %}
+                      </div>
+                </div>
+              </div>
+        </div>        
+      </div>
+      <div class="row">
+        <div id='results'></div>
+      </div>
+    </div>
+    <div class="col-md-6" style="height:80vh;">
+      <div id='mapzen'></div>
+    </div>
+  </div>
 </div>
 
 
-
-
+</div>
 
 {% endblock %}
