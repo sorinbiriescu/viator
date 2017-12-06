@@ -1,4 +1,4 @@
-from sqlalchemy import func, and_, cast
+from sqlalchemy import func, and_, or_, cast
 from sqlalchemy.sql import select
 from geoalchemy2 import WKTElement, Geography
 
@@ -24,20 +24,23 @@ def get_poi_type(json):
     query = json["query"]
 
     query = rhone_alpes_point.query \
-                .filter(and_(
-                    rhone_alpes_point.amenity==query,
-                    func.ST_DWithin(cast(rhone_alpes_point.way,Geography),location, 3000)
+                .filter(and_(or_(
+                                rhone_alpes_point.amenity==i for i in query
+                                ),
+                            func.ST_DWithin(cast(rhone_alpes_point.way,Geography),location, 3000)
                     )) \
                 .with_entities(
                         rhone_alpes_point.name,
                         rhone_alpes_point.amenity,
                         func.ST_AsGeoJSON(rhone_alpes_point.way)
                         ) \
-                .limit(25) \
-                .all()
+                .paginate()
+
     result = {
         "status":"OK",
-        "result":[{"name":e[0], "type":e[1], "location":ast.literal_eval(e[2])} for e in query]}
+        "total_results": query.total,
+        "pages": query.pages,
+        "result":[{"name":e[0], "type":e[1], "location":ast.literal_eval(e[2])} for e in query.items]}
 
     return result
 
