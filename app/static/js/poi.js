@@ -12,13 +12,11 @@ $("#search_submit").on("click", function () {
 
 });
 
-
+let selected_venues = [];
+let unselected_venues = [];
 
 $("#venue-update").on("click", function() {
     console.log("Update button clicked")
-
-    let selected_venues = []
-    let unselected_venues = []
 
     $("input.poi-checkbox").each( function() {
         console.log($(this))
@@ -32,56 +30,29 @@ $("#venue-update").on("click", function() {
     console.log("poi",selected_venues,unselected_venues)
 
     getResults(selected_venues).then(results => { 
+                    // 0: data["result"],
+                    // 1: data["total_results"],
+                    // 2: data["total_pages"],
+                    // 3: data["current_page"]
                     showResults(results[0]);
-                    paginateResults(results[1],results[2]);
+                    paginateResults(results[2])
+                    
                 });
 });
 
-// $("input.poi-checkbox:checkbox").on("change" , () => {
-
-//     // Get the name attribute of the child that triggered the event.
-//     // As of now, it's the label that wraps the input:checkbox element
-
-//     // Basic flow. When checkbox is checked, event .on("change") is triggered
-//     // Then name of checkbox is passed to func getResults and results are 
-//     // displayed with the func showResults()
-
+function paginateResults(total_pages) {
     
-//     let value = $(event.target).find("input.poi-checkbox").attr("name");
-//     console.log("current value",value);
+    $('#pagination').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 7,
+        onPageClick: function (event, page) {
+            getResults(selected_venues, page).then(results => {showResults(results[0])})
+        }
+    });
 
-//     // If event.target detects status "checked", then gets results and shows
-//     // markers on map. If "unchecked", it clears the markers from the map
+};
 
-//     if($("input.poi-checkbox").is(":checked")) {
-        
-//         // For debug
-//         // console.log($value,jQuery.type($value),"checked");
-
-//         // Calls getResults, then with the data (query results), calls showResults
-
-//         checked_POI.push(value)
-//         console.log("current values in checked_POI", checked_POI)
-
-//         getResults(value).then(results => { 
-//             showResults(results[0]);
-//             paginateResults(results[1],results[2]);
-//         });
-//     }
-//     else {
-        
-//         // For debug
-//         // console.log($value,"unchecked");
-
-//         // Clears the markers on the map for that POI / tag.
-//         checked_POI.splice(value)
-//         console.log("current values in checked_POI", checked_POI)
-//         clearMarkersFromGroup();
-//     }
-    
-// });
-
-function getResults(query,page=1,per_page=20) {
+function getResults(query,page=1,per_page=10) {
 
     // Since other functions depend on the results of the query, it creates a
     // promise. If the query is retrieved with success, then it resolves with 
@@ -94,8 +65,8 @@ function getResults(query,page=1,per_page=20) {
         let json_req_payload = {
             "coordinates":[autocomplete_data[1], autocomplete_data[0]],
             "query": query,
-            "page":page,
-            "per_page":per_page,
+            "page":parseInt(page),
+            "per_page":parseInt(per_page),
         }
 
         // Ajax request that will be sent. Takes query params from payload
@@ -121,7 +92,12 @@ function getResults(query,page=1,per_page=20) {
         function successHandler(data, textStatus, xhr) {
             console.log("Data from request", data)
 
-            var results = [data["result"], data["total_results"],data["pages"]]
+            var results = [
+                data["result"],
+                data["total_results"],
+                data["total_pages"],
+                data["current_page"]
+            ]
             return resolve(results)
         };
 
@@ -141,30 +117,16 @@ function showResults(results) {
     $("#results").empty();
     clearMarkersFromGroup();
 
-    for (let i = 1; i < results.length; i++) {
+    for (let i = 0; i < results.length; i++) {
 
-        $("#results").append("<p>" + i + ")." + results[i]["name"] + "</p>")
+        let index = i+1
+        $("#results").append("<p>" + index + ")." + results[i]["name"] + "</p>")
         addMarkerToGroup(
             results[i]["location"]["coordinates"][0],
             results[i]["location"]["coordinates"][1],
             results[i]["name"]
         );
     }
-};
-
-function paginateResults(total_results,pages) {
-
-    $("ul.pagination").empty()
-    $("ul.pagination").append('<li class="page-item-previous"><a class="page-link" href="#">Previous</a></li>')
-    
-    let total_pages = parseInt(pages)
-    
-    for (let i=1; i < total_pages; i++) {
-        let page_link = 
-        $("ul.pagination").append('<li class="page-item"><a class="page-link" href="#">'+i+'</a></li>')
-    }
-    
-    $("ul.pagination").append('<li class="page-item-next"><a class="page-link" href="#">Next</a></li>')
 };
 
 });

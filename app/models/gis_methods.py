@@ -22,6 +22,8 @@ def get_poi_type(json):
 
     location = WKTElement('POINT(%s %s)' % (json["coordinates"][1],json["coordinates"][0]), srid=4326)
     query = json["query"]
+    page = json["page"]
+    per_page=json["per_page"]
 
     query = rhone_alpes_point.query \
                 .filter(and_(or_(
@@ -34,12 +36,13 @@ def get_poi_type(json):
                         rhone_alpes_point.amenity,
                         func.ST_AsGeoJSON(rhone_alpes_point.way)
                         ) \
-                .paginate()
+                .paginate(page=page, per_page=per_page)
 
     result = {
         "status":"OK",
         "total_results": query.total,
-        "pages": query.pages,
+        "total_pages": query.pages,
+        "current_page": query.page,
         "result":[{"name":e[0], "type":e[1], "location":ast.literal_eval(e[2])} for e in query.items]}
 
     return result
