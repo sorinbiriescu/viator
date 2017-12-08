@@ -1,8 +1,11 @@
 "use strict";
 $(document).ready(function () {
 
-    let selected_venues = [];
-    let unselected_venues = [];
+    let selected_venues;
+    let unselected_venues;
+
+    console.log("selected venues", selected_venues)
+    console.log("not selected venues", unselected_venues)
 
     $("#search_submit").on("click", function () {
 
@@ -12,7 +15,8 @@ $(document).ready(function () {
     });
 
     $("#venue-update").on("click", function () {
-
+        selected_venues = [];
+        unselected_venues = [];
         $("input.poi-checkbox").each(function () {
 
             if ($(this).is(":checked")) {

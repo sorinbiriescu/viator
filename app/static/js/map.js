@@ -19,7 +19,8 @@ $(document).ready(function () {
     // }
   });
 
-  let marker_group = L.layerGroup().addTo(map)
+  let marker_group = L.layerGroup()
+  marker_group.addTo(map)
 
   addMarkerToGroup = function (lat, long, name, icon, color, shape) {
 
