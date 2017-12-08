@@ -18,15 +18,45 @@ $(document).ready(function () {
     // }
   });
 
-  let resultsGroup = L.layerGroup().addTo(map);
+  var redMarker = L.ExtraMarkers.icon({
+    icon: 'fa-coffee',
+    markerColor: 'red',
+    shape: 'square',
+    prefix: 'fa'
+  });
 
-  addMarkerToGroup = function(lat, long, popup) {
-    let marker = L.marker([long, lat]).bindPopup(popup);
-    marker.addTo(resultsGroup);
+  L.marker([51.941196, 4.512291], {
+    icon: redMarker,
+  }).addTo(map);
+
+  addMarkerToGroup = function (lat, long, popup, type) {
+
+    layer = type + "Group"
+
+    if (map.hasLayer(layer)) {
+      // If has layer, do nothing
+    } else {
+      L.layerGroup(layer).addTo(map)
+    }
+
+    var marker_style = L.ExtraMarkers.icon({
+      icon: 'fa-coffee',
+      markerColor: 'red',
+      shape: 'square',
+      prefix: 'fa'
+    });
+
+    L.marker([long, lat], {
+      icon: marker_style,
+    }).addTo(layer).bindPopup(popup);
+
+    // let marker = L.marker([long, lat]).bindPopup(popup);
+    // marker.addTo(resultsGroup);
   };
 
-  clearMarkersFromGroup = function() {
-    resultsGroup.clearLayers();
+  clearMarkersFromGroup = function () {
+    map.eachLayer(function (layer) {
+      map.removeLayer(layer);
+    });
   };
 });
-

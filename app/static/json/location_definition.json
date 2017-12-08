@@ -1,0 +1,14 @@
+{
+    "type1" : {
+        "name" : "restaurant",
+        "icon" : "fa-coffee",
+        "color": "red",
+        "shape": "square"
+    },
+    "type2" : {
+        "name" : "bar",
+        "icon" : "fa-bar",
+        "color": "blue",
+        "shape": "square"
+    }
+}

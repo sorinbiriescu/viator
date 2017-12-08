@@ -68,7 +68,7 @@ def route():
 
 
 
-@main.route('/poi', methods=['GET'])
+@main.route('/explore', methods=['GET'])
 def poi():
     form = SearchForm(request.form)
     poi_type_checkbox = PoiTypeForm(request.form)
@@ -76,7 +76,7 @@ def poi():
         'form': form,
         'poi_type_checkbox':poi_type_checkbox
     }
-    return render_template('/main/poi.html', **content)
+    return render_template('/main/explore.html', **content)
 
 
 
