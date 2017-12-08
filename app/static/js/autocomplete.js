@@ -14,7 +14,6 @@ function assignAutocomplete() {
         deferRequestBy: 100,
         onSelect: function (suggestion) {
             autocomplete_data = suggestion.data
-            console.log('Received coordinates:', autocomplete_data)
         }
     });
 

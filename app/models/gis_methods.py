@@ -1,13 +1,32 @@
-from sqlalchemy import func, and_, or_, cast
-from sqlalchemy.sql import select
-from geoalchemy2 import WKTElement, Geography
+import ast
 
-from app import (db, rhone_alpes_line, rhone_alpes_nodes, rhone_alpes_point,
+from flask import jsonify
+from geoalchemy2 import Geography, WKTElement
+from sqlalchemy import and_, cast, func, or_
+from sqlalchemy.sql import select
+
+from app import (app, db, rhone_alpes_line, rhone_alpes_nodes, rhone_alpes_point,
                  rhone_alpes_polygon, rhone_alpes_rels, rhone_alpes_roads,
                  rhone_alpes_ways)
 
-from flask import jsonify
-import ast
+
+class locationDefinition(db.Model):
+
+    __bind_key__ = None
+    
+    id = db.Column(db.Integer, primary_key=True)
+    location_type = db.Column(db.Text)
+    location_icon = db.Column(db.Text)
+    location_color = db.Column(db.Text)
+    location_shape = db.Column(db.Text)
+
+    @staticmethod
+    def fetch_definition(location_type):
+
+        result = locationDefinition.query \
+                        .filter(locationDefinition.location_type == location_type) \
+                        .first()
+        return result
 
 def get_poi_type(json):
 
@@ -43,7 +62,12 @@ def get_poi_type(json):
         "total_results": query.total,
         "total_pages": query.pages,
         "current_page": query.page,
-        "result":[{"name":e[0], "type":e[1], "location":ast.literal_eval(e[2])} for e in query.items]}
+        "result":[{"name":e[0],
+                "type":e[1],
+                "location":ast.literal_eval(e[2]),
+                "icon":locationDefinition.fetch_definition(e[1]).location_icon,
+                "color":locationDefinition.fetch_definition(e[1]).location_color,
+                "shape":locationDefinition.fetch_definition(e[1]).location_shape} for e in query.items]
+    }
 
     return result
-

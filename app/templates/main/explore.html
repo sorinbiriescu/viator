@@ -1,8 +1,15 @@
 {% extends "/main/base.html" %} {% block head%}
+<link rel="stylesheet" href="../static/vendor/extra-markers/css/leaflet.extra-markers.min.css">
+<link rel="stylesheet" href="../static/vendor/font-awesome-470/css/font-awesome.min.css">
+<!-- latest version of mapzen.js-->
+<script src="https://mapzen.com/js/mapzen.js"></script>
+
 <script src="../static/js/map.js"></script>
 <script src="../static/js/autocomplete.js"></script>
 <script src="../static/vendor/twbs/jquery.twbsPagination.js"></script>
-<script src="../static/vendor/extra-markers/leaflet.extra-markers.min.js"></script>
+<script src="../static/vendor/extra-markers/js/leaflet.extra-markers.min.js"></script>
+<!-- <script src="../static/vendor/font-awesome/js/fontawesome.min.js"></script>
+<script defer src="../static/vendor/font-awesome/styles/fa-solid.min.js"></script> -->
 <script src="../static/js/explore.js"></script>
 <script src="../static/js/position.js"></script>
 
@@ -11,8 +18,7 @@
 <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
 
 
-<!-- latest version of mapzen.js-->
-<script src="https://mapzen.com/js/mapzen.js"></script>
+
 
 {% endblock %} {% block content %}
 

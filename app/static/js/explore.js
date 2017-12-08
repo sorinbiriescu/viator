@@ -92,7 +92,9 @@ $(document).ready(function () {
                 results[i]["location"]["coordinates"][0],
                 results[i]["location"]["coordinates"][1],
                 results[i]["name"],
-                results[i]["type"]
+                results[i]["icon"],
+                results[i]["color"],
+                results[i]["shape"]
             );
         }
     };

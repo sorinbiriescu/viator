@@ -7,6 +7,7 @@ let clearMarkersFromGroup
 
 $(document).ready(function () {
   L.Mapzen.apiKey = api_key;
+  
   // Add a map to the 'map' div  
   map = L.Mapzen.map('mapzen', {
     center: [45.1885, 5.7245],
@@ -18,45 +19,36 @@ $(document).ready(function () {
     // }
   });
 
-  var redMarker = L.ExtraMarkers.icon({
-    icon: 'fa-coffee',
-    markerColor: 'red',
-    shape: 'square',
-    prefix: 'fa'
-  });
+  let marker_group = L.layerGroup().addTo(map)
 
-  L.marker([51.941196, 4.512291], {
-    icon: redMarker,
-  }).addTo(map);
+  addMarkerToGroup = function (lat, long, name, icon, color, shape) {
 
-  addMarkerToGroup = function (lat, long, popup, type) {
+    // let layer = type + "Group"
 
-    layer = type + "Group"
-
-    if (map.hasLayer(layer)) {
-      // If has layer, do nothing
-    } else {
-      L.layerGroup(layer).addTo(map)
-    }
+    // if (map.hasLayer(layer)) {
+    //   // If has layer, do nothing
+    // } else {
+    //   L.layer().addTo(map)
+    // }
 
     var marker_style = L.ExtraMarkers.icon({
-      icon: 'fa-coffee',
-      markerColor: 'red',
-      shape: 'square',
+      icon: icon,
+      markerColor: color,
+      shape: shape,
       prefix: 'fa'
     });
 
     L.marker([long, lat], {
       icon: marker_style,
-    }).addTo(layer).bindPopup(popup);
+    }).addTo(marker_group).bindPopup(name);
 
     // let marker = L.marker([long, lat]).bindPopup(popup);
     // marker.addTo(resultsGroup);
   };
 
   clearMarkersFromGroup = function () {
-    map.eachLayer(function (layer) {
-      map.removeLayer(layer);
-    });
+
+      marker_group.clearLayers();
+
   };
 });
