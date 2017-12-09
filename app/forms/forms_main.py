@@ -1,7 +1,7 @@
 from wtforms import Form, TextField,BooleanField
 
 class SearchForm(Form):
-    autocomp = TextField('Insert City', id='location-search-autocomplete')
+    autocomp = TextField('Search City', id='location-search-autocomplete',render_kw={"type":"search","class":"form-control mr-sm-2","placeholder":"Search city"})
 
 class PoiTypeForm(Form):
     restaurant = BooleanField(label='Restaurants', id='restaurant-poi-type-checkbox')

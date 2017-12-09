@@ -15,12 +15,7 @@
 
 
 <!-- style sheet for mapzen.js -->
-<link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
-
-
-
-
-{% endblock %} {% block content %}
+<link rel="stylesheet" href="https://mapzen.com/js/mapzen.css"> {% endblock %} {% block content %}
 
 <style>
   #mapzen {
@@ -68,39 +63,48 @@
 
 
 
-<div class="container">
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-md-12">
       {{ form.autocomp.label }}: {{ form.autocomp }}
       <button id='search_submit' class="btn btn-success">Search</button>
     </div>
-  </div>
+  </div> -->
   <div class="row">
     <div class="col-md-6">
       <div class="row">
+          <nav class="navbar navbar-light bg-light">
+              <div class="input-group">
+                <span class="input-group-addon" id="btnGroupAddon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                {{ form.autocomp }}
+                <button class="btn btn-outline-success my-2 my-sm-0" id='search_submit'>Search</button>
+              </div>
+            </nav>
+      </div>
+      <div class="row">
         <div class="row">
-            <p>
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Select venues
+          <p>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+              aria-controls="collapseExample">
+              Select venues
+            </button>
+          </p>
+          <div class="collapse" id="collapseExample" style="width:100%" ;>
+            <div class="card card-block">
+              <div class="btn-group" data-toggle="buttons">
+                {% for item in poi_type_checkbox %}
+                <label class="btn btn-primary" for="{{ item.id }}">
+
+                  {{ item(class_="poi-checkbox") }} {{ item.name }}
+                </label>
+                {% endfor %}
+              </div>
+              <p>
+                <button id="venue-update" class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseExample">Update
                 </button>
               </p>
-              <div class="collapse" id="collapseExample" style="width:100%";>
-                <div class="card card-block">
-                    <div class="btn-group" data-toggle="buttons">
-                      {% for item in poi_type_checkbox %}
-                        <label class="btn btn-primary" for="{{ item.id }}">
-                          
-                             {{ item(class_="poi-checkbox") }} {{ item.name }}
-                        </label>
-                       {% endfor %}
-                      </div>
-                      <p>
-                      <button id="venue-update" class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseExample">Update
-                      </button>
-                    </p>
-                </div>
-              </div>
-        </div>        
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row">
         <div id='results'>
@@ -108,10 +112,10 @@
         </div>
       </div>
       <div class="row">
-      <nav aria-label="Page navigation">
-        <ul id="pagination">
-           <!-- Pagination numbers will be inserted here -->
-        </ul>
+        <nav aria-label="Page navigation">
+          <ul id="pagination">
+            <!-- Pagination numbers will be inserted here -->
+          </ul>
       </div>
       </nav>
     </div>
@@ -119,7 +123,7 @@
       <div id='mapzen'></div>
     </div>
   </div>
-</div>
+
 
 
 </div>
