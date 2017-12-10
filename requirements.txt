@@ -11,3 +11,5 @@ mapbox==0.14.0
 WTForms==2.1
 psycopg2==2.7.3.2
 geoalchemy2==0.4.0
+flask-login==0.4.1
+flask-WTF

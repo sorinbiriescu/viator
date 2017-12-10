@@ -58,6 +58,22 @@
                 <li>
                     <a href="#">Contact</a>
                 </li>
+                {% if current_user.is_authenticated %}
+                <!-- /.dropdown -->
+
+                <li>
+                    <a href="{{ url_for('main.logout') }}">
+					Logout</a>
+                </li>
+
+                {% else %}
+
+                <li>
+                    <a href="{{ url_for('main.login') }}">
+					Sign In</a>
+                </li>
+
+                {% endif %}
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->

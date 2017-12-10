@@ -1,4 +1,6 @@
-{% extends "/main/base.html" %} {% block head%}
+{% extends "/main/base.html" %}
+
+{% block head%}
 <link rel="stylesheet" href="../static/vendor/extra-markers/css/leaflet.extra-markers.min.css">
 <link rel="stylesheet" href="../static/vendor/font-awesome-470/css/font-awesome.min.css">
 <!-- latest version of mapzen.js-->
@@ -15,7 +17,10 @@
 
 
 <!-- style sheet for mapzen.js -->
-<link rel="stylesheet" href="https://mapzen.com/js/mapzen.css"> {% endblock %} {% block content %}
+<link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+{% endblock %}
+
+{% block content %}
 
 <style>
   #mapzen {
