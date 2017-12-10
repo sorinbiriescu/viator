@@ -8,8 +8,7 @@ from flask import (Blueprint, Response, jsonify, redirect, render_template,
 from flask_login import login_required, login_user, logout_user
 
 from app import (Attractions, Locations, LoginForm, PoiTypeForm, SearchForm,
-                 SearchForm2, SearchForm3, SignupForm, User, get_poi_type,
-                 login_manager)
+                 SignupForm, User, get_poi_type, login_manager, Route, UserRoute)
 
 script_dir = os.path.dirname(__file__)
 
@@ -48,24 +47,20 @@ def location():
 @main.route('/directions', methods=['GET','POST'])
 def directions():
     form = SearchForm(request.form)
-    form2 = SearchForm2(request.form)
     content = {
-        'form': form,
-        'form2': form2
+        'form': form
     }
     return render_template('/main/directions.html', **content)
 
 
-
 @main.route('/route')
-def route():
-    form = SearchForm(request.form)
-    form2 = SearchForm2(request.form)
-    form3 = SearchForm3(request.form)
+@main.route('/route/<user>', methods=['GET'])
+@login_required
+def route(user):
+    form = Route(request.form)
+    form.route_list.choices = [x.name for x in UserRoute.get_user_routes(user)]
     content = {
-        'form': form,
-        'form2': form2,
-        'form3': form3
+        "form" : form
     }
     return render_template('/main/route.html', **content)
 
@@ -190,6 +185,10 @@ def optimized_route():
     print(mapzen_req, file=sys.stderr)
     print(mapzen_req.json, file=sys.stderr)
     return mapzen_resp_json
+
+@main.route('/_route', methods=['GET','POST','PUT','DELETE'])
+def route_api():
+    return True
 
 # @main.after_request
 # def after(response):

@@ -44,7 +44,7 @@
                     <a href="#">Shortcuts</a>
                 </li>
                 <li>
-                    <a href="#">Overview</a>
+                    <a href="{{ url_for('main.route', user=current_user.email) }}">Routes</a>
                 </li>
                 <li>
                     <a href="#">Events</a>

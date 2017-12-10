@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import (BooleanField, Form, PasswordField, StringField,
-                     SubmitField, TextField)
+                     SubmitField, TextField, SelectField)
 from wtforms.validators import DataRequired, Email
+from app import UserRoute
 
 
 class SearchForm(FlaskForm):
@@ -13,12 +14,6 @@ class PoiTypeForm(FlaskForm):
     nightclub = BooleanField(label='Nightclub', id='nightclub-poi-type-checkbox')
     toilets = BooleanField(label='Toilet', id='toilets-poi-type-checkbox')
 
-class SearchForm2(FlaskForm):
-    autocomp2 = TextField('Insert City2', id='location-search-autocomplete2')
-
-class SearchForm3(FlaskForm):
-    autocomp3 = TextField('Insert City3', id='location-search-autocomplete3')
-
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -29,3 +24,7 @@ class SignupForm(FlaskForm):
     email = StringField('email', validators=[DataRequired(), Email()])
     password = PasswordField('password', validators=[DataRequired()])
     submit = SubmitField("Sign up")
+
+class Route(FlaskForm):
+    route_list = SelectField('Routes', choices=None)
+    select_route = SubmitField("Select route")

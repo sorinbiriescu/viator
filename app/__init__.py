@@ -21,11 +21,11 @@ def load_user(email):
 
 
 from .models.models import Locations, Attractions
-from .models.models_user import User
+from .models.models_user import User, UserRoute
 from .models.gis_rhone_alpes import (
     rhone_alpes_line, rhone_alpes_nodes, rhone_alpes_point,
     rhone_alpes_polygon,rhone_alpes_rels,rhone_alpes_roads,rhone_alpes_ways) 
 from .models.gis_methods import locationDefinition,get_poi_type
-from .forms.forms_main import SearchForm, SearchForm2, SearchForm3, PoiTypeForm, LoginForm, SignupForm
+from .forms.forms_main import SearchForm, PoiTypeForm, LoginForm, SignupForm, Route
 from .views.views_main import main
 app.register_blueprint(main)

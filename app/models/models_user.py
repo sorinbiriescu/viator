@@ -1,5 +1,6 @@
 from app import db
 from flask_login import UserMixin
+from sqlalchemy.dialects.postgresql import JSON
 
 class User(UserMixin, db.Model):
     __bind_key__ = None
@@ -27,7 +28,7 @@ class User(UserMixin, db.Model):
 
     def is_anonymous(self):
         return False
-    
+
     def get_id(self):
         return str(self.email)
 
@@ -36,6 +37,14 @@ class User(UserMixin, db.Model):
         query = User.query.filter(User.email == email).first()
         if query:
             return query
+        else:
+            return None
+    
+    @staticmethod
+    def get_user_id(email):
+        query = User.query.filter(User.email == email).first()
+        if query:
+            return query.id
         else:
             return None
 
@@ -47,4 +56,18 @@ class User(UserMixin, db.Model):
 
         return new_user
 
-    
+class UserRoute(db.Model):
+    __bind_key__ = None
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    route_name = db.Column(db.String(80), nullable=False)
+    route_JSON = db.Column(JSON)
+
+    @staticmethod
+    def get_user_routes(current_user):
+        query = UserRoute.query.filter(UserRoute.user_id == User.get_user_id(current_user))
+        if query:
+            return query
+        else:
+            return None

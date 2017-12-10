@@ -22,19 +22,76 @@
       position: absolute;
     }
     html,body{margin: 0; padding: 0;}
-    .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
-    .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
-    .autocomplete-selected { background: #F0F0F0; }
-    .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-    .autocomplete-group { padding: 2px 5px; }
-    .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
   </style>
 
-{{ form.autocomp.label }}: {{ form.autocomp }}
-{{ form2.autocomp2.label }}: {{ form2.autocomp2 }}
-{{ form3.autocomp3.label }}: {{ form3.autocomp3 }}
-<button id='search_submit_directions' class="btn btn-success">Search</button>
-<div id='mapzen'></div>
+  <style>
+    #mapzen {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+  
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  
+    .autocomplete-suggestions {
+      border: 1px solid #999;
+      background: #FFF;
+      overflow: auto;
+    }
+  
+    .autocomplete-suggestion {
+      padding: 2px 5px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  
+    .autocomplete-selected {
+      background: #F0F0F0;
+    }
+  
+    .autocomplete-suggestions strong {
+      font-weight: normal;
+      color: #3399FF;
+    }
+  
+    .autocomplete-group {
+      padding: 2px 5px;
+    }
+  
+    .autocomplete-group strong {
+      display: block;
+      border-bottom: 1px solid #000;
+    }
+  </style>
+  
+  
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+            {{ form.route_list }}
+        </div>
+        <div class="row">
+          <div class="row">
+
+          </div>
+        </div>
+        <div class="row">
+
+        </div>
+        <div class="row">
+
+        </div>
+      </div>
+      <div class="col-md-6" style="height:80vh;">
+        <div id='mapzen'></div>
+      </div>
+    </div>
+  
 
 
 {% endblock %}
