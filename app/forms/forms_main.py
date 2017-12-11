@@ -26,5 +26,6 @@ class SignupForm(FlaskForm):
     submit = SubmitField("Sign up")
 
 class Route(FlaskForm):
-    route_list = SelectField('Routes', choices=None)
+    route_list = SelectField('Routes', choices=[(1,"Please wait")], coerce=int)
     select_route = SubmitField("Select route")
+    new_route = StringField('New route name', validators=[DataRequired()])

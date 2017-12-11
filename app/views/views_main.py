@@ -5,7 +5,7 @@ import sys
 import requests
 from flask import (Blueprint, Response, jsonify, redirect, render_template,
                    request, url_for)
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 
 from app import (Attractions, Locations, LoginForm, PoiTypeForm, SearchForm,
                  SignupForm, User, get_poi_type, login_manager, Route, UserRoute)
@@ -15,7 +15,6 @@ script_dir = os.path.dirname(__file__)
 main = Blueprint('main', __name__)
 
 mapzen_api = 'mapzen-fPCfu1G'
-
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -53,18 +52,16 @@ def directions():
     return render_template('/main/directions.html', **content)
 
 
-@main.route('/route')
-@main.route('/route/<user>', methods=['GET'])
+@main.route('/route', methods=['GET','POST'])
+@main.route('/route/<user>', methods=['GET','POST'])
 @login_required
 def route(user):
     form = Route(request.form)
-    form.route_list.choices = [x.name for x in UserRoute.get_user_routes(user)]
+
     content = {
         "form" : form
     }
     return render_template('/main/route.html', **content)
-
-
 
 @main.route('/explore', methods=['GET'])
 def poi():
@@ -164,31 +161,13 @@ def getpoi():
 
     return json.dumps(result)
 
-
-
 @main.route('/_geocode', methods=['GET'])
 def geocode():
     pass
 
 
 
-@main.route('/_optimized_route', methods=['GET','POST'])
-def optimized_route():
-    json = request.json
-    payload = {
-        "json" : json,
-        "api_key" : mapzen_api,
-        }
-    print(json, file=sys.stderr)
-    mapzen_req = requests.post(url='https://matrix.mapzen.com/optimized_route', params=payload)
-    mapzen_resp_json = mapzen_req.json
-    print(mapzen_req, file=sys.stderr)
-    print(mapzen_req.json, file=sys.stderr)
-    return mapzen_resp_json
 
-@main.route('/_route', methods=['GET','POST','PUT','DELETE'])
-def route_api():
-    return True
 
 # @main.after_request
 # def after(response):

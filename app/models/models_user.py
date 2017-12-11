@@ -41,10 +41,13 @@ class User(UserMixin, db.Model):
             return None
     
     @staticmethod
-    def get_user_id(email):
-        query = User.query.filter(User.email == email).first()
+    def get_user_id(user):
+        '''
+        Returns the ID of the user. int format
+        '''
+        query = User.query.filter(User.email == user).first()
         if query:
-            return query.id
+            return int(query.id)
         else:
             return None
 
@@ -65,9 +68,17 @@ class UserRoute(db.Model):
     route_JSON = db.Column(JSON)
 
     @staticmethod
-    def get_user_routes(current_user):
-        query = UserRoute.query.filter(UserRoute.user_id == User.get_user_id(current_user))
+    def get_user_routes(user):
+        query = UserRoute.query.filter(UserRoute.user_id == user).all()
+
         if query:
-            return query
+            result = {"results":[{"route_id": e.id,"route_name":e.route_name} for e in query]}
+            return result
         else:
             return None
+
+    @staticmethod
+    def add_route(user,route_name):
+        new_route = UserRoute(user_id=user,route_name=route_name)
+        db.session.add(new_route)
+        db.session.commit()

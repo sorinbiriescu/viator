@@ -90,10 +90,14 @@
             <div class="card card-block">
               <div class="btn-group" data-toggle="buttons">
                 {% for item in poi_type_checkbox %}
-                <label class="btn btn-primary" for="{{ item.id }}">
+                  {% if item.name == 'csrf_token' %}
+                    {{ item.csrf_token }}
+                  {% else %}
+                    <label class="btn btn-primary" for="{{ item.id }}">
 
-                  {{ item(class_="poi-checkbox") }} {{ item.name }}
-                </label>
+                      {{ item(class_="poi-checkbox") }} {{ item.name }}
+                    </label>
+                  {% endif %}
                 {% endfor %}
               </div>
               <p>

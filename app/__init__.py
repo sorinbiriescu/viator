@@ -14,6 +14,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "main.login"
+login_manager.session_protection = "strong"
 
 @login_manager.user_loader
 def load_user(email):
@@ -28,4 +29,7 @@ from .models.gis_rhone_alpes import (
 from .models.gis_methods import locationDefinition,get_poi_type
 from .forms.forms_main import SearchForm, PoiTypeForm, LoginForm, SignupForm, Route
 from .views.views_main import main
+from .views.views_api import api
+
 app.register_blueprint(main)
+app.register_blueprint(api)

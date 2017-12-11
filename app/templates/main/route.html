@@ -1,6 +1,4 @@
-{% extends "/main/base.html" %}
-
-{% block head%}
+{% extends "/main/base.html" %} {% block head%}
 <script src="../static/js/map.js"></script>
 <script src="../static/js/route.js"></script>
 
@@ -11,87 +9,119 @@
 <!-- latest version of mapzen.js-->
 <script src="https://mapzen.com/js/mapzen.js"></script>
 
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 
 <style>
-    #mapzen {
-      height: 600px;
-      width: 600px;
-      position: absolute;
-    }
-    html,body{margin: 0; padding: 0;}
-  </style>
+  #mapzen {
+    height: 600px;
+    width: 600px;
+    position: absolute;
+  }
 
-  <style>
-    #mapzen {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-    }
-  
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-    }
-  
-    .autocomplete-suggestions {
-      border: 1px solid #999;
-      background: #FFF;
-      overflow: auto;
-    }
-  
-    .autocomplete-suggestion {
-      padding: 2px 5px;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-  
-    .autocomplete-selected {
-      background: #F0F0F0;
-    }
-  
-    .autocomplete-suggestions strong {
-      font-weight: normal;
-      color: #3399FF;
-    }
-  
-    .autocomplete-group {
-      padding: 2px 5px;
-    }
-  
-    .autocomplete-group strong {
-      display: block;
-      border-bottom: 1px solid #000;
-    }
-  </style>
-  
-  
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>
 
+<style>
+  #mapzen {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .autocomplete-suggestions {
+    border: 1px solid #999;
+    background: #FFF;
+    overflow: auto;
+  }
+
+  .autocomplete-suggestion {
+    padding: 2px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .autocomplete-selected {
+    background: #F0F0F0;
+  }
+
+  .autocomplete-suggestions strong {
+    font-weight: normal;
+    color: #3399FF;
+  }
+
+  .autocomplete-group {
+    padding: 2px 5px;
+  }
+
+  .autocomplete-group strong {
+    display: block;
+    border-bottom: 1px solid #000;
+  }
+</style>
+
+
+
+<div class="row">
+  <div class="col-md-6">
     <div class="row">
-      <div class="col-md-6">
-        <div class="row">
-            {{ form.route_list }}
-        </div>
-        <div class="row">
-          <div class="row">
+      {{ form.route_list }}
+    </div>
+    <div>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newRouteModal">
+        Create new route
+      </button>
 
+      <!-- Modal -->
+      <div class="modal fade" id="newRouteModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ModalLabel">Create new route</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="" method="post" id="submitNewRouteModal">
+            <div class="modal-body">
+              {{ form.new_route }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" id="newRouteModalSave" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
           </div>
         </div>
-        <div class="row">
-
-        </div>
-        <div class="row">
-
-        </div>
-      </div>
-      <div class="col-md-6" style="height:80vh;">
-        <div id='mapzen'></div>
       </div>
     </div>
-  
+    <div class="row">
+      <div class="row">
+
+      </div>
+    </div>
+    <div class="row">
+
+    </div>
+    <div class="row">
+
+    </div>
+  </div>
+  <div class="col-md-6" style="height:80vh;">
+    <div id='mapzen'></div>
+  </div>
+</div>
+
 
 
 {% endblock %}
