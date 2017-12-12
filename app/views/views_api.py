@@ -29,8 +29,33 @@ def route_api():
         route_json = request.json
         UserRoute.add_route(user = user, route_name = route_json["route_name"])
 
-        routes = UserRoute.get_user_routes(user)
         return jsonify({"status":"200"})
+
+    elif request.method == 'DELETE':
+        route_json = request.json
+        UserRoute.delete_route(user_id=user,route_id=route_json["route_id"],route_name=route_json["route_name"])
+        
+        return jsonify({"status":"200"})
+
+@api.route('/route_poi', methods=['GET','PUT','DELETE'])
+def route_poi_api():
+    user = User.get_user_id(current_user.email)
+
+    if request.method == 'GET':
+        "get poi for a route ID"
+        return "route json with poi"
+
+    elif request.method == 'PUT':
+        route = request.json
+        
+        UserRoute.add_poi_to_route(user,route['route_id'],route["poi_id"])
+        return "OK"
+
+    elif request.method == 'DELETE':
+        "get route from DB"
+        "remove in route json the POI"
+        return "success"
+
 
 
 @api.route('/optimized_route', methods=['GET','POST'])

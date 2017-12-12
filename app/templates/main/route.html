@@ -1,5 +1,6 @@
 {% extends "/main/base.html" %} {% block head%}
 <script src="../static/js/map.js"></script>
+<script src="../static/js/route_api.js"></script>
 <script src="../static/js/route.js"></script>
 
 <!-- style sheet for mapzen.js -->
@@ -74,40 +75,54 @@
 <div class="row">
   <div class="col-md-6">
     <div class="row">
-      {{ form.route_list }}
-    </div>
-    <div>
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newRouteModal">
-        Create new route
-      </button>
-
-      <!-- Modal -->
-      <div class="modal fade" id="newRouteModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="ModalLabel">Create new route</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <div class="btn-group">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Routes
+          </button>
+          <div class="dropdown-menu" id="dropdown-menu-items" aria-labelledby="dropdownMenu2">
+            <!-- Route list goes here -->
+          </div>
+        </div>
+        <button type="button" class="btn btn-danger" id="delete_route">
+          Delete route
+        </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newRouteModal">
+          Create new route
+        </button>
+  
+        <!-- Modal -->
+        <div class="modal fade" id="newRouteModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">Create new route</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form action="" method="post" id="submitNewRouteModal">
+              <div class="modal-body">
+                {{ form.new_route }}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="newRouteModalSave" class="btn btn-primary">Save changes</button>
+              </div>
+              </form>
             </div>
-            <form action="" method="post" id="submitNewRouteModal">
-            <div class="modal-body">
-              {{ form.new_route }}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" id="newRouteModalSave" class="btn btn-primary">Save changes</button>
-            </div>
-            </form>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="row">
+    
+    <div>
+      <!-- Button trigger modal -->
 
+    </div>
+    <div class="row">
+      <div id="route-name">
+        <!-- Route name goes here -->
       </div>
     </div>
     <div class="row">

@@ -1,11 +1,19 @@
 "use strict";
+let csrf_token = "{{ csrf_token() }}"; // the token is set by Jinja2
+
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrf_token); // insert custom header
+        }
+    }
+});
+
 $(document).ready(function () {
 
     let selected_venues;
     let unselected_venues;
-
-    console.log("selected venues", selected_venues)
-    console.log("not selected venues", unselected_venues)
 
     $("#search_submit").on("click", function () {
 
@@ -17,10 +25,13 @@ $(document).ready(function () {
     $("#venue-update").on("click", function () {
         selected_venues = [];
         unselected_venues = [];
+
+        
         $("input.poi-checkbox").each(function () {
 
             if ($(this).is(":checked")) {
                 selected_venues.push($(this).attr("name"))
+                console.log("selected" , selected_venues)
             } else {
                 unselected_venues.push($(this).attr("name"))
             }
@@ -91,7 +102,14 @@ $(document).ready(function () {
         for (let i = 0; i < results.length; i++) {
 
             let index = i + 1
-            $("#results").append("<p>" + index + ")." + results[i]["name"] + "</p>")
+            $("#results").append($("<li></li>")
+                            .text(results[i]["name"]));
+            $("#results").append($("<button></button>")
+                            .attr("class","btn btn-primary btn-sm btn-add-poi")
+                            .attr("type","button")
+                            .attr("oid",results[i]["oid"]+"."+results[i]["osm_type"])
+                            .text("Add attraction"));
+            
             addMarkerToGroup(
                 results[i]["location"]["coordinates"][0],
                 results[i]["location"]["coordinates"][1],
@@ -134,6 +152,63 @@ $(document).ready(function () {
 
             });
         }
+    }
+
+    getRoutes().then( data => {
+        updateRouteList(data);
+    })
+
+    $("#newRouteModalSave").on('click', function () {
+        console.log($("#submitNewRouteModal").find("#new_route").val())
+        let route_name = $("#submitNewRouteModal").find("#new_route").val()
+
+        createRoute(route_name).then(() => {
+            getRoutes().then( data => {
+                updateRouteList(data);
+            });
+            $('#newRouteModal').modal('hide');
+        });
+    });
+
+    $(".dropdown-menu").on('click', ".dropdown-item", function () {
+        console.log($(this).text());
+        current_selected_route_id = $(this).attr('value');
+        current_selected_route_name = $(this).text();
+        showRoute(current_selected_route_name);
+    })
+    
+    $("#results").on('click', ".btn-add-poi", function () {
+        console.log("clicked",$(this))
+        let poi_oid = $(this).attr("oid")
+        addPOIToRoute(poi_oid)
+    })
+
+    $("#delete_route").on('click', function () {
+        deleteRoute(current_selected_route_id, current_selected_route_name).then(() => {
+                getRoutes().then( data => {
+                    updateRouteList(data);
+                });
+            }
+
+        )
+    });
+
+
+    function showRoute(name) {
+        let route_content = $("#route-name");
+        route_content.empty();
+        route_content.append($("<h1></h1>").text(name));
+    }
+
+    function updateRouteList(data) {
+        let dropdown = $("#dropdown-menu-items")
+        let route_content = $("#route-name")
+
+        route_content.empty();
+        dropdown.empty();
+        $.each(data["results"], function (key, entry) {
+            dropdown.append($("<button class='dropdown-item' type='button'></button>").attr("value", entry.route_id).text(entry.route_name));
+        })
     }
 
 });

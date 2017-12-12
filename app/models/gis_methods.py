@@ -51,6 +51,7 @@ def get_poi_type(json):
                             func.ST_DWithin(cast(rhone_alpes_point.way,Geography),location, 3000)
                     )) \
                 .with_entities(
+                        rhone_alpes_point.osm_id,
                         rhone_alpes_point.name,
                         rhone_alpes_point.amenity,
                         func.ST_AsGeoJSON(rhone_alpes_point.way)
@@ -62,12 +63,15 @@ def get_poi_type(json):
         "total_results": query.total,
         "total_pages": query.pages,
         "current_page": query.page,
-        "result":[{"name":e[0],
-                "type":e[1],
-                "location":ast.literal_eval(e[2]),
-                "icon":locationDefinition.fetch_definition(e[1]).location_icon,
-                "color":locationDefinition.fetch_definition(e[1]).location_color,
-                "shape":locationDefinition.fetch_definition(e[1]).location_shape} for e in query.items]
+        "result":[{
+                "oid":e[0],
+                "osm_type":"point",
+                "name":e[1],
+                "type":e[2],
+                "location":ast.literal_eval(e[3]),
+                "icon":locationDefinition.fetch_definition(e[2]).location_icon,
+                "color":locationDefinition.fetch_definition(e[2]).location_color,
+                "shape":locationDefinition.fetch_definition(e[2]).location_shape} for e in query.items]
     }
 
     return result

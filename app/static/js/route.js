@@ -1,4 +1,7 @@
-var csrf_token = "{{ 'csrf_token()' }}"; // the token is set by Jinja2
+"use strict";
+let csrf_token = "{{ csrf_token() }}"; // the token is set by Jinja2
+let current_selected_route_id
+let current_selected_route_name
 
 $.ajaxSetup({
     beforeSend: function (xhr, settings) {
@@ -9,86 +12,56 @@ $.ajaxSetup({
 });
 $(document).ready(function () {
 
-    getRoutes();
+    getRoutes().then( data => {
+        updateRouteList(data);
+    })
 
     $("#newRouteModalSave").on('click', function () {
         console.log($("#submitNewRouteModal").find("#new_route").val())
         let route_name = $("#submitNewRouteModal").find("#new_route").val()
 
         createRoute(route_name).then(() => {
-            getRoutes();
-            $('#newRouteModal').modal('hide')
-        });       
+            getRoutes().then( data => {
+                updateRouteList(data);
+            });
+            $('#newRouteModal').modal('hide');
+        });
     });
 
-    function getRoutes() {
-        $.ajax({
-            url: "http://127.0.0.1:5000/api/route",
-            type: "GET",
-            contentType: "application/json; charset=utf-8",
-            beforeSend: function (xhr) {
-                if (xhr && xhr.overrideMimeType) {
-                    xhr.overrideMimeType("application/json;charset=utf-8");
-                }
-            },
-            dataType: "json",
-            success: getRoutesSuccessHandler,
-            error: getRoutesErrorHandler,
-            complete: () => {}
-        });
+    $(".dropdown-menu").on('click', '.dropdown-item', function () {
+        console.log($(this).text());
+        current_selected_route_id = $(this).attr('value');
+        current_selected_route_name = $(this).text();
+        showRoute(current_selected_route_name);
+    })
 
-        function getRoutesSuccessHandler(data, textStatus, xhr) {
 
-            let dropdown = $('#route_list');
+    $("#delete_route").on('click', function () {
+        deleteRoute(current_selected_route_id, current_selected_route_name).then(() => {
+                getRoutes().then( data => {
+                    updateRouteList(data);
+                });
+            }
 
-            dropdown.empty();
-            $.each(data["results"], function (key, entry) {
-                dropdown.append($('<option></option>').attr('value', entry.route_id).text(entry.route_name));
-            })
+        )
+    });
 
-            return true
-        };
 
-        function getRoutesErrorHandler() {
-            error = new Error("Could not fetch data!")
-            return error
-        };
-
+    function showRoute(name) {
+        let route_content = $("#route-name");
+        route_content.empty();
+        route_content.append($("<h1></h1>").text(name));
     }
 
-    function createRoute(data) {
-        
+    function updateRouteList(data) {
+        let dropdown = $("#dropdown-menu-items")
+        let route_content = $("#route-name")
 
-        return new Promise(function (resolve, reject) {
-        let payload = {
-            "route_name": data
-        }
-        $.ajax({
-            url: "http://127.0.0.1:5000/api/route",
-            type: "POST",
-            data: JSON.stringify(payload),
-            contentType: "application/json; charset=utf-8",
-            beforeSend: function (xhr) {
-                if (xhr && xhr.overrideMimeType) {
-                    xhr.overrideMimeType("application/json;charset=utf-8");
-                }
-            },
-            dataType: "json",
-            success: createRouteSuccessHandler,
-            error: createRouteErrorHandler,
-            complete: () => {}
-
-        });
-
-        function createRouteSuccessHandler(data, textStatus, xhr) {
-
-            return resolve(true)
-        };
-
-        function createRouteErrorHandler() {
-            return reject(new Error("Could not fetch data!"))
-        };
-    });
-}
+        route_content.empty();
+        dropdown.empty();
+        $.each(data["results"], function (key, entry) {
+            dropdown.append($("<button class='dropdown-item' type='button'></button>").attr("value", entry.route_id).text(entry.route_name));
+        })
+    }
 
 });

@@ -1,6 +1,10 @@
-from app import db
+import json
+
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import JSON
+
+from app import db
+
 
 class User(UserMixin, db.Model):
     __bind_key__ = None
@@ -81,4 +85,40 @@ class UserRoute(db.Model):
     def add_route(user,route_name):
         new_route = UserRoute(user_id=user,route_name=route_name)
         db.session.add(new_route)
+        db.session.commit()
+
+    @staticmethod
+    def delete_route(user_id, route_id, route_name):
+        query = UserRoute.query \
+                        .filter(
+                            UserRoute.user_id == user_id,
+                            UserRoute.id == route_id,
+                            UserRoute.route_name == route_name
+                            ) \
+                        .first()
+        db.session.delete(query)
+        db.session.commit()
+
+    @staticmethod
+    def add_poi_to_route(user_id,route_id,poi_id):
+        query = UserRoute.query \
+                        .filter(
+                            UserRoute.user_id == user_id,
+                            UserRoute.id == route_id
+                        ) \
+                        .first()
+        
+        oid = poi_id.split(".")[0]
+        oid_type = poi_id.split(".")[1]
+
+        # if query.route_JSON is "":
+        route = {
+            "route_id" : 0,
+            "old_route_id" : "",
+            "oid" : oid,
+            "oid_type" : oid_type
+        }
+
+        route_json = json.dumps(route)
+        query.route_JSON = route_json
         db.session.commit()

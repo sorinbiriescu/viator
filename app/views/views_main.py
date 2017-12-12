@@ -64,6 +64,7 @@ def route(user):
     return render_template('/main/route.html', **content)
 
 @main.route('/explore', methods=['GET'])
+@login_required
 def poi():
     form = SearchForm(request.form)
     poi_type_checkbox = PoiTypeForm(request.form)
