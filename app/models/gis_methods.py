@@ -5,9 +5,11 @@ from geoalchemy2 import Geography, WKTElement
 from sqlalchemy import and_, cast, func, or_
 from sqlalchemy.sql import select
 
-from app import (app, db, rhone_alpes_line, rhone_alpes_nodes, rhone_alpes_point,
-                 rhone_alpes_polygon, rhone_alpes_rels, rhone_alpes_roads,
-                 rhone_alpes_ways)
+from app import app, db
+from app.models.gis_rhone_alpes import (rhone_alpes_line, rhone_alpes_nodes,
+                                        rhone_alpes_point, rhone_alpes_polygon,
+                                        rhone_alpes_rels, rhone_alpes_roads,
+                                        rhone_alpes_ways)
 
 
 class locationDefinition(db.Model):
@@ -75,3 +77,16 @@ def get_poi_type(json):
     }
 
     return result
+
+def get_poi_by_oid(oid):
+    query = rhone_alpes_point.query \
+                    .filter(rhone_alpes_point.osm_id==oid) \
+                    .with_entities(
+                        rhone_alpes_point.osm_id,
+                        rhone_alpes_point.name,
+                        rhone_alpes_point.amenity,
+                        func.ST_AsGeoJSON(rhone_alpes_point.way)
+                    ) \
+                    .first()
+                
+    return query

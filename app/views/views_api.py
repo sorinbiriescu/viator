@@ -42,13 +42,14 @@ def route_poi_api():
     user = User.get_user_id(current_user.email)
 
     if request.method == 'GET':
-        "get poi for a route ID"
-        return "route json with poi"
+        route_id = request.args.get("route_id")
+        result = UserRoute.get_poi_route(user, route_id)
+        return jsonify(result)
 
     elif request.method == 'PUT':
         route = request.json
         
-        UserRoute.add_poi_to_route(user,route['route_id'],route["poi_id"])
+        UserRoute.add_poi_to_route(user,route["route_id"],route["poi_id"])
         return "OK"
 
     elif request.method == 'DELETE':

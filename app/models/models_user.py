@@ -4,6 +4,7 @@ from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import JSON
 
 from app import db
+from app.models.gis_methods import get_poi_by_oid
 
 
 class User(UserMixin, db.Model):
@@ -100,6 +101,31 @@ class UserRoute(db.Model):
         db.session.commit()
 
     @staticmethod
+    def get_poi_route(user_id,route_id):
+        query = UserRoute.query \
+                        .filter(
+                            UserRoute.user_id == user_id,
+                            UserRoute.id == route_id
+                        ) \
+                        .first()
+
+        route_json = json.loads(query.route_JSON)
+
+        for i in route_json["route"]:
+            oid = i["oid"]
+            oid_query = get_poi_by_oid(oid)
+            print(oid_query)
+            i.update(
+                {
+                    "name": oid_query[1],
+                    "type": oid_query[2],
+                    "coordinates": oid_query[3]
+                }
+        )
+        
+        return route_json
+
+    @staticmethod
     def add_poi_to_route(user_id,route_id,poi_id):
         query = UserRoute.query \
                         .filter(
@@ -108,17 +134,33 @@ class UserRoute(db.Model):
                         ) \
                         .first()
         
-        oid = poi_id.split(".")[0]
+        oid = int(poi_id.split(".")[0])
         oid_type = poi_id.split(".")[1]
 
-        # if query.route_JSON is "":
-        route = {
-            "route_id" : 0,
-            "old_route_id" : "",
-            "oid" : oid,
-            "oid_type" : oid_type
-        }
+        if query.route_JSON is None:
+            route = {"route": [
+                {
+                "route_id" : 0,
+                "old_route_id" : "",
+                "oid" : oid,
+                "oid_type" : oid_type
+                }
+            ]}
 
-        route_json = json.dumps(route)
-        query.route_JSON = route_json
-        db.session.commit()
+            route_json = json.dumps(route)
+            query.route_JSON = route_json
+            db.session.commit()
+        else:
+            route_json = json.loads(query.route_JSON)
+            last_route_id = max(route_json["route"], key=lambda x:x["route_id"])["route_id"]
+            route_json["route"].append(
+                {
+                "route_id" : (last_route_id+1),
+                "old_route_id" : "",
+                "oid" : oid,
+                "oid_type" : oid_type
+                }
+            )
+            query.route_JSON = json.dumps(route_json)
+            db.session.commit()
+

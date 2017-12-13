@@ -1,7 +1,5 @@
 "use strict";
 let csrf_token = "{{ csrf_token() }}"; // the token is set by Jinja2
-let current_selected_route_id
-let current_selected_route_name
 
 $.ajaxSetup({
     beforeSend: function (xhr, settings) {
@@ -12,7 +10,7 @@ $.ajaxSetup({
 });
 $(document).ready(function () {
 
-    getRoutes().then( data => {
+    getRoutes().then(data => {
         updateRouteList(data);
     })
 
@@ -21,7 +19,7 @@ $(document).ready(function () {
         let route_name = $("#submitNewRouteModal").find("#new_route").val()
 
         createRoute(route_name).then(() => {
-            getRoutes().then( data => {
+            getRoutes().then(data => {
                 updateRouteList(data);
             });
             $('#newRouteModal').modal('hide');
@@ -33,12 +31,13 @@ $(document).ready(function () {
         current_selected_route_id = $(this).attr('value');
         current_selected_route_name = $(this).text();
         showRoute(current_selected_route_name);
+
     })
 
 
     $("#delete_route").on('click', function () {
         deleteRoute(current_selected_route_id, current_selected_route_name).then(() => {
-                getRoutes().then( data => {
+                getRoutes().then(data => {
                     updateRouteList(data);
                 });
             }
@@ -48,9 +47,24 @@ $(document).ready(function () {
 
 
     function showRoute(name) {
-        let route_content = $("#route-name");
-        route_content.empty();
-        route_content.append($("<h1></h1>").text(name));
+        let route_name = $("#route-name");
+        let route_poi = $("#route-poi-list");
+
+        route_name.empty();
+        route_poi.empty();
+        route_name.append($("<h1></h1>").text(name));
+
+        getRoutePOI().then(data => {
+            
+            console.log("poi data", data)
+
+            $.each(data["route"], function (key, value) {
+                console.log("data value",value.name)
+                route_poi.append($("<li></li>").text(value.name));
+                // route_poi.append($("<li></li>").text(value.type));
+            });
+        });
+
     }
 
     function updateRouteList(data) {

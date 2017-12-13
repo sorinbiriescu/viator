@@ -118,19 +118,55 @@ function addPOIToRoute(poi_oid, route_id = current_selected_route_id) {
                     xhr.overrideMimeType("application/json;charset=utf-8");
                 }
             },
-            success: deleteRouteSuccessHandler,
-            error: deleteRouteErrorHandler,
+            dataType: "json",
+            success: addPOITorouteSuccessHandler,
+            error: addPOITorouteErrorHandler,
             complete: () => {}
 
         });
 
-        function deleteRouteSuccessHandler(data, textStatus, xhr) {
+        function addPOITorouteSuccessHandler(data, textStatus, xhr) {
             return resolve(true)
         };
 
-        function deleteRouteErrorHandler() {
+        function addPOITorouteErrorHandler() {
             return reject(new Error("Could not fetch data!"))
         };
 
     });
+}
+
+function getRoutePOI (route_id = current_selected_route_id) {
+    return new Promise(function (resolve, reject) {
+
+        let payload = {
+            "route_id": route_id
+        }
+
+        $.ajax({
+            url: "http://127.0.0.1:5000/api/route_poi",
+            type: "GET",
+            data: payload,
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                if (xhr && xhr.overrideMimeType) {
+                    xhr.overrideMimeType("application/json;charset=utf-8");
+                }
+            },
+            success: getRoutePOISuccessHandler,
+            error: getRoutePOIErrorHandler,
+            complete: () => {}
+
+        });
+
+        function getRoutePOISuccessHandler(data, textStatus, xhr) {
+            return resolve(data)
+        };
+
+        function getRoutePOIErrorHandler() {
+            return reject(new Error("Could not fetch data!"))
+        };
+
+    });
+
 }
