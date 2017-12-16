@@ -10,6 +10,8 @@ from flask_login import login_required, login_user, logout_user, current_user
 from app import (Attractions, Locations, LoginForm, PoiTypeForm, SearchForm,
                  SignupForm, User, get_poi_type, login_manager, Route, UserRoute)
 
+from app.models.gis_methods import get_poi_type
+
 script_dir = os.path.dirname(__file__)
 
 api = Blueprint('api', __name__, url_prefix='/api')
@@ -37,7 +39,7 @@ def route_api():
         
         return jsonify({"status":"200"})
 
-@api.route('/route_poi', methods=['GET','PUT','DELETE'])
+@api.route('/route_poi', methods=['GET','POST','PUT','DELETE'])
 def route_poi_api():
     user = User.get_user_id(current_user.email)
 
@@ -46,10 +48,18 @@ def route_poi_api():
         result = UserRoute.get_poi_route(user, route_id)
         return jsonify(result)
 
-    elif request.method == 'PUT':
+    elif request.method == 'POST':
         route = request.json
-        
         UserRoute.add_poi_to_route(user,route["route_id"],route["poi_id"])
+        return "OK"
+
+    elif request.method == 'PUT':
+        param = request.json
+        UserRoute.change_poi_pos_in_route(
+            route_id= param["route_id"],
+            poi_pos= param["poi_pos"],
+            poi_new_pos= param["poi_new_pos"],
+            user_id = user )
         return "OK"
 
     elif request.method == 'DELETE':
@@ -75,3 +85,10 @@ def optimized_route_api():
     print(mapzen_req, file=sys.stderr)
     print(mapzen_req.json, file=sys.stderr)
     return mapzen_resp_json
+
+@api.route('/getpoi', methods=['GET','POST'])
+def getpoi():
+    json_response = request.json
+    result = get_poi_type(json_response)
+
+    return json.dumps(result)

@@ -45,12 +45,50 @@ $(document).ready(function () {
         )
     });
 
-    $("#route-poi-list").on('click',".btn-rem-poi", function () {
+    $("#route-poi-list").on('click', ".btn-rem-poi", function () {
+
         let poi_pos = $(this).prevAll("li").first().attr("pos");
-        console.log("list item pos",poi_pos);
+
         removePOIFromRoute(poi_pos).then(() => {
             showRoutePOI();
         });
+    });
+
+    $("#route-poi-list").on('click', ".btn-move-up-poi", function () {
+
+
+        let poi_pos = $(this).prevAll("li").first().attr("pos");
+
+        if (parseInt(poi_pos) === 0) {
+            console.log("Cannot go any lower than this")
+
+        } else {
+
+            let poi_new_pos = (parseInt(poi_pos) - 1);
+
+            changePOIPosInRoute(poi_pos, poi_new_pos).then(() => {
+                showRoutePOI();
+            });
+        }
+    });
+
+    $("#route-poi-list").on('click', ".btn-move-down-poi", function () {
+
+
+        let poi_pos = $(this).prevAll("li").first().attr("pos");
+        let total_number_poi = $("#route-poi-list").find("li").length
+
+        if (parseInt(poi_pos) === total_number_poi - 1) {
+            console.log("Cannot go any higher than this")
+
+        } else {
+
+            let poi_new_pos = (parseInt(poi_pos) + 1);
+
+            changePOIPosInRoute(poi_pos, poi_new_pos).then(() => {
+                showRoutePOI();
+            });
+        }
     });
 
     function showRoutePOI() {
@@ -58,15 +96,15 @@ $(document).ready(function () {
         route_poi.empty();
 
         getRoutePOI().then(data => {
-            
+
             console.log("poi data", data)
 
             $.each(data["route"], function (key, value) {
-                console.log("data value",value.name)
-                route_poi.append($("<li class='li-route-poi'></li>").text(value.name).attr("pos",value.poi_pos));
+                console.log("data value", value.name)
+                route_poi.append($("<li class='li-route-poi'></li>").text(value.name).attr("pos", value.poi_pos));
                 // route_poi.append($("<li></li>").text(value.type));
-                route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-rem-poi'>Move up</button>"));
-                route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-rem-poi'>Move down</button>"));
+                route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-move-up-poi'>Move up</button>"));
+                route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-move-down-poi'>Move down</button>"));
                 route_poi.append($("<button type='button' class='btn btn-danger btn-sm btn-rem-poi'>Remove</button>"));
             });
         });

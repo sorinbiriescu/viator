@@ -175,16 +175,56 @@ class UserRoute(db.Model):
 
         route_json = json.loads(query.route_JSON)
 
+        # if item is found, then it's removed
         for i in route_json["route"]:
             if i["poi_pos"] == int(poi_pos):
                 route_json["route"].remove(i)
                 break
 
+        # all elements after the removed element get their positions lowered by 1
+        # old_poi_pos gets the value of poi_pos before it's lowered by 1
         for i in route_json["route"]:
             if i["poi_pos"] > int(poi_pos):
+                i["old_poi_pos"] = i["poi_pos"]
                 i["poi_pos"] -=1
+                
 
         query.route_JSON = json.dumps(route_json)
         db.session.commit() 
         
+        return "OK"
+
+    @staticmethod
+    def change_poi_pos_in_route(route_id,poi_pos,poi_new_pos,user_id):
+        query = UserRoute.query \
+                .filter(
+                    UserRoute.user_id == user_id,
+                    UserRoute.id == route_id
+                ) \
+                .first()
+
+        poi_pos = int(poi_pos)
+        poi_new_pos = int(poi_new_pos)
+
+        route_json = json.loads(query.route_JSON)
+
+        # gets the index of the dict to operate on, old_poi_pos gets the actual one, then 
+        # the values are swapped between the poi_pos actual and target
+
+        actual = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_pos]
+        target = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_new_pos]
+
+        # old_poi_pos gets the actual poi_pos value 
+        route_json["route"][actual[0]]["old_poi_pos"] = route_json["route"][actual[0]]["poi_pos"]
+        route_json["route"][target[0]]["old_poi_pos"] = route_json["route"][target[0]]["poi_pos"]
+
+        # actual and target poi_pos swap values
+        route_json["route"][actual[0]]["poi_pos"], route_json["route"][target[0]]["poi_pos"] = \
+        route_json["route"][target[0]]["poi_pos"], route_json["route"][actual[0]]["poi_pos"]
+
+        # new route list is sorted by the new poi_pos
+        route_json["route"] = sorted(route_json["route"], key=lambda k:k["poi_pos"])
+
+        query.route_JSON = json.dumps(route_json)
+        db.session.commit()
         return "OK"

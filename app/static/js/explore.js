@@ -60,7 +60,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:5000/_getpoi",
+                url: "http://127.0.0.1:5000/api/getpoi",
                 data: JSON.stringify(json_req_payload),
                 contentType: "application/json; charset=utf-8",
                 beforeSend: function (xhr) {
