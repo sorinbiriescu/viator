@@ -31,7 +31,7 @@ $(document).ready(function () {
         current_selected_route_id = $(this).attr('value');
         current_selected_route_name = $(this).text();
         showRoute(current_selected_route_name);
-
+        showRoutePOI();
     })
 
 
@@ -45,14 +45,9 @@ $(document).ready(function () {
         )
     });
 
-
-    function showRoute(name) {
-        let route_name = $("#route-name");
+    function showRoutePOI() {
         let route_poi = $("#route-poi-list");
-
-        route_name.empty();
         route_poi.empty();
-        route_name.append($("<h1></h1>").text(name));
 
         getRoutePOI().then(data => {
             
@@ -65,17 +60,6 @@ $(document).ready(function () {
             });
         });
 
-    }
-
-    function updateRouteList(data) {
-        let dropdown = $("#dropdown-menu-items")
-        let route_content = $("#route-name")
-
-        route_content.empty();
-        dropdown.empty();
-        $.each(data["results"], function (key, entry) {
-            dropdown.append($("<button class='dropdown-item' type='button'></button>").attr("value", entry.route_id).text(entry.route_name));
-        })
     }
 
 });

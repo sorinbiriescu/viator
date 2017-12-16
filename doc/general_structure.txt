@@ -1,0 +1,153 @@
+@startuml
+
+component #0074D9 route_api.js
+interface #0074D9 "getRoutes()" as route_api.js_get_route
+interface #0074D9 "createRoute()" as route_api.js_create_route
+interface #0074D9 "deleteRoute()" as route_api.js_delete_route
+interface #0074D9 "addPOIToRoute()" as route_api.js_add_poi_to_route
+interface #0074D9 "getRoutePOI()" as route_api.js_get_route_poi
+interface #0074D9 "showroute()" as route_api.js_show_route
+interface #0074D9 "updateRouteList()" as route_api.js_update_route_list
+
+route_api.js -up- route_api.js_get_route
+route_api.js -up- route_api.js_create_route
+route_api.js -up- route_api.js_delete_route
+route_api.js -up- route_api.js_add_poi_to_route
+route_api.js -up- route_api.js_get_route_poi
+route_api.js -up- route_api.js_show_route
+route_api.js -up- route_api.js_update_route_list
+
+component #FF851B route.js
+interface #FF851B "showRoutePOI()" as route.js_show_route_poi
+
+route.js -up- route.js_show_route_poi
+
+component #FF851B explore.js
+interface #FF851B "getResults()" as explore.js_get_results
+interface #FF851B "showResults()" as explore.js_show_results
+interface #FF851B "paginateResults()" as explore.js_paginate_results
+interface #FF851B "fetchAndShow()" as explore.js_fetch_and_show
+
+explore.js -up- explore.js_get_results
+explore.js -up- explore.js_show_results
+explore.js -up- explore.js_paginate_results
+explore.js -up- explore.js_fetch_and_show
+
+
+component #FFDC00 explore.html
+interface #FFDC00 "Button #search_submit" as explore.html_search_submit
+interface #FFDC00 "Button #venue-update" as explore.html_venue_update
+interface #FFDC00 "Button #newRouteModalSave" as explore.html_new_route_modal_save
+interface #FFDC00 "Button .dropdown-menu" as explore.html_dropdown_menu
+interface #FFDC00 "Button .btn-add-poi" as explore.html_add_poi
+interface "Button .delete_route" as explore.html_delete_route
+interface #FFDC00 "Div #route-name" as explore.html_route_name
+interface #FFDC00 "Div #dropdown-menu-items" as explore.html_dropdown_menu_items
+
+explore.html -down- explore.html_search_submit
+explore.html -down- explore.html_venue_update
+explore.html -down- explore.html_new_route_modal_save
+explore.html -down- explore.html_dropdown_menu
+explore.html -down- explore.html_add_poi
+explore.html -down- explore.html_delete_route
+explore.html -down- explore.html_route_name
+explore.html -down- explore.html_dropdown_menu_items
+
+component #FFDC00 route.html
+interface #FFDC00 "Button #newRouteModalSave" as route.html_new_route_modal_save
+interface #FFDC00 "Button .dropdown-menu" as route.html_dropdown_menu
+interface #FFDC00 "Button #delete_route" as route.html_delete_route
+interface #FFDC00 "Div #dropdown-menu-items" as route.html_dropdown_menu_items
+interface #FFDC00 "Div #route-name" as route.html_route_name
+interface #FFDC00 "Div #route-poi-list" as route.html_route_poi_list
+
+route.html -down- route.html_new_route_modal_save
+route.html -down- route.html_dropdown_menu
+route.html -down- route.html_delete_route
+route.html -down- route.html_dropdown_menu_items
+route.html -down- route.html_route_name
+route.html -down- route.html_route_poi_list
+
+component views_api.py
+interface "/api/route" as views_api.py_route
+interface "/api/route_poi" as views_api.py_route_poi
+
+views_api.py -up- views_api.py_route
+views_api.py -up- views_api.py_route_poi
+
+component views_main.py
+interface "/" as views_main.py_index
+interface "/location" as views_main.py_location
+interface "/directions" as views_main.py_directions
+interface "/route" as views_main.py_route
+interface "/explore" as views_main.py_explore
+interface "/signup" as views_main.py_signup
+interface "/login" as views_main.py_login
+interface "/logout" as views_main.py_logout
+interface "/user_dashboard" as views_main.py_user_dashboard
+interface "/_autocomplete" as views_main.py_autocomplete
+interface "/_getpoi" as views_main.py_get_poi
+interface "/_geocode" as views_main.py_geocode
+
+views_main.py -up- views_main.py_index
+views_main.py -up- views_main.py_location
+views_main.py -up- views_main.py_directions
+views_main.py -up- views_main.py_route
+views_main.py -up- views_main.py_explore
+views_main.py -up- views_main.py_signup
+views_main.py -up- views_main.py_login
+views_main.py -up- views_main.py_logout
+views_main.py -up- views_main.py_user_dashboard
+views_main.py -up- views_main.py_autocomplete
+views_main.py -up- views_main.py_get_poi
+views_main.py -up- views_main.py_geocode
+
+
+
+explore.js_paginate_results --> explore.js_get_results
+explore.js_paginate_results --> explore.js_show_results
+explore.js_fetch_and_show --> explore.js_get_results
+explore.js_fetch_and_show --> explore.js_show_results
+explore.js_fetch_and_show --> explore.js_paginate_results
+explore.js_get_results --> views_main.py_get_poi
+
+
+explore.html_search_submit --> explore.js_fetch_and_show
+explore.html_venue_update --> explore.js_fetch_and_show
+explore.html_new_route_modal_save --> route_api.js_create_route
+explore.html_new_route_modal_save --> route_api.js_get_route
+explore.html_new_route_modal_save --> route_api.js_update_route_list
+explore.html_dropdown_menu --> route_api.js_show_route
+explore.html_add_poi --> route_api.js_add_poi_to_route
+explore.html_delete_route --> route_api.js_delete_route
+explore.html_delete_route --> route_api.js_get_route
+explore.html_delete_route --> route_api.js_update_route_list
+
+
+route.html_new_route_modal_save --> route_api.js_create_route
+route.html_new_route_modal_save --> route_api.js_get_route
+route.html_new_route_modal_save --> route_api.js_update_route_list
+route.html_dropdown_menu --> route_api.js_show_route
+route.html_dropdown_menu --> route.js_show_route_poi
+route.html_delete_route --> route_api.js_delete_route
+route.html_delete_route --> route_api.js_get_route
+route.html_delete_route --> route_api.js_update_route_list
+
+route_api.js_get_route --> views_api.py_route
+route_api.js_create_route --> views_api.py_route
+route_api.js_delete_route --> views_api.py_route
+route_api.js_add_poi_to_route --> views_api.py_route_poi
+route_api.js_get_route_poi --> views_api.py_route_poi
+route_api.js_update_route_list -up-> explore.html_dropdown_menu_items
+route_api.js_update_route_list --> explore.html_route_name
+route_api.js_show_route -up-> explore.html_route_name
+route_api.js_show_route -up-> route.html_route_name
+route_api.js_show_route -up-> route.html_route_poi_list
+route_api.js_update_route_list -up-> route.html_dropdown_menu_items
+route_api.js_update_route_list -up-> route.html_route_name
+
+route.js_show_route_poi -up-> route.html_route_poi_list
+
+views_main.py_get_poi --> explore.js_get_results
+
+@enduml

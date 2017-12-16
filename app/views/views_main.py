@@ -165,15 +165,3 @@ def getpoi():
 @main.route('/_geocode', methods=['GET'])
 def geocode():
     pass
-
-
-
-
-
-# @main.after_request
-# def after(response):
-#   # todo with response
-#     print(response.status)
-#     print(response.headers)
-#     print(response.get_data())
-#     return response

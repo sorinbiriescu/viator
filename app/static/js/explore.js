@@ -132,7 +132,7 @@ $(document).ready(function () {
             onPageClick: function (event, page) {
                 getResults(selected_venues, page).then(results => {
                     showResults(results[0])
-                })
+                });
             }
         });
 
@@ -156,7 +156,7 @@ $(document).ready(function () {
 
     getRoutes().then( data => {
         updateRouteList(data);
-    })
+    });
 
     $("#newRouteModalSave").on('click', function () {
         console.log($("#submitNewRouteModal").find("#new_route").val())
@@ -175,40 +175,20 @@ $(document).ready(function () {
         current_selected_route_id = $(this).attr('value');
         current_selected_route_name = $(this).text();
         showRoute(current_selected_route_name);
-    })
+    });
     
     $("#results").on('click', ".btn-add-poi", function () {
         console.log("clicked",$(this))
         let poi_oid = $(this).attr("oid")
         addPOIToRoute(poi_oid)
-    })
+    });
 
     $("#delete_route").on('click', function () {
         deleteRoute(current_selected_route_id, current_selected_route_name).then(() => {
                 getRoutes().then( data => {
                     updateRouteList(data);
                 });
-            }
-
-        )
+            });
     });
-
-
-    function showRoute(name) {
-        let route_content = $("#route-name");
-        route_content.empty();
-        route_content.append($("<h1></h1>").text(name));
-    }
-
-    function updateRouteList(data) {
-        let dropdown = $("#dropdown-menu-items")
-        let route_content = $("#route-name")
-
-        route_content.empty();
-        dropdown.empty();
-        $.each(data["results"], function (key, entry) {
-            dropdown.append($("<button class='dropdown-item' type='button'></button>").attr("value", entry.route_id).text(entry.route_name));
-        })
-    }
 
 });

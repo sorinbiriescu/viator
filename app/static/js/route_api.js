@@ -170,3 +170,22 @@ function getRoutePOI (route_id = current_selected_route_id) {
     });
 
 }
+
+function showRoute(name) {
+    let route_name = $("#route-name");
+
+    route_name.empty();
+    route_name.append($("<h1></h1>").text(name));
+
+}
+
+function updateRouteList(data) {
+    let dropdown = $("#dropdown-menu-items")
+    let route_content = $("#route-name")
+
+    route_content.empty();
+    dropdown.empty();
+    $.each(data["results"], function (key, entry) {
+        dropdown.append($("<button class='dropdown-item' type='button'></button>").attr("value", entry.route_id).text(entry.route_name));
+    })
+}
