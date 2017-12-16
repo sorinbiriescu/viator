@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import (BooleanField, Form, PasswordField, StringField,
-                     SubmitField, TextField, SelectField)
+from wtforms import (BooleanField, Form, PasswordField, SelectField,
+                     StringField, SubmitField, TextField)
 from wtforms.validators import DataRequired, Email
-from app import UserRoute
+
+from app.models.models_user import UserRoute
 
 
 class SearchForm(FlaskForm):
@@ -25,7 +26,7 @@ class SignupForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired()])
     submit = SubmitField("Sign up")
 
-class Route(FlaskForm):
+class RouteForm(FlaskForm):
     route_list = SelectField('Routes', choices=[(1,"Please wait")], coerce=int)
     select_route = SubmitField("Select route")
     new_route = StringField('New route name', validators=[DataRequired()])

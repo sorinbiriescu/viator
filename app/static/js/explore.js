@@ -30,14 +30,14 @@ $(document).ready(function () {
         $("input.poi-checkbox").each(function () {
 
             if ($(this).is(":checked")) {
-                selected_venues.push($(this).attr("name"))
-                console.log("selected" , selected_venues)
+                selected_venues.push($(this).attr("name"));
+
             } else {
-                unselected_venues.push($(this).attr("name"))
+                unselected_venues.push($(this).attr("name"));
             }
         });
 
-        fetchAndShow(selected_venues)
+        fetchAndShow(selected_venues);
 
     });
 

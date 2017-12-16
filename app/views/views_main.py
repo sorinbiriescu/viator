@@ -1,14 +1,13 @@
-import json
 import os
-import sys
 
 import requests
-from flask import (Blueprint, Response, jsonify, redirect, render_template,
-                   request, url_for)
-from flask_login import login_required, login_user, logout_user, current_user
+from flask import (Blueprint, jsonify, redirect, render_template, request,
+                   url_for)
+from flask_login import login_required, login_user, logout_user
 
-from app import (Attractions, Locations, LoginForm, PoiTypeForm, SearchForm,
-                 SignupForm, User, get_poi_type, login_manager, Route, UserRoute)
+from app.forms.forms_main import (LoginForm, PoiTypeForm, RouteForm,
+                                  SearchForm, SignupForm)
+from app.models.models_user import User
 
 script_dir = os.path.dirname(__file__)
 
@@ -56,7 +55,7 @@ def directions():
 @main.route('/route/<user>', methods=['GET','POST'])
 @login_required
 def route(user):
-    form = Route(request.form)
+    form = RouteForm(request.form)
 
     content = {
         "form" : form
@@ -152,15 +151,6 @@ def autocomplete():
                 })
 
     return jsonify(json)
-
-
-
-@main.route('/_getpoi', methods=['GET','POST'])
-def getpoi():
-    json_response = request.json
-    result = get_poi_type(json_response)
-
-    return json.dumps(result)
 
 @main.route('/_geocode', methods=['GET'])
 def geocode():

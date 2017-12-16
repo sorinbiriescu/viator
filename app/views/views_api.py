@@ -3,14 +3,11 @@ import os
 import sys
 
 import requests
-from flask import (Blueprint, Response, jsonify, redirect, render_template,
-                   request, url_for)
-from flask_login import login_required, login_user, logout_user, current_user
-
-from app import (Attractions, Locations, LoginForm, PoiTypeForm, SearchForm,
-                 SignupForm, User, get_poi_type, login_manager, Route, UserRoute)
+from flask import Blueprint, jsonify, request
+from flask_login import current_user
 
 from app.models.gis_methods import get_poi_type
+from app.models.models_user import User, UserRoute
 
 script_dir = os.path.dirname(__file__)
 
