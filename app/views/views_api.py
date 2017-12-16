@@ -53,9 +53,12 @@ def route_poi_api():
         return "OK"
 
     elif request.method == 'DELETE':
-        "get route from DB"
-        "remove in route json the POI"
-        return "success"
+        request_json = request.json
+        route_id = request_json["route_id"]
+        poi_pos = request_json["poi_pos"]
+        UserRoute.remove_poi_from_route(route_id = route_id, poi_pos = poi_pos, user_id = user)
+
+        return "OK"
 
 
 

@@ -140,8 +140,8 @@ class UserRoute(db.Model):
         if query.route_JSON is None:
             route = {"route": [
                 {
-                "route_id" : 0,
-                "old_route_id" : "",
+                "poi_pos" : 0,
+                "old_poi_pos" : "",
                 "oid" : oid,
                 "oid_type" : oid_type
                 }
@@ -152,11 +152,11 @@ class UserRoute(db.Model):
             db.session.commit()
         else:
             route_json = json.loads(query.route_JSON)
-            last_route_id = max(route_json["route"], key=lambda x:x["route_id"])["route_id"]
+            last_route_id = max(route_json["route"], key=lambda x:x["poi_pos"])["poi_pos"]
             route_json["route"].append(
                 {
-                "route_id" : (last_route_id+1),
-                "old_route_id" : "",
+                "poi_pos" : (last_route_id+1),
+                "old_poi_pos" : "",
                 "oid" : oid,
                 "oid_type" : oid_type
                 }
@@ -164,3 +164,27 @@ class UserRoute(db.Model):
             query.route_JSON = json.dumps(route_json)
             db.session.commit()
 
+    @staticmethod
+    def remove_poi_from_route(route_id,poi_pos, user_id):
+        query = UserRoute.query \
+                .filter(
+                    UserRoute.user_id == user_id,
+                    UserRoute.id == route_id
+                ) \
+                .first()
+
+        route_json = json.loads(query.route_JSON)
+
+        for i in route_json["route"]:
+            if i["poi_pos"] == int(poi_pos):
+                route_json["route"].remove(i)
+                break
+
+        for i in route_json["route"]:
+            if i["poi_pos"] > int(poi_pos):
+                i["poi_pos"] -=1
+
+        query.route_JSON = json.dumps(route_json)
+        db.session.commit() 
+        
+        return "OK"

@@ -45,6 +45,14 @@ $(document).ready(function () {
         )
     });
 
+    $("#route-poi-list").on('click',".btn-rem-poi", function () {
+        let poi_pos = $(this).prevAll("li").first().attr("pos");
+        console.log("list item pos",poi_pos);
+        removePOIFromRoute(poi_pos).then(() => {
+            showRoutePOI();
+        });
+    });
+
     function showRoutePOI() {
         let route_poi = $("#route-poi-list");
         route_poi.empty();
@@ -55,8 +63,11 @@ $(document).ready(function () {
 
             $.each(data["route"], function (key, value) {
                 console.log("data value",value.name)
-                route_poi.append($("<li></li>").text(value.name));
+                route_poi.append($("<li class='li-route-poi'></li>").text(value.name).attr("pos",value.poi_pos));
                 // route_poi.append($("<li></li>").text(value.type));
+                route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-rem-poi'>Move up</button>"));
+                route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-rem-poi'>Move down</button>"));
+                route_poi.append($("<button type='button' class='btn btn-danger btn-sm btn-rem-poi'>Remove</button>"));
             });
         });
 

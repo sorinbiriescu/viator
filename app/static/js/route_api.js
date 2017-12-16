@@ -136,7 +136,42 @@ function addPOIToRoute(poi_oid, route_id = current_selected_route_id) {
     });
 }
 
-function getRoutePOI (route_id = current_selected_route_id) {
+function removePOIFromRoute(poi_pos, route_id = current_selected_route_id) {
+    return new Promise(function (resolve, reject) {
+
+        let payload = {
+            "poi_pos": poi_pos,
+            "route_id": route_id
+        }
+
+        $.ajax({
+            url: "http://127.0.0.1:5000/api/route_poi",
+            type: "DELETE",
+            data: JSON.stringify(payload),
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                if (xhr && xhr.overrideMimeType) {
+                    xhr.overrideMimeType("application/json;charset=utf-8");
+                }
+            },
+            dataType: 'text',
+            success: removePOIFromRouteSuccessHandler,
+            error: removePOIFromRouteErrorHandler
+
+        });
+
+        function removePOIFromRouteSuccessHandler(data, textStatus, xhr) {
+            return resolve(true)
+        };
+
+        function removePOIFromRouteErrorHandler() {
+            return reject(new Error("Could not fetch data!"))
+        };
+
+    });
+}
+
+function getRoutePOI(route_id = current_selected_route_id) {
     return new Promise(function (resolve, reject) {
 
         let payload = {
