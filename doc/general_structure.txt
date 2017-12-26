@@ -23,8 +23,10 @@ route_api.js -up- route_api.js_change_poi_pos_in_route
 
 component #FF851B route.js
 interface #FF851B "showRoutePOI()" as route.js_show_route_poi
+interface #FF851B "getWaypoints()" as route.js_get_waypoints
 
 route.js -up- route.js_show_route_poi
+route.js -up- route.js_get_waypoints
 
 component #FF851B explore.js
 interface #FF851B "getResults()" as explore.js_get_results
@@ -37,6 +39,7 @@ explore.js -up- explore.js_show_results
 explore.js -up- explore.js_paginate_results
 explore.js -up- explore.js_fetch_and_show
 
+component #FF851B map.js
 
 component #FFDC00 explore.html
 interface #FFDC00 "Button #search_submit" as explore.html_search_submit
@@ -132,6 +135,7 @@ explore.html_add_poi --> route_api.js_add_poi_to_route
 explore.html_delete_route --> route_api.js_delete_route
 explore.html_delete_route --> route_api.js_get_route
 explore.html_delete_route --> route_api.js_update_route_list
+explore.html --> map.js
 
 
 route.html_new_route_modal_save --> route_api.js_create_route
@@ -148,6 +152,7 @@ route.html_move_up_poi --> route_api.js_change_poi_pos_in_route
 route.html_move_up_poi --> route.js_show_route_poi
 route.html_move_down_poi --> route_api.js_change_poi_pos_in_route
 route.html_move_down_poi --> route.js_show_route_poi
+route.html -down-> map.js
 
 route_api.js_get_route --> views_api.py_route
 route_api.js_create_route --> views_api.py_route
@@ -165,6 +170,8 @@ route_api.js_remove_poi_from_route --> views_api.py_route_poi
 route_api.js_change_poi_pos_in_route --> views_api.py_route_poi
 
 route.js_show_route_poi -up-> route.html_route_poi_list
+route.js_show_route_poi --> route.js_get_waypoints 
+route.js_get_waypoints --> map.js
 
 views_main.py_explore --> explore.html
 views_main.py_route --> route.html

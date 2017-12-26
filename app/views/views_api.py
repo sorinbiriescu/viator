@@ -9,14 +9,43 @@ from flask_login import current_user
 from app.models.gis_methods import get_poi_type
 from app.models.models_user import User, UserRoute
 
+mapzen_api = 'mapzen-fPCfu1G'
+
 script_dir = os.path.dirname(__file__)
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
 mapzen_api = 'mapzen-fPCfu1G'
 
+@api.route('/autocomplete', methods=['GET'])
+def autocomplete():
+    query = request.args.get('query')
+    payload = {
+        'api_key' : mapzen_api,
+        'text': query,
+        'size' : 10,
+        'layers': 'locality',
+        'boundary.country': 'FRA'
+        }
+    
+    mapzen_req = requests.get(url='https://search.mapzen.com/v1/search', params=payload)
+    mapzen_resp_json = mapzen_req.json()
+
+    json = { "query": "Unit","suggestions": [] }
+    for result in mapzen_resp_json['features']:
+        json["suggestions"] \
+            .append({
+                "value":','.join([result['properties']['name'],result['properties']['region']]),
+                "data": result['geometry']['coordinates'] \
+                })
+
+    return jsonify(json)
+
 @api.route('/route', methods=['GET','POST','PUT','DELETE'])
 def route_api():
+    '''
+    Create / delete user routes
+    '''
     user = User.get_user_id(current_user.email)
 
     if request.method == 'GET':
@@ -38,6 +67,9 @@ def route_api():
 
 @api.route('/route_poi', methods=['GET','POST','PUT','DELETE'])
 def route_poi_api():
+    '''
+    Add, remove, delete or change the position of a POI in a route
+    '''
     user = User.get_user_id(current_user.email)
 
     if request.method == 'GET':
@@ -83,9 +115,21 @@ def optimized_route_api():
     print(mapzen_req.json, file=sys.stderr)
     return mapzen_resp_json
 
+
 @api.route('/getpoi', methods=['GET','POST'])
 def getpoi():
+    '''
+    Get POI around 3km of a given point
+    '''
     json_response = request.json
     result = get_poi_type(json_response)
 
     return json.dumps(result)
+
+
+@api.route('/turnbyturn', methods =['GET'])
+def turnbyturn():
+    '''
+    Calls mapzen to get a route between given POIs in a route
+    '''
+

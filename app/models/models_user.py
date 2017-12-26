@@ -114,7 +114,7 @@ class UserRoute(db.Model):
         for i in route_json["route"]:
             oid = i["oid"]
             oid_query = get_poi_by_oid(oid)
-            print(oid_query)
+
             i.update(
                 {
                     "name": oid_query[1],

@@ -4,20 +4,39 @@ let api_key = 'mapzen-fPCfu1G'
 let map
 let addMarkerToGroup
 let clearMarkersFromGroup
+let routingControl
 
 $(document).ready(function () {
   L.Mapzen.apiKey = api_key;
-  
+
   // Add a map to the 'map' div  
   map = L.Mapzen.map('mapzen', {
     center: [45.1885, 5.7245],
     zoom: 13,
     panToPint: true,
     pointIcon: true,
-    // tangramOptions: {
-    //   scene: L.Mapzen.BasemapStyles.Refill
-    // }
+    tangramOptions: {
+      scene: {
+        import: L.Mapzen.BasemapStyles.Cinnabar,
+        global: {
+          sdk_building_extrude: false
+        }
+      }
+    }
   });
+
+
+
+  routingControl = L.Mapzen.routing.control({
+    waypoints: [null],
+    router: L.Mapzen.routing.router({
+      costing: "auto"
+    }),
+    summaryTemplate: '<div class="start">{name}</div><div class="info {costing}">{distance}, {time}</div>',
+    routeWhileDragging: false,
+    show: false,
+    collapsible: true
+  }).addTo(map);
 
   let marker_group = L.layerGroup()
   marker_group.addTo(map)
@@ -49,7 +68,7 @@ $(document).ready(function () {
 
   clearMarkersFromGroup = function () {
 
-      marker_group.clearLayers();
+    marker_group.clearLayers();
 
   };
 });

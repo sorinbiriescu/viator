@@ -15,7 +15,7 @@ $(document).ready(function () {
     })
 
     $("#newRouteModalSave").on('click', function () {
-        console.log($("#submitNewRouteModal").find("#new_route").val())
+
         let route_name = $("#submitNewRouteModal").find("#new_route").val()
 
         createRoute(route_name).then(() => {
@@ -27,7 +27,7 @@ $(document).ready(function () {
     });
 
     $(".dropdown-menu").on('click', '.dropdown-item', function () {
-        console.log($(this).text());
+
         current_selected_route_id = $(this).attr('value');
         current_selected_route_name = $(this).text();
         showRoute(current_selected_route_name);
@@ -97,18 +97,28 @@ $(document).ready(function () {
 
         getRoutePOI().then(data => {
 
-            console.log("poi data", data)
-
             $.each(data["route"], function (key, value) {
-                console.log("data value", value.name)
-                route_poi.append($("<li class='li-route-poi'></li>").text(value.name).attr("pos", value.poi_pos));
+
+                route_poi.append($("<li class='li-route-poi'></li>").append($("<h4></h4>").text(value.name)).attr("pos", value.poi_pos));
                 // route_poi.append($("<li></li>").text(value.type));
                 route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-move-up-poi'>Move up</button>"));
                 route_poi.append($("<button type='button' class='btn btn-info btn-sm btn-move-down-poi'>Move down</button>"));
                 route_poi.append($("<button type='button' class='btn btn-danger btn-sm btn-rem-poi'>Remove</button>"));
             });
+
+            function getWaypoints(data) {
+                let waypoints = []
+
+                $.each(data["route"], function (key, value) {
+                    let coordinates = JSON.parse(value.coordinates)
+                    waypoints.push(L.latLng(coordinates.coordinates[1], coordinates.coordinates[0]))
+                });
+
+                return waypoints
+            };
+
+            routingControl.setWaypoints(getWaypoints(data))
+
         });
-
     }
-
 });

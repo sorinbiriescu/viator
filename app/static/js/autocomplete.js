@@ -8,7 +8,7 @@ $(document).ready(function () {
 function assignAutocomplete() {
     // Autocomplete field
     $('#location-search-autocomplete').devbridgeAutocomplete({
-        serviceUrl: 'http://127.0.0.1:5000/_autocomplete',
+        serviceUrl: 'http://127.0.0.1:5000/api/autocomplete',
         dataType: 'json',
         minChars: 4,
         deferRequestBy: 100,

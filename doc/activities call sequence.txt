@@ -1,0 +1,62 @@
+@startuml
+
+actor User
+
+box "FrontEnd" #LightBlue
+    participant route.html
+    participant explore.html
+    participant index.html
+	participant route.js
+	participant explore.js
+    participant route_api.js
+    participant map.js
+    participant autocomplete.js
+end box
+
+box "BackEnd" #3D9970
+	participant "/" as views.index
+	participant "/api/route" as views.api.route
+    participant "/api/route_poi" as views.api.route_poi
+    participant "/api/autocomplete" as views.api.autocomplete
+    participant "/explore" as views.explore
+end box
+
+box "External API" #FF851B
+	participant "Mapzen API" as mapzen.api
+end box
+
+
+=== Load Index page ===
+
+User -> views.index: request index.html
+views.index -> index.html: render page
+index.html -> User: page ready
+
+
+=== Load Explore page ===
+
+User -> views.explore: request page
+views.explore -> explore.html: render page
+explore.html -> explore.js: load script
+explore.html -> route_api.js: load script
+explore.html -> map.js: load script
+explore.html -> autocomplete.js: load script
+explore.html -> explore.html: render forms
+explore.html -> map.js: create map object
+map.js -> explore.html: render map
+explore.html -> User: page ready
+
+
+=== Search for location ===
+
+User -> explore.html: type in location
+explore.html -> autocomplete.js: Event "on type" -> Search field #location-search-autocomplete
+autocomplete.js -> views.api.autocomplete: request sent
+views.api.autocomplete -> mapzen.api: create payload, request sent
+mapzen.api -> views.api.autocomplete: response type:JSON
+views.api.autocomplete -> views.api.autocomplete: prepare JSON
+views.api.autocomplete -> autocomplete.js: response type:JSON
+autocomplete.js -> explore.html: render results
+explore.html -> User: show results
+
+@enduml

@@ -127,31 +127,6 @@ def user_dashboard(user):
 
     return render_template('/main/user_dashboard.html', **content)
 
-
-@main.route('/_autocomplete', methods=['GET'])
-def autocomplete():
-    query = request.args.get('query')
-    payload = {
-        'api_key' : mapzen_api,
-        'text': query,
-        'size' : 10,
-        'layers': 'locality',
-        'boundary.country': 'FRA'
-        }
-    
-    mapzen_req = requests.get(url='https://search.mapzen.com/v1/search', params=payload)
-    mapzen_resp_json = mapzen_req.json()
-
-    json = { "query": "Unit","suggestions": [] }
-    for result in mapzen_resp_json['features']:
-        json["suggestions"] \
-            .append({
-                "value":','.join([result['properties']['name'],result['properties']['region']]),
-                "data": result['geometry']['coordinates'] \
-                })
-
-    return jsonify(json)
-
 @main.route('/_geocode', methods=['GET'])
 def geocode():
     pass
