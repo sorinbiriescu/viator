@@ -6,8 +6,8 @@ import requests
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
 
-from app.models.gis_methods import get_poi_type
 from app.models.models_user import User, UserRoute
+from app.models.models_locations import Locations
 
 mapzen_api = 'mapzen-fPCfu1G'
 
@@ -20,26 +20,9 @@ mapzen_api = 'mapzen-fPCfu1G'
 @api.route('/autocomplete', methods=['GET'])
 def autocomplete():
     query = request.args.get('query')
-    payload = {
-        'api_key' : mapzen_api,
-        'text': query,
-        'size' : 10,
-        'layers': 'locality',
-        'boundary.country': 'FRA'
-        }
-    
-    mapzen_req = requests.get(url='https://search.mapzen.com/v1/search', params=payload)
-    mapzen_resp_json = mapzen_req.json()
+    result = Locations.get_location_autocomplete(query)
 
-    json = { "query": "Unit","suggestions": [] }
-    for result in mapzen_resp_json['features']:
-        json["suggestions"] \
-            .append({
-                "value":','.join([result['properties']['name'],result['properties']['region']]),
-                "data": result['geometry']['coordinates'] \
-                })
-
-    return jsonify(json)
+    return jsonify(result)
 
 @api.route('/route', methods=['GET','POST','PUT','DELETE'])
 def route_api():

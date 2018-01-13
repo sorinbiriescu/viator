@@ -17,7 +17,9 @@ $(document).ready(function () {
 
     $("#search_submit").on("click", function () {
 
-        map.flyTo([autocomplete_data[1], autocomplete_data[0]], 13)
+        // map.flyTo([autocomplete_data[1], autocomplete_data[0]], 13)
+        var geojsonLayer = L.geoJson(autocomplete_data).addTo(map);
+        map.fitBounds(geojsonLayer.getBounds());
         fetchAndShow(selected_venues)
 
     });

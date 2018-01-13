@@ -3,8 +3,16 @@
 {% block head%}
 <link rel="stylesheet" href="../static/vendor/extra-markers/css/leaflet.extra-markers.min.css">
 <link rel="stylesheet" href="../static/vendor/font-awesome-470/css/font-awesome.min.css">
-<!-- latest version of mapzen.js-->
-<script src="https://mapzen.com/js/mapzen.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+
+
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
+
+<script src="//rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js"></script>
 
 <script src="../static/js/map.js"></script>
 <script src="../static/js/autocomplete.js"></script>
@@ -17,14 +25,12 @@
 <script src="../static/js/position.js"></script>
 
 
-<!-- style sheet for mapzen.js -->
-<link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
 {% endblock %}
 
 {% block content %}
 
 <style>
-  #mapzen {
+  #mapbox {
     height: 100%;
     width: 100%;
     position: absolute;
@@ -173,7 +179,7 @@
       
     </div>
     <div class="col-md-6" style="height:80vh;">
-      <div id='mapzen'></div>
+      <div id='mapbox'></div>
     </div>
   </div>
 

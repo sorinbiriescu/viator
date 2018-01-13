@@ -4,6 +4,7 @@ config*.py
 alembic.ini
 internal_dev
 .vscode/
+*.pbf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -11,8 +11,8 @@ app.config.from_object('config')
 
 db = SQLAlchemy(app)
 
-
-from .models.models_user import User
+from app.models.models_user import User, UserRoute
+from app.models.models_locations import Locations, Attractions
 
 login_manager = LoginManager()
 login_manager.init_app(app)

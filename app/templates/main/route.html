@@ -3,12 +3,15 @@
 <script src="../static/js/route_api.js"></script>
 <script src="../static/js/route.js"></script>
 
-<!-- style sheet for mapzen.js -->
-<link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 
 
-<!-- latest version of mapzen.js-->
-<script src="https://mapzen.com/js/mapzen.js"></script>
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
+
+<script src="//rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js"></script>
 
 {% endblock %} {% block content %}
 
@@ -27,7 +30,7 @@
 </style>
 
 <style>
-  #mapzen {
+  #mapbox {
     height: 100%;
     width: 100%;
     position: absolute;
@@ -137,7 +140,7 @@
     </div>
   </div>
   <div class="col-md-6" style="height:80vh;">
-    <div id='mapzen'></div>
+    <div id='mapbox'></div>
   </div>
 </div>
 

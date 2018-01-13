@@ -4,8 +4,6 @@ from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import JSON
 
 from app import db
-from app.models.gis_methods import get_poi_by_oid
-
 
 class User(UserMixin, db.Model):
     __bind_key__ = None
