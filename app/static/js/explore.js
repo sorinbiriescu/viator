@@ -1,28 +1,23 @@
 "use strict";
-let csrf_token = "{{ csrf_token() }}"; // the token is set by Jinja2
-
-
-$.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrf_token); // insert custom header
-        }
-    }
-});
 
 $(document).ready(function () {
 
     let selected_venues;
     let unselected_venues;
+    let geojsonLayer;
 
     $("#search_submit").on("click", function () {
-
-        // map.flyTo([autocomplete_data[1], autocomplete_data[0]], 13)
-        var geojsonLayer = L.geoJson(autocomplete_data).addTo(map);
+        
+        if(map.hasLayer(geojsonLayer)) {
+            map.removeLayer(geojsonLayer)
+        }
+        
+        geojsonLayer = L.geoJson(autocomplete_data).addTo(map);
         map.fitBounds(geojsonLayer.getBounds());
-        fetchAndShow(selected_venues)
 
     });
+
+    
 
     $("#venue-update").on("click", function () {
         selected_venues = [];
@@ -54,7 +49,7 @@ $(document).ready(function () {
             // Query params that will be sent with the Ajax request
 
             let json_req_payload = {
-                "coordinates": [autocomplete_data[1], autocomplete_data[0]],
+                "coordinates": poi_center,
                 "query": query,
                 "page": parseInt(page),
                 "per_page": parseInt(per_page),
@@ -79,11 +74,12 @@ $(document).ready(function () {
             function successHandler(data, textStatus, xhr) {
 
                 var results = [
-                    data["result"],
+                    data["result_geojson"],
                     data["total_results"],
                     data["total_pages"],
                     data["current_page"]
                 ]
+                console.log(JSON.parse(data))
                 return resolve(results)
             };
 
@@ -112,14 +108,6 @@ $(document).ready(function () {
                             .attr("oid",results[i]["oid"]+"."+results[i]["osm_type"])
                             .text("Add attraction"));
             
-            addMarkerToGroup(
-                results[i]["location"]["coordinates"][0],
-                results[i]["location"]["coordinates"][1],
-                results[i]["name"],
-                results[i]["icon"],
-                results[i]["color"],
-                results[i]["shape"]
-            );
         }
     };
 

@@ -7,15 +7,11 @@ from flask import Blueprint, jsonify, request
 from flask_login import current_user
 
 from app.models.models_user import User, UserRoute
-from app.models.models_locations import Locations
-
-mapzen_api = 'mapzen-fPCfu1G'
+from app.models.models_locations import Locations, Attractions
 
 script_dir = os.path.dirname(__file__)
 
 api = Blueprint('api', __name__, url_prefix='/api')
-
-mapzen_api = 'mapzen-fPCfu1G'
 
 @api.route('/autocomplete', methods=['GET'])
 def autocomplete():
@@ -82,32 +78,15 @@ def route_poi_api():
 
         return "OK"
 
-
-
-@api.route('/optimized_route', methods=['GET','POST'])
-def optimized_route_api():
-    json = request.json
-    payload = {
-        "json" : json,
-        "api_key" : mapzen_api,
-        }
-    print(json, file=sys.stderr)
-    mapzen_req = requests.post(url='https://matrix.mapzen.com/optimized_route', params=payload)
-    mapzen_resp_json = mapzen_req.json
-    print(mapzen_req, file=sys.stderr)
-    print(mapzen_req.json, file=sys.stderr)
-    return mapzen_resp_json
-
-
 @api.route('/getpoi', methods=['GET','POST'])
 def getpoi():
     '''
     Get POI around 3km of a given point
     '''
-    json_response = request.json
-    result = get_poi_type(json_response)
+    json_request_param = request.json
+    result = Attractions.get_poi_by_distance(json_request_param)
 
-    return json.dumps(result)
+    return jsonify(result)
 
 
 @api.route('/turnbyturn', methods =['GET'])

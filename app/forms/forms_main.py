@@ -10,10 +10,8 @@ class SearchForm(FlaskForm):
     autocomp = TextField('Search City', id='location-search-autocomplete',render_kw={"type":"search","class":"form-control mr-sm-2","placeholder":"Search city"})
 
 class PoiTypeForm(FlaskForm):
-    restaurant = BooleanField(label='Restaurants', id='restaurant-poi-type-checkbox')
-    bar = BooleanField(label='Bar', id='bar-poi-type-checkbox')
-    nightclub = BooleanField(label='Nightclub', id='nightclub-poi-type-checkbox')
-    toilets = BooleanField(label='Toilet', id='toilets-poi-type-checkbox')
+    museum = BooleanField(label='Museum', id='museum-poi-type-checkbox')
+    hotel = BooleanField(label='Hotel', id='hotel-poi-type-checkbox')
 
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[DataRequired()])
