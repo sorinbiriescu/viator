@@ -2,8 +2,7 @@
 let token = 'pk.eyJ1Ijoic29yaW5iaXJpZXNjdSIsImEiOiJjajhuYXR1YmcxMXdrMnd1YWZzOG5nNXQwIn0.tY6DQoXnp_V88XSNlF2HdA';
 
 let map;
-let poi_center_auto;
-let poi_center_user;
+let poi_center;
 
 $(document).ready(function () {
 
@@ -16,11 +15,9 @@ $(document).ready(function () {
   }).addTo(map);
 
   poi_center = map.getCenter();
-  console.log(poi_center)
 
   map.on('moveend', () => {
     poi_center = map.getCenter();
-    console.log(poi_center)
   })
 
   map.on('click',
@@ -31,6 +28,14 @@ $(document).ready(function () {
       console.log("You clicked the map at latitude: " + lat[1] + " and longitude:" + lng[0]);
     });
 
-  
-
 });
+
+function onEachFeature(feature, layer) {
+  let popupContent = "";
+
+  if (feature.properties && feature.properties.name) {
+    popupContent += feature.properties.name;
+  }
+
+  layer.bindPopup(popupContent);
+}

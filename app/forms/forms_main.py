@@ -12,6 +12,7 @@ class SearchForm(FlaskForm):
 class PoiTypeForm(FlaskForm):
     museum = BooleanField(label='Museum', id='museum-poi-type-checkbox')
     hotel = BooleanField(label='Hotel', id='hotel-poi-type-checkbox')
+    camp_site = BooleanField(label='Camp Site', id='camp_site-poi-type-checkbox')
 
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[DataRequired()])

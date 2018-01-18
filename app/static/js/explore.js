@@ -5,25 +5,27 @@ $(document).ready(function () {
     let selected_venues;
     let unselected_venues;
     let geojsonLayer;
+    let POILayer;
 
     $("#search_submit").on("click", function () {
-        
-        if(map.hasLayer(geojsonLayer)) {
+
+        if (map.hasLayer(geojsonLayer)) {
             map.removeLayer(geojsonLayer)
         }
-        
+
+        console.log(autocomplete_data)
         geojsonLayer = L.geoJson(autocomplete_data).addTo(map);
         map.fitBounds(geojsonLayer.getBounds());
 
     });
 
-    
+
 
     $("#venue-update").on("click", function () {
         selected_venues = [];
         unselected_venues = [];
 
-        
+
         $("input.poi-checkbox").each(function () {
 
             if ($(this).is(":checked")) {
@@ -40,15 +42,9 @@ $(document).ready(function () {
 
     function getResults(query, page = 1, per_page = 10) {
 
-        // Since other functions depend on the results of the query, it creates a
-        // promise. If the query is retrieved with success, then it resolves with 
-        // the data. Else, it rejects the resolution
-
         return new Promise(function (resolve, reject) {
 
-            // Query params that will be sent with the Ajax request
-
-            let json_req_payload = {
+            let request_payload = {
                 "coordinates": poi_center,
                 "query": query,
                 "page": parseInt(page),
@@ -56,31 +52,17 @@ $(document).ready(function () {
             }
 
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "http://127.0.0.1:5000/api/getpoi",
-                data: JSON.stringify(json_req_payload),
-                contentType: "application/json; charset=utf-8",
-                beforeSend: function (xhr) {
-                    if (xhr && xhr.overrideMimeType) {
-                        xhr.overrideMimeType("application/json;charset=utf-8");
-                    }
+                data: {
+                    parameters: JSON.stringify(request_payload)
                 },
-                dataType: "json",
                 success: successHandler,
                 error: errorHandler,
-                complete: () => {}
             });
 
             function successHandler(data, textStatus, xhr) {
-
-                var results = [
-                    data["result_geojson"],
-                    data["total_results"],
-                    data["total_pages"],
-                    data["current_page"]
-                ]
-                console.log(JSON.parse(data))
-                return resolve(results)
+                return resolve(data)
             };
 
             function errorHandler() {
@@ -91,23 +73,18 @@ $(document).ready(function () {
 
     function showResults(results) {
 
-        // Flow: clears the results from the #results div, then iterates over the 
-        // query results and displays the results in the #results div
-
         $("#results").empty();
-        clearMarkersFromGroup();
 
         for (let i = 0; i < results.length; i++) {
 
             let index = i + 1
             $("#results").append($("<li></li>")
-                            .text(results[i]["name"]));
+                .text(results[i]["properties"]["name"]));
             $("#results").append($("<button></button>")
-                            .attr("class","btn btn-primary btn-sm btn-add-poi")
-                            .attr("type","button")
-                            .attr("oid",results[i]["oid"]+"."+results[i]["osm_type"])
-                            .text("Add attraction"));
-            
+                .attr("class", "btn btn-primary btn-sm btn-add-poi")
+                .attr("type", "button")
+                .text("Add attraction"));
+
         }
     };
 
@@ -120,31 +97,40 @@ $(document).ready(function () {
             visiblePages: 7,
             initiateStartPageClick: false,
             onPageClick: function (event, page) {
-                getResults(selected_venues, page).then(results => {
-                    showResults(results[0])
-                });
+                fetchAndShow(selected_venues, page, false)
             }
         });
 
     };
 
-    function fetchAndShow(selected_venues) {
+    function showPOIOnMap(geojson) {
+        console.log(geojson)
+        if (map.hasLayer(POILayer)) {
+            map.removeLayer(POILayer)
+        }
+        POILayer = L.geoJson(geojson, {
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+        map.fitBounds(POILayer.getBounds());
+    }
+
+    function fetchAndShow(selected_venues, page, paginate = true) {
         if (selected_venues.length === 0) {
 
         } else {
-            getResults(selected_venues).then(results => {
-                // 0: data["result"],
-                // 1: data["total_results"],
-                // 2: data["total_pages"],
-                // 3: data["current_page"]
-                showResults(results[0]);
-                paginateResults(results[2])
+            getResults(selected_venues, page).then(data => {
+                showResults(data["result_geojson"]["features"]);
+                showPOIOnMap(data["result_geojson"]["features"]);
+                if (paginate === true) {
+                    paginateResults(data["total_pages"]);
+                }
 
             });
         }
     }
 
-    getRoutes().then( data => {
+    getRoutes().then(data => {
         updateRouteList(data);
     });
 
@@ -153,7 +139,7 @@ $(document).ready(function () {
         let route_name = $("#submitNewRouteModal").find("#new_route").val()
 
         createRoute(route_name).then(() => {
-            getRoutes().then( data => {
+            getRoutes().then(data => {
                 updateRouteList(data);
             });
             $('#newRouteModal').modal('hide');
@@ -166,19 +152,19 @@ $(document).ready(function () {
         current_selected_route_name = $(this).text();
         showRoute(current_selected_route_name);
     });
-    
+
     $("#results").on('click', ".btn-add-poi", function () {
-        console.log("clicked",$(this))
+        console.log("clicked", $(this))
         let poi_oid = $(this).attr("oid")
         addPOIToRoute(poi_oid)
     });
 
     $("#delete_route").on('click', function () {
         deleteRoute(current_selected_route_id, current_selected_route_name).then(() => {
-                getRoutes().then( data => {
-                    updateRouteList(data);
-                });
+            getRoutes().then(data => {
+                updateRouteList(data);
             });
+        });
     });
 
 });

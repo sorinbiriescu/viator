@@ -78,12 +78,13 @@ def route_poi_api():
 
         return "OK"
 
-@api.route('/getpoi', methods=['GET','POST'])
+@api.route('/getpoi', methods=['GET'])
 def getpoi():
     '''
     Get POI around 3km of a given point
     '''
-    json_request_param = request.json
+    json_request_param = json.loads(request.args.get('parameters'))
+    print(json_request_param)
     result = Attractions.get_poi_by_distance(json_request_param)
 
     return jsonify(result)

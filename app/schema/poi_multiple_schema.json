@@ -1,0 +1,130 @@
+{
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "properties": {
+        "total_results": {
+            "$id": "/properties/total_results",
+            "type": "integer",
+            "title": "The Total_results Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                10
+            ]
+        },
+        "total_pages": {
+            "$id": "/properties/total_pages",
+            "type": "integer",
+            "title": "The Total_pages Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "current_page": {
+            "$id": "/properties/current_page",
+            "type": "integer",
+            "title": "The Current_page Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "result_geojson": {
+            "$id": "/properties/result_geojson",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$id": "/properties/result_geojson/properties/type",
+                    "type": "string",
+                    "title": "The Type Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "FeatureCollection"
+                    ]
+                },
+                "features": {
+                    "$id": "/properties/result_geojson/properties/features",
+                    "type": "array",
+                    "items": {
+                        "$id": "/properties/result_geojson/properties/features/items",
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "$id": "/properties/result_geojson/properties/features/items/properties/type",
+                                "type": "string",
+                                "title": "The Type Schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "Feature"
+                                ]
+                            },
+                            "geometry": {
+                                "$id": "/properties/result_geojson/properties/features/items/properties/geometry",
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "$id": "/properties/result_geojson/properties/features/items/properties/geometry/properties/type",
+                                        "type": "string",
+                                        "title": "The Type Schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "Point"
+                                        ]
+                                    },
+                                    "coordinates": {
+                                        "$id": "/properties/result_geojson/properties/features/items/properties/geometry/properties/coordinates",
+                                        "type": "array",
+                                        "items": {
+                                            "$id": "/properties/result_geojson/properties/features/items/properties/geometry/properties/coordinates/items",
+                                            "type": "number",
+                                            "title": "The 0 Schema",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": 0,
+                                            "examples": [
+                                                5.731392860412598
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            "properties": {
+                                "$id": "/properties/result_geojson/properties/features/items/properties/properties",
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "$id": "/properties/result_geojson/properties/features/items/properties/properties/properties/name",
+                                        "type": "string",
+                                        "title": "The Name Schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "Musee de Grenoble"
+                                        ]
+                                    },
+                                    "type": {
+                                        "$id": "/properties/result_geojson/properties/features/items/properties/properties/properties/type",
+                                        "type": "string",
+                                        "title": "The Type Schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "Museum"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

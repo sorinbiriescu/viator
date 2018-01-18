@@ -1,0 +1,109 @@
+{
+    "total_results": 31,
+    "total_pages": 4,
+    "current_page": 1,
+    "result_geojson": {
+        "features": [{
+            "geometry": {
+                "coordinates": [5.7258889, 45.1904221],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "Ibis Grenoble Centre",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7254788, 45.1891977],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "H\u00f4tel d'Angleterre",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.715705, 45.1911627],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "H\u00f4tel Terminus",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7215297, 45.1874099],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "H\u00f4tel Victoria",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7208, 45.1869457],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "Splendid H\u00f4tel",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7199418, 45.1896195],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "Touring H\u00f4tel",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7272545, 45.1903443],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "H\u00f4tel de l'Europe",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7158276, 45.189528],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "H\u00f4tel Aliz\u00e9",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7253515, 45.1909702],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "H\u00f4tel Acacia",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }, {
+            "geometry": {
+                "coordinates": [5.7196593, 45.190826],
+                "type": "Point"
+            },
+            "properties": {
+                "name": "Ibis Styles",
+                "type": "hotel"
+            },
+            "type": "Feature"
+        }],
+        "type": "FeatureCollection"
+    }
+}
