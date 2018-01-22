@@ -84,8 +84,7 @@ def getpoi():
     Get POI around 3km of a given point
     '''
     json_request_param = json.loads(request.args.get('parameters'))
-    print(json_request_param)
-    result = Attractions.get_poi_by_distance(json_request_param)
+    result = Attractions.get_poi(json_request_param)
 
     return jsonify(result)
 

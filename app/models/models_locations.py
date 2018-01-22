@@ -1,15 +1,13 @@
-import ast
 import json
 
-import shapely.wkt
-from flask import jsonify
+import geojson
 from geoalchemy2 import Geography, Geometry, WKTElement
 from geojson import Feature, FeatureCollection, Point
+from jsonschema import validate
 from sqlalchemy import Column, and_, cast, func, or_
 
 from app import db
-import geojson
-from jsonschema import validate
+
 
 class Locations(db.Model):
     __bind_key__ = None
@@ -28,8 +26,10 @@ class Locations(db.Model):
         query =  Locations.query \
                     .filter(Locations.name.like(term+'%')) \
                     .with_entities(
+                        Locations.id,
                         Locations.name,
-                        func.ST_AsGeoJSON(Locations.geometry)) \
+                        func.ST_AsGeoJSON(func.ST_FlipCoordinates(Locations.geometry))
+                        ) \
                     .all()
         result_json = { "query": "Unit","suggestions": [] }
         
@@ -40,8 +40,8 @@ class Locations(db.Model):
             # Flask jsonify. However jsonify is required to return the response
             # in json format.
 
-            data = json.loads(result[1])
-            result_json["suggestions"].append({"value":result[0],"data":data})
+            geo_json = json.loads(result[2])
+            result_json["suggestions"].append({"value":result[1],"data":{"location_ID": result[0],"geo_json":result[2]}})
 
         return result_json
 
@@ -58,20 +58,40 @@ class Attractions(db.Model):
     centroid = db.Column(Geometry('POINT'))
 
     @staticmethod
-    def get_poi_by_distance(json_request_param,radius=3000):
+    def get_poi(json_request_param,radius=3000):
 
-        poi_response_schema = json.loads(open('./app/schema/poi_query_schema.json').read())
+        poi_response_schema = json.loads(open('./app/schema/poi_multiple_schema.json').read())
 
-        location = WKTElement('POINT(%s %s)' % (json_request_param["coordinates"]["lat"],json_request_param["coordinates"]["lng"]), srid=4326)
+        location_ID = json_request_param["location_ID"]
         query = json_request_param["query"]
         page = json_request_param["page"]
         per_page = json_request_param["per_page"]
 
+        location_geometry = Locations.query \
+                                .filter(Locations.id == location_ID) \
+                                .with_entities(
+                                    func.ST_AsText(Locations.geometry)
+                                    ) \
+                                .first()
+
+        attraction_geometry = Attractions.query \
+                                .with_entities(
+                                    func.ST_asText(Attractions.centroid)
+                                    ) \
+                                .first()
+
+        print(location_geometry)
+        print(attraction_geometry)
+
         query = Attractions.query \
-                    .filter(and_(or_(
-                                    Attractions.attraction_type==i for i in query
-                                    ),
-                                func.ST_DWithin(cast(Attractions.centroid,Geography),location, radius)
+                    .filter(
+                        and_(or_(
+                                Attractions.attraction_type==i for i in query
+                                ),
+                            func.ST_Contains(
+                                location_geometry,
+                                Attractions.centroid
+                                )
                         )) \
                     .with_entities(
                             Attractions.name,
@@ -81,6 +101,8 @@ class Attractions(db.Model):
                             ) \
                     .paginate(page=page, per_page=per_page)
 
+        print(query.items)
+
         result_json = {
             "total_results": query.total,
             "total_pages": query.pages,
@@ -88,11 +110,11 @@ class Attractions(db.Model):
             # Note: PostGIS has coords in lat/lng, but GeoJSON encodes in lng/lat
             # When creating the point, it's required to reverse the coords.
             "result_geojson": FeatureCollection([Feature(geometry=Point((e[3],e[2])),properties={"name":e[0],"type":e[1]}) for e in query.items])
-        
         }
 
         try:
             validate(result_json, poi_response_schema)
+            print(result_json)
             return result_json
         except Exception as e:
             print("An error occured with the data format: ")

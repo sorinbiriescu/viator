@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import JSON
@@ -69,6 +70,7 @@ class UserRoute(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     route_name = db.Column(db.String(80), nullable=False)
     route_JSON = db.Column(JSON)
+    last_update = db.Column(db.DateTime, nullable=False)
 
     @staticmethod
     def get_user_routes(user):
@@ -82,7 +84,11 @@ class UserRoute(db.Model):
 
     @staticmethod
     def add_route(user,route_name):
-        new_route = UserRoute(user_id=user,route_name=route_name)
+        new_route = UserRoute(
+            user_id=user,
+            route_name=route_name,
+            last_update=datetime.datetime.utcnow()
+            )
         db.session.add(new_route)
         db.session.commit()
 

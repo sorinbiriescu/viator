@@ -13,7 +13,9 @@ function assignAutocomplete() {
         minChars: 4,
         deferRequestBy: 100,
         onSelect: function (suggestion) {
-            autocomplete_data = suggestion.data
+            autocomplete_data = suggestion.data;
+            searchResults();
+            console.log(autocomplete_data)
         }
     });
 

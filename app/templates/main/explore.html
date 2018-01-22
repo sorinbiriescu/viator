@@ -23,6 +23,7 @@
 <script src="../static/js/route_api.js"></script>
 <script src="../static/js/explore.js"></script>
 
+<link rel="stylesheet" href="../static/css/viator.css">
 
 {% endblock %}
 
@@ -80,12 +81,11 @@
               <div class="input-group">
                 <span class="input-group-addon" id="btnGroupAddon"><i class="fa fa-search" aria-hidden="true"></i></span>
                 {{ form.autocomp }}
-                <button class="btn btn-outline-success my-2 my-sm-0" id='search_submit'>Search</button>
               </div>
             </nav>
       </div>
       <div class="row">
-        <div class="row">
+        <div class="row" id="venueSelector">
           <p>
             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
               aria-controls="collapseExample">
@@ -124,12 +124,6 @@
               <!-- Route list goes here -->
             </div>
           </div>
-          <button type="button" class="btn btn-danger" id="delete_route">
-            Delete route
-          </button>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newRouteModal">
-            Create new route
-          </button>
     
           <!-- Modal -->
           <div class="modal fade" id="newRouteModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">

@@ -1,30 +1,16 @@
 "use strict";
 
+let selected_venues;
+let unselected_venues;
+let geojsonLayer;
+let POILayer;
+let currentLocationID;
+
 $(document).ready(function () {
-
-    let selected_venues;
-    let unselected_venues;
-    let geojsonLayer;
-    let POILayer;
-
-    $("#search_submit").on("click", function () {
-
-        if (map.hasLayer(geojsonLayer)) {
-            map.removeLayer(geojsonLayer)
-        }
-
-        console.log(autocomplete_data)
-        geojsonLayer = L.geoJson(autocomplete_data).addTo(map);
-        map.fitBounds(geojsonLayer.getBounds());
-
-    });
-
-
 
     $("#venue-update").on("click", function () {
         selected_venues = [];
         unselected_venues = [];
-
 
         $("input.poi-checkbox").each(function () {
 
@@ -39,96 +25,6 @@ $(document).ready(function () {
         fetchAndShow(selected_venues);
 
     });
-
-    function getResults(query, page = 1, per_page = 10) {
-
-        return new Promise(function (resolve, reject) {
-
-            let request_payload = {
-                "coordinates": poi_center,
-                "query": query,
-                "page": parseInt(page),
-                "per_page": parseInt(per_page),
-            }
-
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:5000/api/getpoi",
-                data: {
-                    parameters: JSON.stringify(request_payload)
-                },
-                success: successHandler,
-                error: errorHandler,
-            });
-
-            function successHandler(data, textStatus, xhr) {
-                return resolve(data)
-            };
-
-            function errorHandler() {
-                return reject(new Error("Could not fetch data!"))
-            };
-        })
-    };
-
-    function showResults(results) {
-
-        $("#results").empty();
-
-        for (let i = 0; i < results.length; i++) {
-
-            let index = i + 1
-            $("#results").append($("<li></li>")
-                .text(results[i]["properties"]["name"]));
-            $("#results").append($("<button></button>")
-                .attr("class", "btn btn-primary btn-sm btn-add-poi")
-                .attr("type", "button")
-                .text("Add attraction"));
-
-        }
-    };
-
-    function paginateResults(total_pages) {
-
-        $('#pagination').twbsPagination('destroy');
-
-        $('#pagination').twbsPagination({
-            totalPages: total_pages,
-            visiblePages: 7,
-            initiateStartPageClick: false,
-            onPageClick: function (event, page) {
-                fetchAndShow(selected_venues, page, false)
-            }
-        });
-
-    };
-
-    function showPOIOnMap(geojson) {
-        console.log(geojson)
-        if (map.hasLayer(POILayer)) {
-            map.removeLayer(POILayer)
-        }
-        POILayer = L.geoJson(geojson, {
-            onEachFeature: onEachFeature
-        }).addTo(map);
-
-        map.fitBounds(POILayer.getBounds());
-    }
-
-    function fetchAndShow(selected_venues, page, paginate = true) {
-        if (selected_venues.length === 0) {
-
-        } else {
-            getResults(selected_venues, page).then(data => {
-                showResults(data["result_geojson"]["features"]);
-                showPOIOnMap(data["result_geojson"]["features"]);
-                if (paginate === true) {
-                    paginateResults(data["total_pages"]);
-                }
-
-            });
-        }
-    }
 
     getRoutes().then(data => {
         updateRouteList(data);
@@ -168,3 +64,106 @@ $(document).ready(function () {
     });
 
 });
+
+
+function searchResults() {
+    if (map.hasLayer(geojsonLayer)) {
+        map.removeLayer(geojsonLayer)
+    }
+
+    currentLocationID = autocomplete_data["location_ID"]
+    geojsonLayer = L.geoJson(JSON.parse(autocomplete_data["geo_json"])).addTo(map);
+    map.fitBounds(geojsonLayer.getBounds());
+    $("#venueSelector").show();
+}
+
+function getResults(query, page = 1, per_page = 10) {
+
+    return new Promise(function (resolve, reject) {
+
+        let request_payload = {
+            "location_ID": currentLocationID,
+            "query": query,
+            "page": parseInt(page),
+            "per_page": parseInt(per_page),
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/getpoi",
+            data: {
+                parameters: JSON.stringify(request_payload)
+            },
+            success: successHandler,
+            error: errorHandler,
+        });
+
+        function successHandler(data, textStatus, xhr) {
+            return resolve(data)
+        };
+
+        function errorHandler() {
+            return reject(new Error("Could not fetch data!"))
+        };
+    })
+};
+
+function showResults(results) {
+
+    $("#results").empty();
+
+    for (let i = 0; i < results.length; i++) {
+
+        let index = i + 1
+        $("#results").append($("<li></li>")
+            .text(results[i]["properties"]["name"]));
+        $("#results").append($("<button></button>")
+            .attr("class", "btn btn-primary btn-sm btn-add-poi")
+            .attr("type", "button")
+            .text("Add attraction"));
+
+    }
+};
+
+function paginateResults(total_pages) {
+
+    $('#pagination').twbsPagination('destroy');
+
+    $('#pagination').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 7,
+        initiateStartPageClick: false,
+        onPageClick: function (event, page) {
+            fetchAndShow(selected_venues, page, false)
+        }
+    });
+
+};
+
+function showPOIOnMap(geojson) {
+    console.log(geojson)
+    if (map.hasLayer(POILayer)) {
+        map.removeLayer(POILayer)
+    }
+    POILayer = L.geoJson(geojson, {
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+    // map.fitBounds(POILayer.getBounds());
+}
+
+function fetchAndShow(selected_venues, page, paginate = true) {
+    if (selected_venues.length === 0) {
+
+    } else {
+        getResults(selected_venues, page).then(data => {
+            console.log("Data received",data)
+            showResults(data["result_geojson"]["features"]);
+            showPOIOnMap(data["result_geojson"]["features"]);
+            if (paginate === true) {
+                paginateResults(data["total_pages"]);
+            }
+
+        });
+    }
+}

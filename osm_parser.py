@@ -5,6 +5,12 @@ import shapely.wkb as wkblib
 from app.models.models_locations import Locations, Attractions
 from app import db
 
+from geoalchemy2.shape import from_shape
+from geoalchemy2 import Geography, Geometry, WKTElement
+from geoalchemy2.shape import from_shape
+from geojson import Feature, FeatureCollection, Point
+from sqlalchemy import Column, and_, cast, func, or_, subquery
+
 wkbfab = o.geom.WKBFactory()
 pbf_file = 'rhone-alpes-latest.osm.pbf'
 
@@ -122,7 +128,7 @@ class AmenityListHandler(o.SimpleHandler):
 class CitiesRegionsHandler(o.SimpleHandler):
 
     def submit_location(amenity, id, tags, lon, lat,wkb):
-        if tags['admin_level'] == '6' or tags['admin_level'] == '8':
+        if tags['admin_level'] == '6' or tags['admin_level'] == '7' or tags['admin_level'] == '8':
 
             osm_id = id
             name = tags['name']
@@ -132,7 +138,7 @@ class CitiesRegionsHandler(o.SimpleHandler):
                 admin_type = 'Region'
             elif admin_level == '6':
                 admin_type = 'Department'
-            elif admin_level == '8':
+            elif admin_level == '7' or admin_level =='8':
                 admin_type = 'City'
             else:
                 print('Unknown value in admin_level tag')
@@ -145,7 +151,7 @@ class CitiesRegionsHandler(o.SimpleHandler):
                 admin_type=admin_type,
                 admin_level=admin_level,
                 centroid=centroid,
-                geometry=wkb
+                geometry=func.ST_FlipCoordinates(wkb)
                 )
 
             db.session.add(new_entry)
@@ -158,11 +164,12 @@ class CitiesRegionsHandler(o.SimpleHandler):
     def area(self, a):
         if 'admin_level' in a.tags:
             wkb = wkbfab.create_multipolygon(a)
+            # wkblatlng = from_shape(wkb, srid=4326)
             poly = wkblib.loads(wkb, hex=True)
             centroid = poly.representative_point()
             self.submit_location(a.id, a.tags, centroid.x, centroid.y,wkb)
 
 
 if __name__ == "__main__":
-    # CitiesRegionsHandler().apply_file(pbf_file)
-    TourismListHandler().apply_file(pbf_file)
+    CitiesRegionsHandler().apply_file(pbf_file)
+    #TourismListHandler().apply_file(pbf_file)
