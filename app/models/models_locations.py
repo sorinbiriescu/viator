@@ -7,7 +7,7 @@ from jsonschema import validate
 from sqlalchemy import Column, and_, cast, func, or_
 
 from app import db
-
+from typing import Dict, Tuple, List
 
 class Locations(db.Model):
     __bind_key__ = None
@@ -22,6 +22,7 @@ class Locations(db.Model):
     geometry = db.Column(Geometry('GEOMETRY'))
 
     @staticmethod
+
     def get_location_autocomplete(term):
         query =  Locations.query \
                     .filter(Locations.name.like(term+'%')) \
@@ -41,7 +42,7 @@ class Locations(db.Model):
             # in json format.
 
             geo_json = json.loads(result[2])
-            result_json["suggestions"].append({"value":result[1],"data":{"location_ID": result[0],"geo_json":result[2]}})
+            result_json["suggestions"].append({"value":result[1],"data":{"location_ID": result[0],"geojson":result[2]}})
 
         return result_json
 
@@ -80,9 +81,6 @@ class Attractions(db.Model):
                                     ) \
                                 .first()
 
-        print(location_geometry)
-        print(attraction_geometry)
-
         query = Attractions.query \
                     .filter(
                         and_(or_(
@@ -101,8 +99,6 @@ class Attractions(db.Model):
                             ) \
                     .paginate(page=page, per_page=per_page)
 
-        print(query.items)
-
         result_json = {
             "total_results": query.total,
             "total_pages": query.pages,
@@ -114,7 +110,6 @@ class Attractions(db.Model):
 
         try:
             validate(result_json, poi_response_schema)
-            print(result_json)
             return result_json
         except Exception as e:
             print("An error occured with the data format: ")

@@ -11,6 +11,8 @@ from geoalchemy2.shape import from_shape
 from geojson import Feature, FeatureCollection, Point
 from sqlalchemy import Column, and_, cast, func, or_, subquery
 
+
+
 wkbfab = o.geom.WKBFactory()
 pbf_file = 'rhone-alpes-latest.osm.pbf'
 

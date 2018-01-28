@@ -1,0 +1,79 @@
+{% extends "/main/base.html" %} {% block head%}
+<link rel="stylesheet" href="../static/vendor/extra-markers/css/leaflet.extra-markers.min.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
+
+<script src="//rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js"></script>
+
+<script src="../static/js/autocomplete.js"></script>
+<script src="../static/vendor/twbs/jquery.twbsPagination.js"></script>
+<script src="../static/vendor/extra-markers/js/leaflet.extra-markers.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
+
+<script src="../static/js/explore-cell.js"></script>
+<script src="https://www.celljs.org/cell.js"></script>
+
+
+<link rel="stylesheet" href="../static/css/viator.css"> {% endblock %} {% block content %}
+
+<script type="text/template" id="search-bar-template">
+    <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Search</span>
+    <input type="text" class="form-control" id="search-location-input" placeholder="search location" aria-describedby="basic-addon1">
+</div>
+</script>
+
+<script type="text/template" id="search-single-option-template">
+    {% raw %}
+    <input type="radio" name="options" id="{{searchZone}}" autocomplete="off"> {{searchZone}} {% endraw %}
+</script>
+
+<script type="text/template" id="poi-single-option-template">
+    {% raw %}
+    <input class="poi-checkbox" type="checkbox" autocomplete="off" id="{{poiType}}" value={{poiType}}>{{poiType}} {% endraw %}
+</script>
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="search-cell">
+                            <!-- SearchCell goes here -->
+                            <div class="form-group" id="search-bar">
+                                <!-- SearchBarCell goes here -->
+                            </div>
+                            <div class="form-group" id="search-options">
+                                <div class="btn-group" role="group" data-toggle="buttons" id="search-option-list">
+                                    <!-- SearchOptionsCell go here -->
+                                </div>
+                            </div>
+                            <div class="form-group" id="poi-options">
+                                <div class="btn-group" role="group" data-toggle="buttons" id="poi-option-list">
+                                    <!-- POIOptionCell goes here -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" id="search-results"></div>
+                <div class="row" id="search-results-pagination"></div>
+            </div>
+            <div class="col-md-6">
+                <!-- Map goes here -->
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

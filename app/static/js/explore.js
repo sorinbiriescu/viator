@@ -2,7 +2,7 @@
 
 let selected_venues;
 let unselected_venues;
-let geojsonLayer;
+let regionLayer;
 let POILayer;
 let currentLocationID;
 
@@ -67,14 +67,15 @@ $(document).ready(function () {
 
 
 function searchResults() {
-    if (map.hasLayer(geojsonLayer)) {
-        map.removeLayer(geojsonLayer)
+    if (map.hasLayer(regionLayer)) {
+        map.removeLayer(regionLayer);
     }
 
-    currentLocationID = autocomplete_data["location_ID"]
-    geojsonLayer = L.geoJson(JSON.parse(autocomplete_data["geo_json"])).addTo(map);
-    map.fitBounds(geojsonLayer.getBounds());
+    currentLocationID = autocomplete_data["location_ID"];
+    regionLayer = L.geoJson(JSON.parse(autocomplete_data["geo_json"])).addTo(map);
+    map.fitBounds(regionLayer.getBounds());
     $("#venueSelector").show();
+    fetchAndShow(selected_venues);
 }
 
 function getResults(query, page = 1, per_page = 10) {
@@ -82,7 +83,7 @@ function getResults(query, page = 1, per_page = 10) {
     return new Promise(function (resolve, reject) {
 
         let request_payload = {
-            "location_ID": currentLocationID,
+            "location_ID": parseInt(currentLocationID),
             "query": query,
             "page": parseInt(page),
             "per_page": parseInt(per_page),
@@ -153,11 +154,11 @@ function showPOIOnMap(geojson) {
 }
 
 function fetchAndShow(selected_venues, page, paginate = true) {
-    if (selected_venues.length === 0) {
+    if (selected_venues == null) {
 
     } else {
         getResults(selected_venues, page).then(data => {
-            console.log("Data received",data)
+            console.log("Data received", data)
             showResults(data["result_geojson"]["features"]);
             showPOIOnMap(data["result_geojson"]["features"]);
             if (paginate === true) {

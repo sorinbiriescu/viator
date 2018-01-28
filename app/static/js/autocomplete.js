@@ -6,17 +6,13 @@ $(document).ready(function () {
 });
 
 function assignAutocomplete() {
-    // Autocomplete field
     $('#location-search-autocomplete').devbridgeAutocomplete({
         serviceUrl: 'http://127.0.0.1:5000/api/autocomplete',
-        // dataType: 'json',
         minChars: 4,
-        deferRequestBy: 100,
+        deferRequestBy: 200,
         onSelect: function (suggestion) {
             autocomplete_data = suggestion.data;
-            searchResults();
-            console.log(autocomplete_data)
+            console.log(autocomplete_data);
         }
     });
-
 };
