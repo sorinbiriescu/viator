@@ -5,30 +5,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundation | Welcome</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
+
     <script src="//rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js"></script>
+
     <script src="../static/vendor/twbs/jquery.twbsPagination.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
-    
-    
+
     <script src="../static/js/explore.js"></script>
     <script src="https://www.celljs.org/cell.js"></script>
+
     <link rel="stylesheet" href="../static/css/foundation.css" />
     <link rel="stylesheet" href="../static/style.css" />
-    <link rel="stylesheet" href="../static/css/viator.css" />
-    <script src="../static/js/vendor/modernizr.js"></script>
-    
-</head>
 
-<!-- Templates -->
-<script type="text/template" id="search-bar-template">
-    <span class="input-group-label">Search</span>
-    <input class="input-group-field" type="text" id="search-location-input">
-</script>
+    <script src="../static/js/vendor/modernizr.js"></script>
+</head>
 
 <body>
     <div class="grid-y medium-grid-frame">
@@ -39,10 +38,10 @@
             <div class="cell medium-auto">
                 <div class="grid-y medium-grid-frame grid-padding-y">
                     <div class="cell small-shrink medium-shrink large-shrink">
-                        <form id="search-cell">
-                            <div class="input-group" id="search-bar"> 
-                                <span class="input-group-label">Search</span> 
-                                <input class="input-group-field" type="text" id="search-location-input"> 
+                        <form>
+                            <div class="input-group">
+                                <span class="input-group-label">Search</span>
+                                <input class="input-group-field" type="url">
                             </div>
                             <button class="button" type="button" data-toggle="drop551">Toggle Dropdown</button>
                             <div class="dropdown-pane" id="drop551" data-dropdown>
@@ -156,14 +155,13 @@
             </div>
             <div class="cell medium-6">
                 <div class="grid-y medium-grid-frame">
-                    <div class="align-stretch large-auto" id="map"></div>
+                    <div class="pg-empty-placeholder align-stretch large-auto" id="map"></div>
                 </div>
             </div>
         </div>
     </div>
     <script src="../static/js/vendor/jquery.js"></script>
     <script src="../static/js/foundation.min.js"></script>
-    <script src="../static/js/vendor/jquery.autocomplete.js"></script>
     <script>
         $(document).foundation();
     </script>

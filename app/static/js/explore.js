@@ -1,170 +1,182 @@
-"use strict";
-
-let selected_venues;
-let unselected_venues;
-let regionLayer;
-let POILayer;
-let currentLocationID;
+// let mapCell
+// let searchCell
+// let app
 
 $(document).ready(function () {
 
-    $("#venue-update").on("click", function () {
-        selected_venues = [];
-        unselected_venues = [];
+    var searchBarTemplate_source = document.getElementById("search-bar-template").innerHTML;
+    var searchBarTemplate = Handlebars.compile(searchBarTemplate_source);
 
-        $("input.poi-checkbox").each(function () {
+    let regionLayer // Will show the region boudaries
 
-            if ($(this).is(":checked")) {
-                selected_venues.push($(this).attr("name"));
+    mapCell = {
+        $cell: true,
+        id: "map",
+        _token: "pk.eyJ1Ijoic29yaW5iaXJpZXNjdSIsImEiOiJjajhuYXR1YmcxMXdrMnd1YWZzOG5nNXQwIn0.tY6DQoXnp_V88XSNlF2HdA",
+        _default_location: [45.18, 5.72],
+        _default_zoom: 12,
 
-            } else {
-                unselected_venues.push($(this).attr("name"));
+        _show_location: function (geojson) {
+            if (map.hasLayer(regionLayer)) {
+                map.removeLayer(regionLayer);
             }
-        });
 
-        fetchAndShow(selected_venues);
+            regionLayer = L.geoJson(JSON.parse(geojson)).addTo(map);
+            map.fitBounds(regionLayer.getBounds());
+        },
 
-    });
+        $init: function () {
+            map = L.map('map').setView(this._default_location, this._default_zoom);
 
-    getRoutes().then(data => {
-        updateRouteList(data);
-    });
+            let gl = L.mapboxGL({
+                accessToken: this._token,
+                style: 'mapbox://styles/mapbox/streets-v9'
+            }).addTo(map);
 
-    $("#newRouteModalSave").on('click', function () {
-        console.log($("#submitNewRouteModal").find("#new_route").val())
-        let route_name = $("#submitNewRouteModal").find("#new_route").val()
+        }
+    }
 
-        createRoute(route_name).then(() => {
-            getRoutes().then(data => {
-                updateRouteList(data);
-            });
-            $('#newRouteModal').modal('hide');
-        });
-    });
+    // POI list factory
+    let poi = ["Museum", "Hotel"]
 
-    $(".dropdown-menu").on('click', ".dropdown-item", function () {
-        console.log($(this).text());
-        current_selected_route_id = $(this).attr('value');
-        current_selected_route_name = $(this).text();
-        showRoute(current_selected_route_name);
-    });
+    // let poiItemMaker = function (item) {
+    //     const context = {
+    //         poiType: item
+    //     }
+    //     return {
+    //         $cell: true,
+    //         $type: "label",
+    //         class: "btn btn-primary",
 
-    $("#results").on('click', ".btn-add-poi", function () {
-        console.log("clicked", $(this))
-        let poi_oid = $(this).attr("oid")
-        addPOIToRoute(poi_oid)
-    });
+    //         $html: [poiSingleOptionsTemplate(context)],
 
-    $("#delete_route").on('click', function () {
-        deleteRoute(current_selected_route_id, current_selected_route_name).then(() => {
-            getRoutes().then(data => {
-                updateRouteList(data);
-            });
-        });
-    });
+    //         onchange: function () {
+    //             val = this.querySelector("#poi-checkbox")
+    //             console.log("checkbox clicked", this._locationSearchPOIOptions.push(this.querySelector(".poi-checkbox").getAttribute("value")))
+    //         },
+    //     }
+    // }
+
+    // let poiOptionsCell = {
+    //     $cell: true,
+    //     $type: "div",
+    //     class: "form-group",
+    //     id: "poi-options",
+    //     _poioptionstest: "test",
+
+    //     $components: [{
+    //         $cell: true,
+    //         $type: "div",
+    //         class: "btn-group",
+    //         id: "poi-option-list",
+
+    //         $init: function () {
+    //             this.setAttribute("data-toggle", "buttons")
+
+    //         },
+
+    //         $components: poi.map(poiItemMaker)
+    //     }]
+    // }
+
+    var searchBarCell = {
+        $cell: true,
+        $type: "div",
+        class: "input-group",
+        id: "search-bar",
+
+        $html: [searchBarTemplate()],
+
+        $init: function () {
+            $("#search-location-input").devbridgeAutocomplete({
+                serviceUrl: 'http://127.0.0.1:5000/api/autocomplete',
+                minChars: 4,
+                deferRequestBy: 200,
+                onSelect: function (suggestion) {
+                    // this._location = suggestion.value;
+                    document.querySelector("#search-cell")._locationUpdate(suggestion)
+
+                }
+            })
+        }
+    }
+
+    //Search options factory
+    // let searchZoneOptions = ["City", "Region"]
+
+    // let searchOptionMaker = function (item) {
+    //     const context = {
+    //         searchZone: item
+    //     }
+    //     return {
+    //         $cell: true,
+    //         $type: "label",
+    //         class: "btn btn-primary",
+    //         $html: [searchSingleOptionTemplate(context)]
+    //     }
+    // }
+
+    // var searchOptionsCell = {
+    //     $cell: true,
+    //     $type: "div",
+    //     class: "form-group",
+    //     id: "search-options",
+
+    //     $components: [{
+    //         $cell: true,
+    //         $type: "div",
+    //         class: "btn-group",
+    //         role: "group",
+    //         id: "search-option-list",
+
+    //         $init: function () {
+    //             this.setAttribute("data-toggle", "buttons")
+    //         },
+
+    //         $components: searchZoneOptions.map(searchOptionMaker)
+    //     }]
+    // }
+
+    searchCell = {
+        $cell: true,
+        $type: "form",
+        id: "search-cell",
+
+        _location: "",
+        _locationID: "",
+        _locationSearchPOIOptions: ["Test2"],
+        _locationSearchOption: "City",
+
+        _location_geojson: "",
+
+        _locationUpdate: function (data) {
+            this._location = data.value;
+            this._locationID = data.data["location_ID"]
+            this._location_geojson = data.data["geojson"]
+        },
+
+        _poiUpdate: function (data) {
+            this._locationSearchPOIOptions.push(data)
+        },
+
+
+
+        // $components: [searchBarCell, searchOptionsCell, poiOptionsCell],
+        $components: [searchBarCell],
+
+        $update: function () {
+            console.log("Location data", this._locationSearchPOIOptions)
+            document.querySelector("#map")._show_location(this._location_geojson)
+
+        }
+    }
+
+
+
+    //App starts here
+    app = {
+        $cell: true,
+        $components: []
+    }
 
 });
-
-
-function searchResults() {
-    if (map.hasLayer(regionLayer)) {
-        map.removeLayer(regionLayer);
-    }
-
-    currentLocationID = autocomplete_data["location_ID"];
-    regionLayer = L.geoJson(JSON.parse(autocomplete_data["geo_json"])).addTo(map);
-    map.fitBounds(regionLayer.getBounds());
-    $("#venueSelector").show();
-    fetchAndShow(selected_venues);
-}
-
-function getResults(query, page = 1, per_page = 10) {
-
-    return new Promise(function (resolve, reject) {
-
-        let request_payload = {
-            "location_ID": parseInt(currentLocationID),
-            "query": query,
-            "page": parseInt(page),
-            "per_page": parseInt(per_page),
-        }
-
-        $.ajax({
-            type: "GET",
-            url: "http://127.0.0.1:5000/api/getpoi",
-            data: {
-                parameters: JSON.stringify(request_payload)
-            },
-            success: successHandler,
-            error: errorHandler,
-        });
-
-        function successHandler(data, textStatus, xhr) {
-            return resolve(data)
-        };
-
-        function errorHandler() {
-            return reject(new Error("Could not fetch data!"))
-        };
-    })
-};
-
-function showResults(results) {
-
-    $("#results").empty();
-
-    for (let i = 0; i < results.length; i++) {
-
-        let index = i + 1
-        $("#results").append($("<li></li>")
-            .text(results[i]["properties"]["name"]));
-        $("#results").append($("<button></button>")
-            .attr("class", "btn btn-primary btn-sm btn-add-poi")
-            .attr("type", "button")
-            .text("Add attraction"));
-
-    }
-};
-
-function paginateResults(total_pages) {
-
-    $('#pagination').twbsPagination('destroy');
-
-    $('#pagination').twbsPagination({
-        totalPages: total_pages,
-        visiblePages: 7,
-        initiateStartPageClick: false,
-        onPageClick: function (event, page) {
-            fetchAndShow(selected_venues, page, false)
-        }
-    });
-
-};
-
-function showPOIOnMap(geojson) {
-    console.log(geojson)
-    if (map.hasLayer(POILayer)) {
-        map.removeLayer(POILayer)
-    }
-    POILayer = L.geoJson(geojson, {
-        onEachFeature: onEachFeature
-    }).addTo(map);
-
-    // map.fitBounds(POILayer.getBounds());
-}
-
-function fetchAndShow(selected_venues, page, paginate = true) {
-    if (selected_venues == null) {
-
-    } else {
-        getResults(selected_venues, page).then(data => {
-            console.log("Data received", data)
-            showResults(data["result_geojson"]["features"]);
-            showPOIOnMap(data["result_geojson"]["features"]);
-            if (paginate === true) {
-                paginateResults(data["total_pages"]);
-            }
-
-        });
-    }
-}
