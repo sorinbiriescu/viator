@@ -5,23 +5,30 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundation | Welcome</title>
+
+    <link rel="stylesheet" href="../static/css/foundation.css" />
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
+    <script src="../static/vendor/twbs/jquery.twbsPagination.js"></script>
+    <script src="https://www.celljs.org/cell.js"></script>
+    <script src="../static/js/explore.js"></script>
+
+    <!-- Leaflet and Mapbox libraries -->
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
-    <script src="//rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js"></script>
-    <script src="../static/vendor/twbs/jquery.twbsPagination.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
-    
-    
-    <script src="../static/js/explore.js"></script>
-    <script src="https://www.celljs.org/cell.js"></script>
-    <link rel="stylesheet" href="../static/css/foundation.css" />
+    <script src="https://rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js"></script>
+
     <link rel="stylesheet" href="../static/style.css" />
     <link rel="stylesheet" href="../static/css/viator.css" />
     <script src="../static/js/vendor/modernizr.js"></script>
-    
+
 </head>
 
 <!-- Templates -->
@@ -30,19 +37,50 @@
     <input class="input-group-field" type="text" id="search-location-input">
 </script>
 
+<script type="text/template" id="poi-option-template">
+    {% raw %}
+    <input class="poi-checkbox" id="{{poi_type}}" type="checkbox" value={{poi_type}}>
+    <label for="{{poi_type}}">{{poi_type}}</label>
+    {% endraw %}
+</script>
+
+<script type="text/template" id="poi-result-template">
+    {% raw %}
+    <img src="http://pinegrow.com/placeholders/img12.jpg">
+    <div class="card-divider"> {{result_name}} </div>
+    <div class="card-section">
+        <p>It has an easy to override visual style, and is appropriately subdued.</p>
+    </div>
+    {% endraw %}
+</script>
+
+<script type="text/template" id="pagination-item-template">
+    {% raw %}
+    <a href="#" aria-label="Page {{pageNumber}}">{{pageNumber}}</a>
+    {% endraw %}
+</script>
+
+<script type="text/template" id="pagination-previous-item-template">
+    <a href="#" aria-label="Previous page">Previous</a>
+</script>
+
+<script type="text/template" id="pagination-next-item-template">
+    <a href="#" aria-label="Next page">Next</a>
+</script>
+
 <body>
     <div class="grid-y medium-grid-frame">
         <header>
             <h1>Explore</h1>
         </header>
-        <div class="grid-x">
+        <div class="grid-x large-auto medium-auto">
             <div class="cell medium-auto">
                 <div class="grid-y medium-grid-frame grid-padding-y">
                     <div class="cell small-shrink medium-shrink large-shrink">
                         <form id="search-cell">
-                            <div class="input-group" id="search-bar"> 
-                                <span class="input-group-label">Search</span> 
-                                <input class="input-group-field" type="text" id="search-location-input"> 
+                            <div class="input-group" id="search-bar">
+                                <span class="input-group-label">Search</span>
+                                <input class="input-group-field" type="text" id="search-location-input">
                             </div>
                             <button class="button" type="button" data-toggle="drop551">Toggle Dropdown</button>
                             <div class="dropdown-pane" id="drop551" data-dropdown>
@@ -53,103 +91,18 @@
                                     <input type="radio" name="pokemon" value="Blue" id="pokemonBlue">
                                     <label for="pokemonBlue">Blue</label>
                                 </div>
-                                <div class="large-6 cell">
-                                    <label>Check these out</label>
-                                    <input id="checkbox1" type="checkbox">
-                                    <label for="checkbox1">Checkbox 1</label>
-                                    <input id="checkbox2" type="checkbox">
-                                    <label for="checkbox2">Checkbox 2</label>
+                                <div class="large-6 cell" id="poi-options">
+                                    <!-- POI options go here -->
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="grid-x medium-cell-block-y large-cell-block-y grid-padding-x">
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
-                        <div class="card medium-6">
-                            <img src="http://pinegrow.com/placeholders/img12.jpg">
-                            <div class="card-divider"> Styled Card </div>
-                            <div class="card-section">
-                                <p>It has an easy to override visual style, and is appropriately subdued.</p>
-                            </div>
-                        </div>
+                    <div class="grid-x medium-cell-block-y large-cell-block-y grid-padding-x" id="results">
+                        <!-- results go here -->
                     </div>
                     <div class="cell large-shrink medium-shrink small-shrink text-center">
-                        <ul class="pagination" role="navigation" aria-label="Pagination">
-                            <li class="pagination-previous disabled">Previous
-                                <span class="show-for-sr">page</span>
-                            </li>
-                            <li class="current">
-                                <span class="show-for-sr">You're on page</span> 1
-                            </li>
-                            <li>
-                                <a href="#" aria-label="Page 2">2</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-label="Page 3">3</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-label="Page 4">4</a>
-                            </li>
-                            <li class="ellipsis" aria-hidden="true"></li>
-                            <li>
-                                <a href="#" aria-label="Page 12">12</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-label="Page 13">13</a>
-                            </li>
-                            <li class="pagination-next">
-                                <a href="#" aria-label="Next page">Next
-                                    <span class="show-for-sr">page</span>
-                                </a>
-                            </li>
+                        <ul class="pagination" role="navigation" aria-label="Pagination" id="results-pagination">
+                            <!-- Paginate goes here -->
                         </ul>
                     </div>
                 </div>
