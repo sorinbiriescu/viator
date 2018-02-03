@@ -3,23 +3,23 @@ let POILayer // Will show the POI on the map
 
 $(document).ready(function () {
 
-    var searchBarTemplate_source = document.getElementById("search-bar-template").innerHTML;
-    var searchBarTemplate = Handlebars.compile(searchBarTemplate_source);
+    let searchBarTemplate_source = document.getElementById("search-bar-template").innerHTML;
+    let searchBarTemplate = Handlebars.compile(searchBarTemplate_source);
 
-    var poiSingleOptionsTemplate_source = document.getElementById("poi-option-template").innerHTML;
-    var poiSingleOptionsTemplate = Handlebars.compile(poiSingleOptionsTemplate_source);
+    let poiSingleOptionsTemplate_source = document.getElementById("poi-option-template").innerHTML;
+    let poiSingleOptionsTemplate = Handlebars.compile(poiSingleOptionsTemplate_source);
 
-    var poiSingleResultTemplate_source = document.getElementById("poi-result-template").innerHTML;
-    var poiSingleResultTemplate = Handlebars.compile(poiSingleResultTemplate_source);
+    let poiSingleResultTemplate_source = document.getElementById("poi-result-template").innerHTML;
+    let poiSingleResultTemplate = Handlebars.compile(poiSingleResultTemplate_source);
 
-    var paginationItemTemplate_source = document.getElementById("pagination-item-template").innerHTML;
-    var paginationItemTemplate = Handlebars.compile(paginationItemTemplate_source);
+    let paginationItemTemplate_source = document.getElementById("pagination-item-template").innerHTML;
+    let paginationItemTemplate = Handlebars.compile(paginationItemTemplate_source);
 
-    var paginationPreviousItemTemplate_source = document.getElementById("pagination-previous-item-template").innerHTML;
-    var paginationPreviousItemTemplate = Handlebars.compile(paginationPreviousItemTemplate_source)
+    let paginationPreviousItemTemplate_source = document.getElementById("pagination-previous-item-template").innerHTML;
+    let paginationPreviousItemTemplate = Handlebars.compile(paginationPreviousItemTemplate_source)
 
-    var paginationNextItemTemplate_source = document.getElementById("pagination-next-item-template").innerHTML;
-    var paginationNextItemTemplate = Handlebars.compile(paginationNextItemTemplate_source)
+    let paginationNextItemTemplate_source = document.getElementById("pagination-next-item-template").innerHTML;
+    let paginationNextItemTemplate = Handlebars.compile(paginationNextItemTemplate_source)
 
     mapCell = {
         $cell: true,
@@ -49,7 +49,6 @@ $(document).ready(function () {
                 regionLayer = L.geoJson(JSON.parse(geojson)).addTo(map);
                 map.fitBounds(regionLayer.getBounds());
             }
-
         },
 
         _showPOIMarkers: function (geojson) {
@@ -71,7 +70,6 @@ $(document).ready(function () {
                     onEachFeature: onEachFeature
                 }).addTo(map);
             }
-
         },
 
         $init: function () {
@@ -89,6 +87,10 @@ $(document).ready(function () {
             this._showLocation(this._locationGeoJSON)
         }
     }
+
+    document.querySelector("#options-dropdown-pane").addEventListener("mouseleave", function () {
+        $(this).foundation('toggle')
+    })
 
     searchBarCell = {
         $cell: true,
@@ -154,7 +156,6 @@ $(document).ready(function () {
             poi_type: item
         }
         return {
-            $cell: true,
             $html: poiSingleOptionsTemplate(context),
 
             onchange: function () {
@@ -172,8 +173,8 @@ $(document).ready(function () {
                     }
 
                 }
-
             },
+
         }
     }
 
@@ -192,7 +193,6 @@ $(document).ready(function () {
         }
 
         return {
-            $cell: true,
             class: "card medium-6",
             $html: poiSingleResultTemplate(context)
         }
@@ -319,16 +319,14 @@ $(document).ready(function () {
         },
 
         _increasePagination: function () {
-            value = this._currentPage+1
-                document.querySelector("#app")._updateCurrentPage(value)
+            value = this._currentPage + 1
+            document.querySelector("#app")._updateCurrentPage(value)
         },
 
         _reducePagination: function () {
-            value = this._currentPage-1
-                document.querySelector("#app")._updateCurrentPage(value)
+            value = this._currentPage - 1
+            document.querySelector("#app")._updateCurrentPage(value)
         },
-
-        
 
         _requestNewPage: function (value) {
             document.querySelector("#app")._updateCurrentPage(value)
@@ -340,21 +338,20 @@ $(document).ready(function () {
             } else {
                 this.$components = [];
                 let startPage
-                // let endPage = this._totalPages <= (this._currentPage + this._displayPages - 1) ? this._totalPages : (this._currentPage + this._displayPages - 1)
                 let endPage
-                let currentPage = this._currentPage
 
-                mid = Math.floor(this._displayPages / 2)
+                displayMin = Math.min(this._displayPages, this._totalPages)
+                displayMid = Math.floor(this._displayPages / 2)
 
-                if (this._currentPage <= mid) {
+                if (this._currentPage <= displayMid) {
                     startPage = 1
-                    endPage = this._displayPages
-                } else if (currentPage >= this._totalPages - mid) {
-                    startPage = this._totalPages - this._displayPages
+                    endPage = displayMin
+                } else if (this._currentPage >= this._totalPages - displayMid) {
+                    startPage = Math.max(this._totalPages - this._displayPages, 1)
                     endPage = this._totalPages
                 } else {
-                    startPage = this._currentPage - mid
-                    endPage = this._currentPage + mid
+                    startPage = this._currentPage - displayMid
+                    endPage = this._currentPage + displayMid
                 }
 
                 if (this._currentPage === 1) {
@@ -362,7 +359,6 @@ $(document).ready(function () {
                 } else {
                     this.$components.push(paginationPreviousItemMaker(true))
                 }
-
 
                 for (let i = startPage; i <= endPage; i++) {
                     if (i === this._currentPage) {
@@ -377,8 +373,6 @@ $(document).ready(function () {
                 } else {
                     this.$components.push(paginationNextItemMaker(true))
                 }
-
-
             }
         }
     }

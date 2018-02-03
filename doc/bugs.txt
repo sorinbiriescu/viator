@@ -1,0 +1,10 @@
+**************************************
+BUGS
+**************************************
+HIGH
+
+MEDIUM
+* results with one entry, cannot scroll down on results
+
+
+LOW

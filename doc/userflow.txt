@@ -1,0 +1,30 @@
+@startuml
+actor User as user
+collections "Landing Page" as landing_page
+collections Itinerary as itinerary
+collections Explore as explore
+collections Route as route
+collections Calendar as calendar
+database Server as server
+
+== First landing ==
+landing_page -> user: show page
+user -> landing_page: enter location, dates and profile
+landing_page -> server: send data
+server -> itinerary: respond with customized Itinerary
+itinerary -> user: show page
+
+== Add locations to itinerary ==
+itinerary -> user: show page
+user -> itinerary: requests to add location
+itinerary -> explore: redirects to explore Page
+explore -> user: show Page
+user -> explore : search and select location
+explore -> server: update route
+server -> explore: mark location as added
+
+== Change route order ==
+
+
+
+@enduml
