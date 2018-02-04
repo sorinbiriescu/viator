@@ -1,0 +1,80 @@
+DUMP:
+===========================
+* starting position apart from destination in itinerary
+* DO NOT PUSH ADS LIKE CANDY !!!!!
+* NO POP-UPS
+* user-friendly and simple route, do not use abbreviations
+* let the user pick if they want to add a hotel, do not push it down their throat
+* preselections of things to choose (will help a lot to add what would be interesting to the trip)
+* itinerary as a function of time (increments of 15 mins ???)
+* save on local before asking to create account ???
+* drag and drop itinerary POI would be really nice
+* when suggesting something, give it as an option (ex: transport between location, recommend different ways, like walking, public transport, taxi, uber etc.)
+* add prices for transport, entries etc, / separate page for budget
+* BUDGET PAGE (last to implement, also tell if prices are missing)
+* google+ reviews
+* image carousel should be long enough to read the text
+* trip critical info (visa, vaccine etc.)
+* DESIGN DESIGN DESIGN details (stupid margins, stuff that you want to sell but looks like crap)
+* social media
+* collections (itineraries grouped by a certain theme)
+* split on search for location or search for POI
+* Ads based only on tourism
+* NO Facebook signup (because fuck facebook)
+* careful on route timing, check for inconsistencies and allow a margin of error
+* transportation options are VERY IMPORTANT !!!!
+* pre-built links in case of missing information (the site's job is to find and provide information)
+* trip created locally, if they like it, they'll create an account
+* include lunch in the itinerary, make eating profiles (on a budget, upscale etc.)
+* itinerary overview
+* pace of visiting !!!! IMPORTANT
+* nightlife ????
+* custom icons for venue types
+* if a person typed in a location that they want to visit, why the hell are you suggesting something on the other side of the continent?
+* general exploration page, where suggestions can be grouped
+* pre-filter: WHERE? WHEN? WHAT?
+
+
+===========================
+ROUTE PLANNING
+Must have:
+
+Nice to have:
+
+---------------------------
+POI DISCOVERY
+Must have:
+
+Nice to have:
+
+BIG LIST OF COMPETITION:
+https://www.inspirock.com #itinerary #tours #booking
+* best so far, but with irrelevant ads 
+
+http://viator.com #tours
+* thanks :/ 
+
+http://www.weareholidays.com/ #travel_agent
+* tsk, no https ...
+* site for travel agent, enough said 
+
+http://www.tripfactory.com/ #itinerary #tours #booking
+* general meh ... difficult to plan something
+
+http://www.holidayiq.com/ #travel_agent
+
+https://utrip.com #itinerary
+* close so far to what I imagined as layout
+* details POi profile before building route
+* issues with route timings (5 mins to get from one place in Paris to another, no!)
+* includes lunch in the itinerary :)))))
+* does have budget estimate
+* route interface a little difficult to understand
+
+https://travel.sygic.com
+
+https://citymaps.com
+
+http://www.tripmark.com/
+* biggest crap I saw recently. WTH is that ???
+

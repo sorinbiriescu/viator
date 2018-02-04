@@ -163,6 +163,7 @@ $(document).ready(function () {
                 let checkbox = this.querySelector(".poi-checkbox")
                 let checkbox_value = this.querySelector(".poi-checkbox").getAttribute("value")
                 let array = document.querySelector("#app")._locationSearchPOIOptions
+                document.querySelector("#app")._currentPage = 1
 
                 if ($(checkbox).prop("checked")) {
                     array.push(checkbox_value)
