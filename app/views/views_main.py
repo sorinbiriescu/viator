@@ -64,29 +64,13 @@ def route(user):
 
 @main.route('/explore', methods=['GET'])
 @login_required
-def poi():
-    form = SearchForm(request.form)
-    poi_type_checkbox = PoiTypeForm(request.form)
-    content = {
-        'form': form,
-        'poi_type_checkbox':poi_type_checkbox
-    }
-    return render_template('/main/explore.html', **content)
+def explore():
+    return render_template('/main/explore.html')
 
-@main.route('/explore-cell', methods=['GET'])
+@main.route('/itinerary', methods=['GET'])
 @login_required
-def explore_cell():
-    form = SearchForm(request.form)
-    poi_type_checkbox = PoiTypeForm(request.form)
-    content = {
-        'form': form,
-        'poi_type_checkbox':poi_type_checkbox
-    }
-    return render_template('/main/explore-cell.html', **content)
-
-@main.route('/explore-cell-foundation', methods=['GET'])
-def explore_cell_foundation():
-    return render_template('/main/explore-cell-foundation.html')
+def itinerary():
+    return render_template('/main/itinerary.html')
 
 @main.route('/signup', methods=['GET', 'POST'])
 def register():
