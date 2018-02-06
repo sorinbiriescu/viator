@@ -66,169 +66,189 @@ class User(UserMixin, db.Model):
 class UserRoute(db.Model):
     __bind_key__ = None
 
-    id = db.Column(db.Integer, primary_key=True)
+    itinerary_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
-    route_name = db.Column(db.String(80), nullable=False)
-    route_JSON = db.Column(JSON)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    start_date = last_update = db.Column(db.DateTime, nullable=False)
+    end_date = last_update = db.Column(db.DateTime, nullable=False)
+    pace = db.Column(db.String)
+    itinerary_profile = db.Column(db.String)
+    amenity_profile = db.Column(db.String)
+    app_estimated_budget = db.Column(db.Numeric(precision=4, asdecimal=False, decimal_return_scale=None))
+    user_estimated_budget = db.Column(db.Numeric(precision=4, asdecimal=False, decimal_return_scale=None))
+    currency = db.Column(db.String)
+    start_location = db.Column(JSON)
+    end_location = db.Column(JSON)
+    itinerary = db.Column(JSON)
     last_update = db.Column(db.DateTime, nullable=False)
 
-    @staticmethod
-    def get_user_routes(user):
-        query = UserRoute.query.filter(UserRoute.user_id == user).all()
+# class UserRoute(db.Model):
+#     __bind_key__ = None
 
-        if query:
-            result = {"results":[{"route_id": e.id,"route_name":e.route_name} for e in query]}
-            return result
-        else:
-            return None
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, nullable=False)
+#     route_name = db.Column(db.String(80), nullable=False)
+#     route_JSON = db.Column(JSON)
+#     last_update = db.Column(db.DateTime, nullable=False)
 
-    @staticmethod
-    def add_route(user,route_name):
-        new_route = UserRoute(
-            user_id=user,
-            route_name=route_name,
-            last_update=datetime.datetime.utcnow()
-            )
-        db.session.add(new_route)
-        db.session.commit()
+#     @staticmethod
+#     def get_user_routes(user):
+#         query = UserRoute.query.filter(UserRoute.user_id == user).all()
 
-    @staticmethod
-    def delete_route(user_id, route_id, route_name):
-        query = UserRoute.query \
-                        .filter(
-                            UserRoute.user_id == user_id,
-                            UserRoute.id == route_id,
-                            UserRoute.route_name == route_name
-                            ) \
-                        .first()
-        db.session.delete(query)
-        db.session.commit()
+#         if query:
+#             result = {"results":[{"route_id": e.id,"route_name":e.route_name} for e in query]}
+#             return result
+#         else:
+#             return None
 
-    @staticmethod
-    def get_poi_route(user_id,route_id):
-        query = UserRoute.query \
-                        .filter(
-                            UserRoute.user_id == user_id,
-                            UserRoute.id == route_id
-                        ) \
-                        .first()
+#     @staticmethod
+#     def add_route(user,route_name):
+#         new_route = UserRoute(
+#             user_id=user,
+#             route_name=route_name,
+#             last_update=datetime.datetime.utcnow()
+#             )
+#         db.session.add(new_route)
+#         db.session.commit()
 
-        route_json = json.loads(query.route_JSON)
+#     @staticmethod
+#     def delete_route(user_id, route_id, route_name):
+#         query = UserRoute.query \
+#                         .filter(
+#                             UserRoute.user_id == user_id,
+#                             UserRoute.id == route_id,
+#                             UserRoute.route_name == route_name
+#                             ) \
+#                         .first()
+#         db.session.delete(query)
+#         db.session.commit()
 
-        for i in route_json["route"]:
-            oid = i["oid"]
-            oid_query = get_poi_by_oid(oid)
+#     @staticmethod
+#     def get_poi_route(user_id,route_id):
+#         query = UserRoute.query \
+#                         .filter(
+#                             UserRoute.user_id == user_id,
+#                             UserRoute.id == route_id
+#                         ) \
+#                         .first()
 
-            i.update(
-                {
-                    "name": oid_query[1],
-                    "type": oid_query[2],
-                    "coordinates": oid_query[3]
-                }
-        )
+#         route_json = json.loads(query.route_JSON)
+
+#         for i in route_json["route"]:
+#             oid = i["oid"]
+#             oid_query = get_poi_by_oid(oid)
+
+#             i.update(
+#                 {
+#                     "name": oid_query[1],
+#                     "type": oid_query[2],
+#                     "coordinates": oid_query[3]
+#                 }
+#         )
         
-        return route_json
+#         return route_json
 
-    @staticmethod
-    def add_poi_to_route(user_id,route_id,poi_id):
-        query = UserRoute.query \
-                        .filter(
-                            UserRoute.user_id == user_id,
-                            UserRoute.id == route_id
-                        ) \
-                        .first()
+#     @staticmethod
+#     def add_poi_to_route(user_id,route_id,poi_id):
+#         query = UserRoute.query \
+#                         .filter(
+#                             UserRoute.user_id == user_id,
+#                             UserRoute.id == route_id
+#                         ) \
+#                         .first()
         
-        oid = int(poi_id.split(".")[0])
-        oid_type = poi_id.split(".")[1]
+#         oid = int(poi_id.split(".")[0])
+#         oid_type = poi_id.split(".")[1]
 
-        if query.route_JSON is None:
-            route = {"route": [
-                {
-                "poi_pos" : 0,
-                "old_poi_pos" : "",
-                "oid" : oid,
-                "oid_type" : oid_type
-                }
-            ]}
+#         if query.route_JSON is None:
+#             route = {"route": [
+#                 {
+#                 "poi_pos" : 0,
+#                 "old_poi_pos" : "",
+#                 "oid" : oid,
+#                 "oid_type" : oid_type
+#                 }
+#             ]}
 
-            route_json = json.dumps(route)
-            query.route_JSON = route_json
-            db.session.commit()
-        else:
-            route_json = json.loads(query.route_JSON)
-            last_route_id = max(route_json["route"], key=lambda x:x["poi_pos"])["poi_pos"]
-            route_json["route"].append(
-                {
-                "poi_pos" : (last_route_id+1),
-                "old_poi_pos" : "",
-                "oid" : oid,
-                "oid_type" : oid_type
-                }
-            )
-            query.route_JSON = json.dumps(route_json)
-            db.session.commit()
+#             route_json = json.dumps(route)
+#             query.route_JSON = route_json
+#             db.session.commit()
+#         else:
+#             route_json = json.loads(query.route_JSON)
+#             last_route_id = max(route_json["route"], key=lambda x:x["poi_pos"])["poi_pos"]
+#             route_json["route"].append(
+#                 {
+#                 "poi_pos" : (last_route_id+1),
+#                 "old_poi_pos" : "",
+#                 "oid" : oid,
+#                 "oid_type" : oid_type
+#                 }
+#             )
+#             query.route_JSON = json.dumps(route_json)
+#             db.session.commit()
 
-    @staticmethod
-    def remove_poi_from_route(route_id,poi_pos, user_id):
-        query = UserRoute.query \
-                .filter(
-                    UserRoute.user_id == user_id,
-                    UserRoute.id == route_id
-                ) \
-                .first()
+#     @staticmethod
+#     def remove_poi_from_route(route_id,poi_pos, user_id):
+#         query = UserRoute.query \
+#                 .filter(
+#                     UserRoute.user_id == user_id,
+#                     UserRoute.id == route_id
+#                 ) \
+#                 .first()
 
-        route_json = json.loads(query.route_JSON)
+#         route_json = json.loads(query.route_JSON)
 
-        # if item is found, then it's removed
-        for i in route_json["route"]:
-            if i["poi_pos"] == int(poi_pos):
-                route_json["route"].remove(i)
-                break
+#         # if item is found, then it's removed
+#         for i in route_json["route"]:
+#             if i["poi_pos"] == int(poi_pos):
+#                 route_json["route"].remove(i)
+#                 break
 
-        # all elements after the removed element get their positions lowered by 1
-        # old_poi_pos gets the value of poi_pos before it's lowered by 1
-        for i in route_json["route"]:
-            if i["poi_pos"] > int(poi_pos):
-                i["old_poi_pos"] = i["poi_pos"]
-                i["poi_pos"] -=1
+#         # all elements after the removed element get their positions lowered by 1
+#         # old_poi_pos gets the value of poi_pos before it's lowered by 1
+#         for i in route_json["route"]:
+#             if i["poi_pos"] > int(poi_pos):
+#                 i["old_poi_pos"] = i["poi_pos"]
+#                 i["poi_pos"] -=1
                 
 
-        query.route_JSON = json.dumps(route_json)
-        db.session.commit() 
+#         query.route_JSON = json.dumps(route_json)
+#         db.session.commit() 
         
-        return "OK"
+#         return "OK"
 
-    @staticmethod
-    def change_poi_pos_in_route(route_id,poi_pos,poi_new_pos,user_id):
-        query = UserRoute.query \
-                .filter(
-                    UserRoute.user_id == user_id,
-                    UserRoute.id == route_id
-                ) \
-                .first()
+#     @staticmethod
+#     def change_poi_pos_in_route(route_id,poi_pos,poi_new_pos,user_id):
+#         query = UserRoute.query \
+#                 .filter(
+#                     UserRoute.user_id == user_id,
+#                     UserRoute.id == route_id
+#                 ) \
+#                 .first()
 
-        poi_pos = int(poi_pos)
-        poi_new_pos = int(poi_new_pos)
+#         poi_pos = int(poi_pos)
+#         poi_new_pos = int(poi_new_pos)
 
-        route_json = json.loads(query.route_JSON)
+#         route_json = json.loads(query.route_JSON)
 
-        # gets the index of the dict to operate on, old_poi_pos gets the actual one, then 
-        # the values are swapped between the poi_pos actual and target
+#         # gets the index of the dict to operate on, old_poi_pos gets the actual one, then 
+#         # the values are swapped between the poi_pos actual and target
 
-        actual = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_pos]
-        target = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_new_pos]
+#         actual = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_pos]
+#         target = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_new_pos]
 
-        # old_poi_pos gets the actual poi_pos value 
-        route_json["route"][actual[0]]["old_poi_pos"] = route_json["route"][actual[0]]["poi_pos"]
-        route_json["route"][target[0]]["old_poi_pos"] = route_json["route"][target[0]]["poi_pos"]
+#         # old_poi_pos gets the actual poi_pos value 
+#         route_json["route"][actual[0]]["old_poi_pos"] = route_json["route"][actual[0]]["poi_pos"]
+#         route_json["route"][target[0]]["old_poi_pos"] = route_json["route"][target[0]]["poi_pos"]
 
-        # actual and target poi_pos swap values
-        route_json["route"][actual[0]]["poi_pos"], route_json["route"][target[0]]["poi_pos"] = \
-        route_json["route"][target[0]]["poi_pos"], route_json["route"][actual[0]]["poi_pos"]
+#         # actual and target poi_pos swap values
+#         route_json["route"][actual[0]]["poi_pos"], route_json["route"][target[0]]["poi_pos"] = \
+#         route_json["route"][target[0]]["poi_pos"], route_json["route"][actual[0]]["poi_pos"]
 
-        # new route list is sorted by the new poi_pos
-        route_json["route"] = sorted(route_json["route"], key=lambda k:k["poi_pos"])
+#         # new route list is sorted by the new poi_pos
+#         route_json["route"] = sorted(route_json["route"], key=lambda k:k["poi_pos"])
 
-        query.route_JSON = json.dumps(route_json)
-        db.session.commit()
-        return "OK"
+#         query.route_JSON = json.dumps(route_json)
+#         db.session.commit()
+#         return "OK"
