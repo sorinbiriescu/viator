@@ -13,64 +13,29 @@ script_dir = os.path.dirname(__file__)
 
 main = Blueprint('main', __name__)
 
-mapzen_api = 'mapzen-fPCfu1G'
-
-
-@main.route('/', methods=['GET', 'POST'])
-def index():
-    form = SearchForm(request.form)
-    if request.method == 'POST' and form.validate():
-        location_name = form.autocomp.data
-        return redirect(url_for('main.location', location=location_name))
-    else:
-        
-        content = {
-            'form': form
-        }
-        return render_template('/main/main.html', **content)
- 
-
-
-@main.route('/location', methods=['GET','POST'])
-def location():
-    form = SearchForm(request.form)
-
-    content = {
-        'form': form
-    }
-    return render_template('/main/location.html', **content)
-
-
-
-@main.route('/directions', methods=['GET','POST'])
-def directions():
-    form = SearchForm(request.form)
-    content = {
-        'form': form
-    }
-    return render_template('/main/directions.html', **content)
-
-
-@main.route('/route', methods=['GET','POST'])
-@main.route('/route/<user>', methods=['GET','POST'])
-@login_required
-def route(user):
-    form = RouteForm(request.form)
-
-    content = {
-        "form" : form
-    }
-    return render_template('/main/route.html', **content)
 
 @main.route('/explore', methods=['GET'])
 @login_required
 def explore():
     return render_template('/main/explore.html')
 
-@main.route('/itinerary', methods=['GET'])
+
+@main.route('/itinerary/<id>', methods=['GET'])
 @login_required
 def itinerary():
     return render_template('/main/itinerary.html')
+
+
+@main.route('/user_dashboard/<user>', methods=['GET'])
+@login_required
+def user_dashboard(user):
+    user = User.get_user(user)
+    content = {
+        "user": user
+    }
+
+    return render_template('/main/user_dashboard.html', **content)
+
 
 @main.route('/signup', methods=['GET', 'POST'])
 def register():
@@ -83,14 +48,16 @@ def register():
             if User.get_user(email=form.email.data):
                 return 'Email already exists in database'
             else:
-                new_user = User.add_user_to_db(email=form.email.data,password=form.password.data)
+                new_user = User.add_user_to_db(
+                    email=form.email.data, password=form.password.data)
                 login_user(new_user)
 
                 return 'User created'
     else:
         'Form error'
 
-@main.route('/login', methods=['GET','POST'])
+
+@main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
 
@@ -110,22 +77,9 @@ def login():
     else:
         return "Form error"
 
+
 @main.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
-
-@main.route('/user_dashboard/<user>', methods=['GET'])
-@login_required
-def user_dashboard(user):
-    user = User.get_user(user)
-    content = {
-        "user": user
-    }
-
-    return render_template('/main/user_dashboard.html', **content)
-
-@main.route('/_geocode', methods=['GET'])
-def geocode():
-    pass

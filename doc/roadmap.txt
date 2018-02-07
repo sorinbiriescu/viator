@@ -1,0 +1,80 @@
+===============================================================================
+                                ROADMAP
+===============================================================================
+
+MILESTONES:
+1. Have OSM data and be able to query it
+2. Able to search for a location and see it on map
+3. Users able to search for a region for POI and recommendation engine to give them
+4. Users able to create routes and add POI
+5. User able to see details about a location (info, pics, history)
+6. Important locations have guides on them (text and voice)
+7. Basic design for the site
+8. User information / API calls as secure as possible
+9. Tests in place for all code
+
+STEPS:
+X get geocodes locally first, then if fail, get from Mapbox
+X allow searches for names with - and diacritics
+X fetch POI around a location radious
+X fetch POI after map flies to a new location
+X create signup / login page and change templates to show current logged in user
+X create postgreSQL user_route table with JSON support
+* CSRF support jQuery / Ajax
+X test jQuery JSON submission to DB
+X add option to add location to route
+X add option to remove location from route
+X add option to change position in route
+* add regions to autocomplete
+* add region boundaries when searching for regions
+* update basic info of a location after map flyTo
+* add user password hash function
+
+--------------
+ROUTE
+--------------
+
+* create itinerary JSON template
+* create user_dashboard template
+* create route for user_dashboard
+* create itinerary page templates
+* create route for itinerary page
+* create itinerary profile template
+* create route for itinerary page
+* create dummy route for itinerary page
+* implement cells
+* test drag & drop option for route 
+* implement auto grouping on template
+* create API endpoint for retrieval of route
+* create API endpoint for creation of route
+* create API endpoint for modification of route
+* create itinerary_engine function for insertion of transport between points
+
+* create JSON validation schema
+
+
+===============================
+    ESSENTIALS OF A MAP
+===============================
+The map application should:
+X search the location with autocomplete
+X see location on map
+X move to a different location on map
+* show POI based on certain criteria (radius, type etc.)
+X get directions based on selected POI / locations
+* get optimized route between POI / locations
+X show time travel between selected POI / locations
+
+===============================
+            BUGS
+===============================
+* CRITICAL: on map move, it queries again the results
+* Optimized route is not working. The issue is with the request sent to Mapzen,
+it incorporates spaces and ' instead of ".
+
+===============================
+    THINGS TO THINK ABOUT
+===============================
+* osm2pgsql automation
+X osm2pgsql: change table name
+* postgresql constraints
