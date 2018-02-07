@@ -59,7 +59,7 @@ class Attractions(db.Model):
     centroid = db.Column(Geometry('POINT'))
 
     @staticmethod
-    def get_poi(json_request_param,radius=3000):
+    def get_poi(json_request_param):
 
         poi_response_schema = json.loads(open('./app/schema/poi_multiple_schema.json').read())
 
@@ -72,12 +72,6 @@ class Attractions(db.Model):
                                 .filter(Locations.id == location_ID) \
                                 .with_entities(
                                     func.ST_AsText(Locations.geometry)
-                                    ) \
-                                .first()
-
-        attraction_geometry = Attractions.query \
-                                .with_entities(
-                                    func.ST_asText(Attractions.centroid)
                                     ) \
                                 .first()
 

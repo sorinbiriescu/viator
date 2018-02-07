@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import JSON
 
 from app import db
 
+
 class User(UserMixin, db.Model):
     __bind_key__ = None
 
@@ -17,7 +18,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(80), nullable=False)
     password_hash = db.Column(db.String)
 
-    def __init__(self,email,password):
+    def __init__(self, email, password):
         self.email = email
         self.password = password
 
@@ -43,7 +44,7 @@ class User(UserMixin, db.Model):
             return query
         else:
             return None
-    
+
     @staticmethod
     def get_user_id(user):
         '''
@@ -56,12 +57,13 @@ class User(UserMixin, db.Model):
             return None
 
     @staticmethod
-    def add_user_to_db(email,password):
-        new_user = User(email=email,password=password)
+    def add_user_to_db(email, password):
+        new_user = User(email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
 
         return new_user
+
 
 class UserRoute(db.Model):
     __bind_key__ = None
@@ -75,13 +77,25 @@ class UserRoute(db.Model):
     pace = db.Column(db.String)
     itinerary_profile = db.Column(db.String)
     amenity_profile = db.Column(db.String)
-    app_estimated_budget = db.Column(db.Numeric(precision=4, asdecimal=False, decimal_return_scale=None))
-    user_estimated_budget = db.Column(db.Numeric(precision=4, asdecimal=False, decimal_return_scale=None))
+    app_estimated_budget = db.Column(db.Numeric(
+        precision=4, asdecimal=False, decimal_return_scale=None))
+    user_estimated_budget = db.Column(db.Numeric(
+        precision=4, asdecimal=False, decimal_return_scale=None))
     currency = db.Column(db.String)
     start_location = db.Column(JSON)
     end_location = db.Column(JSON)
     itinerary = db.Column(JSON)
     last_update = db.Column(db.DateTime, nullable=False)
+
+    @staticmethod
+    def add_route(user, route_name):
+        new_route = UserRoute(
+            user_id=user,
+            route_name=route_name,
+            last_update=datetime.datetime.utcnow()
+        )
+        db.session.add(new_route)
+        db.session.commit()
 
 # class UserRoute(db.Model):
 #     __bind_key__ = None
@@ -146,7 +160,7 @@ class UserRoute(db.Model):
 #                     "coordinates": oid_query[3]
 #                 }
 #         )
-        
+
 #         return route_json
 
 #     @staticmethod
@@ -157,7 +171,7 @@ class UserRoute(db.Model):
 #                             UserRoute.id == route_id
 #                         ) \
 #                         .first()
-        
+
 #         oid = int(poi_id.split(".")[0])
 #         oid_type = poi_id.split(".")[1]
 
@@ -211,11 +225,11 @@ class UserRoute(db.Model):
 #             if i["poi_pos"] > int(poi_pos):
 #                 i["old_poi_pos"] = i["poi_pos"]
 #                 i["poi_pos"] -=1
-                
+
 
 #         query.route_JSON = json.dumps(route_json)
-#         db.session.commit() 
-        
+#         db.session.commit()
+
 #         return "OK"
 
 #     @staticmethod
@@ -232,13 +246,13 @@ class UserRoute(db.Model):
 
 #         route_json = json.loads(query.route_JSON)
 
-#         # gets the index of the dict to operate on, old_poi_pos gets the actual one, then 
+#         # gets the index of the dict to operate on, old_poi_pos gets the actual one, then
 #         # the values are swapped between the poi_pos actual and target
 
 #         actual = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_pos]
 #         target = [index for index,value in enumerate(route_json["route"]) if value["poi_pos"] == poi_new_pos]
 
-#         # old_poi_pos gets the actual poi_pos value 
+#         # old_poi_pos gets the actual poi_pos value
 #         route_json["route"][actual[0]]["old_poi_pos"] = route_json["route"][actual[0]]["poi_pos"]
 #         route_json["route"][target[0]]["old_poi_pos"] = route_json["route"][target[0]]["poi_pos"]
 

@@ -80,18 +80,9 @@ def route_poi_api():
 
 @api.route('/getpoi', methods=['GET'])
 def getpoi():
-    '''
-    Get POI around 3km of a given point
-    '''
+
     json_request_param = json.loads(request.args.get('parameters'))
     result = Attractions.get_poi(json_request_param)
 
     return jsonify(result)
-
-
-@api.route('/turnbyturn', methods =['GET'])
-def turnbyturn():
-    '''
-    Calls mapzen to get a route between given POIs in a route
-    '''
 
