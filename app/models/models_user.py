@@ -57,6 +57,17 @@ class User(UserMixin, db.Model):
             return None
 
     @staticmethod
+    def get_user_by_id(user):
+        '''
+        Returns the user by ID.
+        '''
+        query = User.query.filter(User.id == user).first()
+        if query:
+            return query
+        else:
+            return None
+
+    @staticmethod
     def add_user_to_db(email, password):
         new_user = User(email=email, password=password)
         db.session.add(new_user)
@@ -88,7 +99,18 @@ class UserRoute(db.Model):
     last_update = db.Column(db.DateTime, nullable=False)
 
     @staticmethod
-    def add_route(user, route_name):
+    def get_user_itineraries(user):
+        query = UserRoute.query.filter(UserRoute.user_id == user).all()
+
+        if query:
+            result = {"results": [
+                {"itinerary_id": e.itinerary_id, "route_name": e.name} for e in query]}
+            return result
+        else:
+            return None
+
+    @staticmethod
+    def add_itinerary(user, route_name):
         new_route = UserRoute(
             user_id=user,
             route_name=route_name,

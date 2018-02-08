@@ -20,10 +20,10 @@ def autocomplete():
 
     return jsonify(result)
 
-@api.route('/route', methods=['GET','POST','PUT','DELETE'])
+@api.route('/itinerary', methods=['GET','POST','DELETE'])
 def route_api():
     '''
-    Create / delete user routes
+    Create / delete user itineraries
     '''
     user = User.get_user_id(current_user.email)
 
@@ -33,8 +33,8 @@ def route_api():
         return jsonify(routes)
 
     elif request.method == 'POST':
-        route_json = request.json
-        UserRoute.add_route(user = user, route_name = route_json["route_name"])
+        itinerary_json = request.json
+        UserRoute.add_route(user = user, route_name = _json["route_name"])
 
         return jsonify({"status":"200"})
 
@@ -44,39 +44,39 @@ def route_api():
         
         return jsonify({"status":"200"})
 
-@api.route('/route_poi', methods=['GET','POST','PUT','DELETE'])
-def route_poi_api():
-    '''
-    Add, remove, delete or change the position of a POI in a route
-    '''
-    user = User.get_user_id(current_user.email)
+# @api.route('/route_poi', methods=['GET','POST','PUT','DELETE'])
+# def route_poi_api():
+#     '''
+#     Add, remove, delete or change the position of a POI in a route
+#     '''
+#     user = User.get_user_id(current_user.email)
 
-    if request.method == 'GET':
-        route_id = request.args.get("route_id")
-        result = UserRoute.get_poi_route(user, route_id)
-        return jsonify(result)
+#     if request.method == 'GET':
+#         route_id = request.args.get("route_id")
+#         result = UserRoute.get_poi_route(user, route_id)
+#         return jsonify(result)
 
-    elif request.method == 'POST':
-        route = request.json
-        UserRoute.add_poi_to_route(user,route["route_id"],route["poi_id"])
-        return "OK"
+#     elif request.method == 'POST':
+#         route = request.json
+#         UserRoute.add_poi_to_route(user,route["route_id"],route["poi_id"])
+#         return "OK"
 
-    elif request.method == 'PUT':
-        param = request.json
-        UserRoute.change_poi_pos_in_route(
-            route_id= param["route_id"],
-            poi_pos= param["poi_pos"],
-            poi_new_pos= param["poi_new_pos"],
-            user_id = user )
-        return "OK"
+#     elif request.method == 'PUT':
+#         param = request.json
+#         UserRoute.change_poi_pos_in_route(
+#             route_id= param["route_id"],
+#             poi_pos= param["poi_pos"],
+#             poi_new_pos= param["poi_new_pos"],
+#             user_id = user )
+#         return "OK"
 
-    elif request.method == 'DELETE':
-        request_json = request.json
-        route_id = request_json["route_id"]
-        poi_pos = request_json["poi_pos"]
-        UserRoute.remove_poi_from_route(route_id = route_id, poi_pos = poi_pos, user_id = user)
+#     elif request.method == 'DELETE':
+#         request_json = request.json
+#         route_id = request_json["route_id"]
+#         poi_pos = request_json["poi_pos"]
+#         UserRoute.remove_poi_from_route(route_id = route_id, poi_pos = poi_pos, user_id = user)
 
-        return "OK"
+#         return "OK"
 
 @api.route('/getpoi', methods=['GET'])
 def getpoi():

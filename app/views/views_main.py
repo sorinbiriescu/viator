@@ -7,7 +7,7 @@ from flask_login import login_required, login_user, logout_user
 
 from app.forms.forms_main import (LoginForm, PoiTypeForm, RouteForm,
                                   SearchForm, SignupForm)
-from app.models.models_user import User
+from app.models.models_user import User, UserRoute
 
 script_dir = os.path.dirname(__file__)
 
@@ -34,9 +34,11 @@ def itinerary_profile():
 @main.route('/user_dashboard/<user>', methods=['GET'])
 @login_required
 def user_dashboard(user):
-    user = User.get_user(user)
+    user_details = User.get_user_by_id(user)
+    itineraries = UserRoute.get_user_itineraries(user)
     content = {
-        "user": user
+        "user": user_details,
+        "itineraries": itineraries
     }
 
     return render_template('/main/user_dashboard.html', **content)
@@ -76,7 +78,7 @@ def login():
                     login_user(user)
                     return redirect(
                         request.args.get('next')
-                        or url_for('main.user_dashboard', user=user.email))
+                        or url_for('main.user_dashboard', user=user.id))
             else:
                 return "User does not exist"
     else:

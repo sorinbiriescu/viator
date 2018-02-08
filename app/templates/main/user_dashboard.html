@@ -5,10 +5,33 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundation | Welcome</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
+
+    
     <link rel="stylesheet" href="../static/css/foundation.css" />
     <link rel="stylesheet" href="../static/style.css" />
     <script src="../static/js/vendor/modernizr.js"></script>
+
+    
+    <script src="https://www.celljs.org/cell.js"></script>
+    <script src="../static/js/user_dashboard.js"></script>
+    
 </head>
+
+<script type="text/template" id="start-date-input-template">
+    <label>Start date
+        <input type="text" placeholder="dd-mm-yyyy" id="start-date-input">
+    </label>
+</script>
+
+<script type="text/template" id="end-date-input-template">
+    <label>End date
+        <input type="text" placeholder="dd-mm-yyyy" id="end-date-input">
+    </label>
+</script>
 
 <body>
     <div class="top-bar">
@@ -53,6 +76,36 @@
             <div class="grid-x">
                 Welcome {{ user.email }}
             </div>
+            <div class="grid-x">
+                <button value="Button" class="button" data-open="create-new-itinerary">Create a new itinerary</button>
+                <div class="reveal" id="create-new-itinerary" data-reveal>
+                    <h1>Awesome! Let's go.</h1>
+                    <div class="grid-x grid-padding-x">
+                        <div class="cell medium-12">
+                            <label>Where do you want to go? 
+                                <small>You'll be able to add other routes later on</small>
+                                <input type="text" placeholder="Enter a city / region">
+                            </label>
+                        </div>
+                        <div class="medium-6 cell" id="start-date">
+                            <!-- Start date input -->
+                        </div>
+                        <div class="medium-6 cell" id="end-date">
+                            <!-- End date input -->
+                        </div>
+                        <div class="cell text-center medium-12">
+                            <a class="button text-center">Create itinerary</a> 
+                        </div>
+                        <button class="close-button" data-close aria-label="Close reveal" type="button"> 
+                            <span aria-hidden="true">&times;</span> 
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-x">
+                <h2>Routes</h2>
+            </div>
+            <div class="grid-x"></div>
         </div>
     </div>
     <!-- Footer -->
@@ -86,6 +139,10 @@
     </footer>
     <script src="../static/js/vendor/jquery.js"></script>
     <script src="../static/js/foundation.min.js"></script>
+
+    <script src="../static/vendor/foundation-datepicker/js/foundation-datepicker.min.js"></script>
+    <link rel="stylesheet" href="../static/vendor/foundation-datepicker/css/foundation-datepicker.min.css" />
+
     <script>
         $(document).foundation();
     </script>
