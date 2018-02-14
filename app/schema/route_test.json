@@ -1,0 +1,73 @@
+{
+    "id": 2324242,
+    "name": "Name of route",
+    "description": "description",
+    "start_date": "date",
+    "end_date": "date",
+    "pace": "pace",
+    "itinerary_profile": "profile",
+    "amenity_profile": "profile",
+    "exclude": ["list of poi IDs not interested"],
+    "app_estimated_budget": "app_budget",
+    "user_estimated_budget": "user_budget",
+    "currency": "currency",
+
+    "global_itinerary": [
+
+        {
+            "position": 1,
+            "type": "Start city",
+            "item": {
+                "name": "Iasi",
+                "description": "bla bla bla",
+                "coordinates": "location",
+                "departure": "2015-05-12T16:45:00.000+02:00"
+            }
+        },
+
+        {
+            "position": 2,
+            "type": "City/Region",
+            "item": {
+                "name": "Grenoble",
+                "description": "bla bla bla",
+                "coordinates": "location",
+                "arrival": "2015-05-12T16:45:00.000+02:00",
+                "departure": "2015-05-12T16:45:00.000+02:00",
+                "accomodation": {
+                    "name": "name",
+                    "coordinates": "coords",
+                    "arrival": "2015-05-12T16:45:00.000+02:00",
+                    "departure": "2015-05-12T16:45:00.000+02:00"
+                },
+                
+                "city_itinerary": [
+
+                    {
+                        "position": 1,
+                        "type": "accomodation",
+                        "item": {
+                            "name": "name",
+                            "coordinates": "coords"
+                        }
+                    },
+
+                    {
+                        "position": 2,
+                        "type": "transport",
+                        "item": {
+                            "name": "name",
+                            "transit_mode": "public bus",
+                            "duration": "duration",
+                            "start": "2015-05-12T16:45:00.000+02:00",
+                            "end": "2015-05-12T16:45:00.000+02:00"
+                        }
+                    }
+
+                ]
+            }
+        }
+
+    ]
+
+}

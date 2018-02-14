@@ -14,11 +14,11 @@ script_dir = os.path.dirname(__file__)
 api = Blueprint('api', __name__, url_prefix='/api')
 
 @api.route('/autocomplete', methods=['GET'])
-def autocomplete():
+def autocomplete(type='city',mode='basic'):
     query = request.args.get('query')
-    result = Locations.get_location_autocomplete(query)
-
-    return jsonify(result)
+    if mode == 'basic':
+        result = Locations.get_location_autocomplete_basic(query)
+        return jsonify(result)
 
 @api.route('/itinerary', methods=['GET','POST','DELETE'])
 def route_api():

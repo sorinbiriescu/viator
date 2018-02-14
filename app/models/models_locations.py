@@ -23,7 +23,7 @@ class Locations(db.Model):
 
     @staticmethod
 
-    def get_location_autocomplete(term):
+    def get_location_autocomplete_basic(term):
         query =  Locations.query \
                     .filter(Locations.name.like(term+'%')) \
                     .with_entities(

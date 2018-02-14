@@ -25,6 +25,7 @@ def explore():
 def itinerary():
     return render_template('/main/itinerary.html')
 
+
 @main.route('/itinerary_profile/<id>', methods=['GET'])
 @login_required
 def itinerary_profile():

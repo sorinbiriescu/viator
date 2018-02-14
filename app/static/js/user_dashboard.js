@@ -6,6 +6,9 @@ $(document).ready(function () {
     let endDateInputTemplate_source = document.getElementById("end-date-input-template").innerHTML;
     let endDateInputTemplate = Handlebars.compile(endDateInputTemplate_source);
 
+    let searchLocationInputTemplate_source = document.getElementById("location-search-bar-template").innerHTML;
+    let searchLocationInputTemplate = Handlebars.compile(searchLocationInputTemplate_source);
+
     startDateCell = {
         $cell: true,
         id: "start-date",
@@ -78,6 +81,27 @@ $(document).ready(function () {
         }
     }
 
+    searchBarCell = {
+        $cell: true,
+        $type: "div",
+        class: "cell medium-12",
+        id: "location-search-bar",
+
+        $html: [searchLocationInputTemplate()],
+
+        $init: function () {
+            $("#search-location-input").devbridgeAutocomplete({
+                serviceUrl: 'http://127.0.0.1:5000/api/autocomplete',
+                minChars: 4,
+                deferRequestBy: 200,
+                onSelect: function (suggestion) {
+                    console.log(suggestion)
+                    localStorage.setItem('locationName', suggestion.value);
+                    localStorage.setItem('locationID', suggestion.data["location_ID"]);
+                }
+            })
+        }
+    }
     // createButton = {
     //     $cell: true,
 
